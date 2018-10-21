@@ -1,8 +1,14 @@
 'use strict';
-var http = require('http');
+var express = require('express');
+var app = express();
 var port = process.env.PORT || 1337;
 
-http.createServer(function (req, res) {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Hello World\n');
-}).listen(port);
+var home = require('./routes/home');
+var auth = require('./routes/auth');
+
+app.use('/', home);
+app.use('/auth', auth);
+
+app.listen(port, function () {
+    console.log("server is started !");
+});
