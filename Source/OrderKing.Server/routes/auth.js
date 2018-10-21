@@ -1,9 +1,9 @@
 'use strict';
 const service = require('../services/authservice');
+const authReponse = require('../models/authRespone');
 const express = require('express');
 const authrouter = express.Router();
 
-const error = { ErrorCode:'', ErrorMessage :'' };
 
 //index page
 authrouter.get('/', function (req, res) {
@@ -14,17 +14,19 @@ authrouter.get('/', function (req, res) {
 //auth user api
 authrouter.post('/authuser', async function (req, res) {
     console.log('authuser api is called');
+    var response = authReponse.model;
     res.writeHead(200, { 'Content-Type': 'application/json' });
+    
     var data = await service.executeAuth('linh.pham', '123456');
     if (data.length > 0) {
-        var json = JSON.stringify(data[0]);
-        res.end(json);
+        response.Result = JSON.stringify(data[0]);
+        res.end(JSON.stringify(response));
     }
     else {
-        error.ErrorCode = 400;
-        error.ErrorMessage = 'Error';
-        res.sendStatus(error.ErrorCode);
-        res.end(JSON.stringify(error));
+        response.ErrorCode = 404;
+        response.ErrorMessage = 'Not Found';
+        res.statusCode = response.ErrorCode;
+        res.end(JSON.stringify(response));
     }
 });
 
