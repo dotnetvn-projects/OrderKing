@@ -30,6 +30,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="database\dbconnection.js" />
+    <Compile Include="models\authRespone.js" />
     <Compile Include="routes\home.js" />
     <Compile Include="server.js" />
     <Compile Include="services\authservice.js" />
@@ -41,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="database\" />
+    <Folder Include="models\" />
     <Folder Include="resources\" />
     <Folder Include="services\" />
     <Folder Include="routes\" />
