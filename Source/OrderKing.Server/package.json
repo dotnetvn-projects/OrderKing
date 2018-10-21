@@ -1,0 +1,9 @@
+{
+  "name": "order-king.server",
+  "version": "0.0.0",
+  "description": "OrderKing.Server",
+  "main": "server.js",
+  "author": {
+    "name": ""
+  }
+}
