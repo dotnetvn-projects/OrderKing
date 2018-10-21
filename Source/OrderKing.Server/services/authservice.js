@@ -1,12 +1,16 @@
 const { poolPromise, sql } = require('../database/dbconnection');
 
-function generateAccessToken(user, pass) {
+const queryUser = 'SELECT HashKey FROM Account';
+
+function createAccessToken(user, pass) {
 
 }
 
-exports.executeAuth = async function () {
+exports.executeAuth = async function (accountName, password) {
     const pool = await poolPromise;
     const result = await pool.request()
-        .query('select * from Account');
+        .input('AccountName', sql.NVarChar, accountName)
+        .input('Password', sql.NVarChar, password)
+        .query(queryUser);
     return result.recordset;
 };
