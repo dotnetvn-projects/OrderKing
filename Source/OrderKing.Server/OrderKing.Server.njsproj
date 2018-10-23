@@ -30,19 +30,30 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="database\dbconnection.js" />
-    <Compile Include="models\authRespone.js" />
+    <Compile Include="models\auth\auth-response.js" />
+    <Compile Include="models\response.js" />
+    <Compile Include="resources\errorcode.js" />
     <Compile Include="routes\home.js" />
     <Compile Include="server.js" />
     <Compile Include="services\authservice.js" />
+    <Compile Include="services\securityservice.js" />
+    <Compile Include="services\storeservice.js" />
+    <Compile Include="services\userservice.js" />
     <Content Include="resources\dbconfig.txt" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="resources\serverkey.txt" />
     <Content Include="routes\auth.js" />
+    <Content Include="services\categoryservice.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="database\" />
     <Folder Include="models\" />
+    <Folder Include="models\auth\" />
+    <Folder Include="models\category\" />
+    <Folder Include="models\product\" />
+    <Folder Include="models\store\" />
+    <Folder Include="models\user\" />
     <Folder Include="resources\" />
     <Folder Include="services\" />
     <Folder Include="routes\" />

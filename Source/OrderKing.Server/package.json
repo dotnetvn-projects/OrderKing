@@ -9,6 +9,7 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "moment": "^2.22.2",
     "mssql": "^4.2.2",
     "mssql-connection-string": "^0.1.2"
   }

@@ -1,1 +1,1 @@
-Data Source=sample;Initial Catalog=OrderKing;User Id=orderking;Password=123456789;
+Data Source=112.78.4.2;Initial Catalog=OrderKing;User Id=orderking;Password=123456789;
