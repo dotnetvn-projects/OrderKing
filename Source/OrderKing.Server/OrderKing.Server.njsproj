@@ -39,9 +39,11 @@
     <Compile Include="services\securityservice.js" />
     <Compile Include="services\storeservice.js" />
     <Compile Include="services\userservice.js" />
+    <Content Include="libman.json" />
     <Content Include="resources\dbconfig.txt" />
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <Content Include="resources\errorconfig.xml" />
     <Content Include="resources\serverkey.txt" />
     <Content Include="routes\auth.js" />
     <Content Include="services\categoryservice.js" />
