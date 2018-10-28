@@ -1,19 +1,16 @@
 const { poolPromise, sql } = require('../database/dbconnection');
 const moment = require('moment');
 const authreponse = require('../models/auth/auth-response');
-
-const queryUser = 'SELECT HashKey FROM Account WHERE AccountName = @AccountName AND Pasword = @Pasword ';
-const querySesionLogin = 'SELECT Id FROM SessionLogin WHERE AccessToken = @AccessToken';
-
-function createAccessToken(user, pass) {
-
-}
+const responestatus = require('../resources/response-status');
+const security = require('../services/securityservice');
+const query = require('../database/authquery');
+const log = require('../services/logservice');
 
 exports.removeAuth = async function (accessToken) {
     const pool = await poolPromise;
     const result = await pool.request()
         .input('@AccessToken', sql.NVarChar, accessToken)
-        .query(querySesionLogin);
+        .query(query.queryLoginSession);
 
     if (result.recordset.length > 0) {
         authreponse.model.Status = 'Removed';
@@ -28,13 +25,19 @@ exports.executeAuth = async function (accountName, password) {
     const result = await pool.request()
         .input('@AccountName', sql.NVarChar, accountName)
         .input('@Password', sql.NVarChar, password)
-        .query(queryUser);
+        .query(query.getHashKey);
+
     if (result.recordset.length > 0) {
-        var accessToken = createAccessToken(accountName, password);
+        var accessToken = security.createHash(result.recordset[0].HashKey);
         var now = moment().add(24, 'h');
         authreponse.model.AccessToken = accessToken;
         authreponse.model.ExpiredDate = now.format('dd/MM/yyyy HH:mm:ss');
-        authreponse.model.Status = 'Successful authentication';
+        authreponse.model.Status = responestatus.authen.Suscess;
+        authreponse.model.ResponseCode = responestatus.authen.SuscessCode;
+    }
+    else {
+        authreponse.model.Status = responestatus.authen.Failed;
+        authreponse.model.ResponseCode = responestatus.authen.FailedCode;
     }
     return authreponse;
 };

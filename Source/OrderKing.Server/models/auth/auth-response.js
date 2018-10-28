@@ -1,5 +1,6 @@
 exports.model = {
-    AccessToken: '',
+    ResponseCode: -1,
     Status: '',
+    AccessToken: '',
     ExpiredDate:''
 };

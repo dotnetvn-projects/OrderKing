@@ -1,5 +1,5 @@
 exports.model = {
-    ErrorCode: -1,
-    ErrorMessage: '',
+    ResponseCode: -1,
+    Message: '',
     Result: null
 };
