@@ -5,7 +5,7 @@ function define(name, value) {
     });
 }
 
-define("getHashKey", 'SELECT HashKey FROM Account WHERE AccountName = @AccountName AND Pasword = @Pasword ');
+define("getHashKey", 'SELECT HashKey FROM Account WHERE AccountName = @AccountName AND Password = @Password ');
 
 define("queryLoginSession", 'SELECT Id FROM LoginSession WHERE AccessToken = @AccessToken');
 

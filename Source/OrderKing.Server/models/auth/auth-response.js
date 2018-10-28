@@ -1,6 +1,6 @@
 exports.model = {
     ResponseCode: -1,
-    Status: '',
+    StatusMessage: '',
     AccessToken: '',
     ExpiredDate:''
 };

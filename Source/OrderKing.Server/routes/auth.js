@@ -4,6 +4,7 @@ const response = require('../models/response');
 const express = require('express');
 const authrouter = express.Router();
 const logger = require('../services/logservice');
+const security = require('../services/securityservice');
 
 //index page
 authrouter.get('/', function (req, res) {
@@ -13,28 +14,36 @@ authrouter.get('/', function (req, res) {
 
 //auth user api
 authrouter.post('/authuser', async function (req, res) {
-
-    res.writeHead(200, { 'Content-Type': 'application/json' }); 
-    var account = req.body.AccountName;
-    var password = req.body.Password;
+   
     var message = response.model;
 
-    logger.Info('[' + account+'] call auth user api');
+    res.writeHead(200, { 'Content-Type': 'application/json' });
 
-    var result = await service.executeAuth(account, password);
-
-    message.ResponseCode = result.model.ResponseCode;
-    message.Message = result.model.Status;
-
-    if (result.model.AccessToken !== '') {
-        var data = {
-            AccessToken: result.model.AccessToken,
-            ExpiredDate: result.model.ExpiredDate
-        };
-        message.Result = JSON.stringify(data);       
+    if (security.isValidRequest(req) === false) {
+        message.ResponseCode = 401;
+        message.StatusMessage = 'Unauthorized request';
+        res.end(JSON.stringify(message));
     }
+    else {      
+        var account = req.body.AccountName;
+        var password = req.body.Password;
+        logger.Info('[' + account + '] call auth user api');
 
-    res.end(JSON.stringify(message));
+        var result = await service.executeAuth(account, password);
+
+        message.ResponseCode = result.model.ResponseCode;
+        message.StatusMessage = result.model.StatusMessage;
+
+        if (result.model.AccessToken !== '') {
+            var data = {
+                AccessToken: result.model.AccessToken,
+                ExpiredDate: result.model.ExpiredDate
+            };
+            message.Result = data;
+        }
+
+        res.end(JSON.stringify(message));
+    }
 });
 
 //export for outside
