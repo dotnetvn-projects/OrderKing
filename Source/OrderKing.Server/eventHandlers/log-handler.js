@@ -1,3 +1,5 @@
+//Log processing
+
 var events = require('events');
 var logger = require('../services/logservice');
 
