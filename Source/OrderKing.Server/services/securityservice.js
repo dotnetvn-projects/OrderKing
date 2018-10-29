@@ -1,5 +1,6 @@
 var crypto = require('crypto');
 var fs = require('fs');
+const clientAllow = require('../resources/client-allow');
 
 //create hash key
 function createHash (data) {
@@ -12,11 +13,13 @@ function createHash (data) {
 }
 
 function isValidRequest(req) {
-    var isvalid = true;
+    var isvalid = false;
     var referrer = req.headers.referer;
     var apikey = req.headers.apikey;
-    if (apikey !== undefined && referrer !== undefined) {
-        var t = 'a';
+    if (apikey === clientAllow.seller.ApiKey && referrer === clientAllow.seller.Referrer
+        || apikey === clientAllow.manager.ApiKey && referrer === clientAllow.manager.Referrer
+        || apikey === clientAllow.system.ApiKey && referrer === clientAllow.system.Referrer) {
+        isvalid = true;
     }
 
     return isvalid;

@@ -31,6 +31,7 @@
   <ItemGroup>
     <Compile Include="database\authquery.js" />
     <Compile Include="database\dbconnection.js" />
+    <Compile Include="eventHandlers\email-handler.js" />
     <Compile Include="models\auth\auth-response.js" />
     <Compile Include="models\response.js" />
     <Compile Include="resources\response-status.js" />
@@ -41,11 +42,12 @@
     <Compile Include="services\securityservice.js" />
     <Compile Include="services\storeservice.js" />
     <Compile Include="services\userservice.js" />
+    <Content Include="eventHandlers\log-handler.js" />
     <Content Include="libman.json" />
+    <Content Include="resources\client-allow.js" />
     <Content Include="resources\dbconfig.txt" />
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Content Include="resources\errorconfig.xml" />
     <Content Include="resources\serverkey.txt" />
     <Content Include="routes\auth.js" />
     <Content Include="services\categoryservice.js" />
@@ -60,6 +62,7 @@
     <Folder Include="models\store\" />
     <Folder Include="models\user\" />
     <Folder Include="logs\" />
+    <Folder Include="eventHandlers\" />
     <Folder Include="resources\" />
     <Folder Include="services\" />
     <Folder Include="routes\" />

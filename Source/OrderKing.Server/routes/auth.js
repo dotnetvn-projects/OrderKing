@@ -3,8 +3,8 @@ const service = require('../services/authservice');
 const response = require('../models/response');
 const express = require('express');
 const authrouter = express.Router();
-const logger = require('../services/logservice');
 const security = require('../services/securityservice');
+var logHandler = require('../eventHandlers/log-handler');
 
 //index page
 authrouter.get('/', function (req, res) {
@@ -20,14 +20,15 @@ authrouter.post('/authuser', async function (req, res) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
 
     if (security.isValidRequest(req) === false) {
+        logHandler.fire('error', 'loi roi');
         message.ResponseCode = 401;
         message.StatusMessage = 'Unauthorized request';
-        res.end(JSON.stringify(message));
+        res.end(JSON.stringify(message));    
     }
     else {      
         var account = req.body.AccountName;
         var password = req.body.Password;
-        logger.Info('[' + account + '] call auth user api');
+        logHandler.fire('info', '[' + account + '] call auth user api');
 
         var result = await service.executeAuth(account, password);
 

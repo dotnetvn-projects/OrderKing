@@ -38,14 +38,14 @@ var debugLogger = winston.createLogger({
     ]
 });
 
-exports.Info = function (message) {
+exports.info = function (message) {
     logger.info(message);
 };
 
-exports.Error = function (message) {
+exports.error = function (message) {
     logger.error(message);
 };
 
-exports.Debug = function (message) {
+exports.debug = function (message) {
     debugLogger.info(message);
 };

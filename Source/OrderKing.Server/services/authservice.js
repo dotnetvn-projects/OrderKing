@@ -4,7 +4,7 @@ const authreponse = require('../models/auth/auth-response');
 const responestatus = require('../resources/response-status');
 const security = require('../services/securityservice');
 const query = require('../database/authquery');
-const log = require('../services/logservice');
+
 
 exports.removeAuth = async function (accessToken) {
     const pool = await poolPromise;
