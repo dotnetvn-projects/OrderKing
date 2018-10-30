@@ -1,6 +1,8 @@
 'use strict';
+const format = require('string-format');
 const service = require('../services/authservice');
 const response = require('../models/response');
+const status = require('../resources/response-status');
 const express = require('express');
 const authrouter = express.Router();
 const security = require('../services/securityservice');
@@ -14,38 +16,58 @@ authrouter.get('/', function (req, res) {
 
 //auth user api
 authrouter.post('/authuser', async function (req, res) {
+    var ip = req.connection.remoteAddress;
+    var userAgent = req.headers['user-agent'];
+    var message = null;
+    logHandler.fire('info', format('ip [{0}] has requested for authentication', ip));
    
-    var message = response.model;
-
     res.writeHead(200, { 'Content-Type': 'application/json' });
-
-    if (security.isValidRequest(req) === false) {
-        logHandler.fire('error', 'loi roi');
-        message.ResponseCode = 401;
-        message.StatusMessage = 'Unauthorized request';
-        res.end(JSON.stringify(message));    
-    }
-    else {      
-        var account = req.body.AccountName;
-        var password = req.body.Password;
-        logHandler.fire('info', '[' + account + '] call auth user api');
-
-        var result = await service.executeAuth(account, password);
-
-        message.ResponseCode = result.model.ResponseCode;
-        message.StatusMessage = result.model.StatusMessage;
-
-        if (result.model.AccessToken !== '') {
-            var data = {
-                AccessToken: result.model.AccessToken,
-                ExpiredDate: result.model.ExpiredDate
-            };
-            message.Result = data;
+    try {
+        if (security.isValidRequest(req) === false) {
+            logHandler.fire('error', format('ip [{0}] {1} ', ip, 'has been rejected by server when calling authentication'));
+            message = createErrorMessage();
         }
+        else {
+            var account = req.body.AccountName;
+            var password = req.body.Password;
+            var result = await service.executeAuth(account, password, ip, userAgent);
 
-        res.end(JSON.stringify(message));
+            message = createSuccessMessage(result.model.accesstoken, result.model.expireddate,
+                result.model.responsecode, result.model.statusmessage);
+
+            logHandler.fire('info', format('[{0}][ip {1}] has been authenticated sucessful', account, ip));
+        }       
     }
+    catch (ex) {
+        logHandler.fire('error', format('there is an error occurred while executing authentication for ip [{0}]', ip));
+        logHandler.fire('error', ex);
+        message = createErrorMessage();
+    }
+    res.end(JSON.stringify(message));
 });
+
+function createErrorMessage() {
+    var message = response.model;
+    message.responsecode = status.invalidRequest.code;
+    message.statusmessage = status.invalidRequest.message;
+    message.result = null;
+    return message;
+}
+
+function createSuccessMessage(accessToken, expiredDate, responseCode, status) {
+    var message = response.model;
+    message.responsecode = responseCode;
+    message.statusmessage = status;
+
+    if (accessToken !== '') {
+        var data = {
+            accesstoken: accessToken,
+            expireddate: expiredDate
+        };
+        message.result = data;
+    }
+    return message;
+}
 
 //export for outside
 module.exports = authrouter;

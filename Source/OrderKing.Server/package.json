@@ -12,6 +12,7 @@
     "moment": "^2.22.2",
     "mssql": "^4.2.2",
     "mssql-connection-string": "^0.1.2",
+    "string-format": "^2.0.0",
     "winston": "^3.1.0",
     "winston-daily-rotate-file": "^3.3.5"
   }

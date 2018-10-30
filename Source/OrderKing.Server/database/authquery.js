@@ -4,8 +4,16 @@ function define(name, value) {
         enumerable: true
     });
 }
-
+//multiline `...`
 define("getHashKey", 'SELECT HashKey FROM Account WHERE AccountName = @AccountName AND Password = @Password ');
 
 define("queryLoginSession", 'SELECT Id FROM LoginSession WHERE AccessToken = @AccessToken');
+
+define("insertLoginSession", `INSERT INTO [dbo].[LoginSession]
+                                ([AccountId], [Ip], [UsetAgent], [Referrer], [LoginTime],
+                                 [LastAccessTime], [AccessToken], [AccessTokenExpired])
+
+                                 VALUES(@AccountId, @Ip, @UsetAgent, @Referrer, @LoginTime,
+                                        @LastAccessTime, @AccessToken, @AccessTokenExpired `);
+
 

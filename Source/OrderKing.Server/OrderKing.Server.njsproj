@@ -29,6 +29,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="common\crypto.js" />
     <Compile Include="database\authquery.js" />
     <Compile Include="database\dbconnection.js" />
     <Compile Include="eventHandlers\email-handler.js" />
@@ -43,12 +44,12 @@
     <Compile Include="services\storeservice.js" />
     <Compile Include="services\userservice.js" />
     <Content Include="eventHandlers\log-handler.js" />
+    <Content Include="eventHandlers\session-login-handler.js" />
     <Content Include="libman.json" />
-    <Content Include="resources\client-allow.js" />
+    <Content Include="resources\api-config.js" />
     <Content Include="resources\dbconfig.txt" />
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Content Include="resources\serverkey.txt" />
     <Content Include="routes\auth.js" />
     <Content Include="services\categoryservice.js" />
   </ItemGroup>
@@ -63,6 +64,7 @@
     <Folder Include="models\user\" />
     <Folder Include="logs\" />
     <Folder Include="eventHandlers\" />
+    <Folder Include="common\" />
     <Folder Include="resources\" />
     <Folder Include="services\" />
     <Folder Include="routes\" />

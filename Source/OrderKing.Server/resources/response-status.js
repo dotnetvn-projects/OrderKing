@@ -1,14 +1,22 @@
 //auth status object
 
+//code: for success => 100 to 110, for failed => -100 to -110
 exports.authen = {
-    Suscess: 'Successful Authentication',
-    SuscessCode: 100,
+    suscess: 'Successful authentication',
+    suscesscode: 100,
 
-    Failed: 'Authentication Failed',
-    FailedCode: 101
+    Failed: 'Authentication failed',
+    FailedCode: -100,
+
+    removesuccess: 'Remove authentication successful',
+    removesuccesscode: 101,
+
+    removefailed: 'Remove authentication failed',
+    removefailedcode: -101,
 };
 
+//code 401
 exports.invalidRequest = {
-    Message: 'Unauthorized Request!',
-    Code: 401
+    message: 'Unauthorized Request!',
+    code: 401
 };
