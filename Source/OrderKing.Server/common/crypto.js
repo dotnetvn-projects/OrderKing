@@ -1,10 +1,11 @@
 var crypto = require('crypto');
+const moment = require('moment');
 const apiConfig = require('../resources/api-config');
 const algorithm = 'aes-256-ctr';
 const password = apiConfig.server.serverkey;
 
 exports.generateHash = function (data) {
-    var input = data + password;
+    var input = data + password + moment().format('YYYY-MM-DD HH:mm:ss:fff');
     return crypto.createHash('sha512').update(input).digest("hex");
 }
 

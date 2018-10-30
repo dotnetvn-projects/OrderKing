@@ -5,7 +5,7 @@ function define(name, value) {
     });
 }
 //multiline `...`
-define("getHashKey", 'SELECT HashKey FROM Account WHERE AccountName = @AccountName AND Password = @Password ');
+define("getHashKey", 'SELECT Id, HashKey FROM Account WHERE AccountName = @AccountName AND Password = @Password ');
 
 define("queryLoginSession", 'SELECT Id FROM LoginSession WHERE AccessToken = @AccessToken');
 
@@ -14,6 +14,9 @@ define("insertLoginSession", `INSERT INTO [dbo].[LoginSession]
                                  [LastAccessTime], [AccessToken], [AccessTokenExpired])
 
                                  VALUES(@AccountId, @Ip, @UsetAgent, @Referrer, @LoginTime,
-                                        @LastAccessTime, @AccessToken, @AccessTokenExpired `);
+                                        @LastAccessTime, @AccessToken, @AccessTokenExpired) `);
+
+define("updateLastAccessTimeLoginSession", 'UPDATE LoginSession SET LastAccessTime = @LastAccessTime WHERE AccountId = @AccountId');
+
 
 

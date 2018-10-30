@@ -9,7 +9,7 @@ var home = require('./routes/home');
 var auth = require('./routes/auth');
 
 app.use(bodyParser.json());
-
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use('/', home);
 app.use('/auth', auth);

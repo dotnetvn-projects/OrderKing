@@ -42,7 +42,8 @@ exports.executeAuth = async function (accountName, password, ip, userAgent, refe
         reponse.model.statusmessage = status.authen.suscess;
         reponse.model.responsecode = status.authen.suscesscode;
 
-        sessionLoginHandler.fire(accountName, ip, userAgent, referrer, accessToken, expireddate)
+        sessionLoginHandler.fire('insert', result.recordset[0].Id, ip, userAgent,
+            referrer, accessToken, expireddate)
     }
     else {
         reponse.model.statusmessage = status.authen.failed;
