@@ -46,6 +46,7 @@
     <Content Include="eventHandlers\log-handler.js" />
     <Content Include="eventHandlers\session-login-handler.js" />
     <Content Include="libman.json" />
+    <Content Include="middlewares\exception.js" />
     <Content Include="resources\api-config.js" />
     <Content Include="resources\dbconfig.txt" />
     <Content Include="package.json" />
@@ -65,6 +66,7 @@
     <Folder Include="logs\" />
     <Folder Include="eventHandlers\" />
     <Folder Include="common\" />
+    <Folder Include="middlewares\" />
     <Folder Include="resources\" />
     <Folder Include="services\" />
     <Folder Include="routes\" />

@@ -1,5 +1,6 @@
 'use strict';
 var express = require('express');
+var exception = require('./middlewares/exception');
 var bodyParser = require('body-parser');
 
 var app = express();
@@ -13,6 +14,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use('/', home);
 app.use('/auth', auth);
+
+app.use(exception.setmiddleware);
 
 app.listen(port, function () {
     console.log("server is started !");
