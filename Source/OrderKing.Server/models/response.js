@@ -1,5 +1,5 @@
 exports.model = {
-    ResponseCode: -1,
-    StatusMessage: '',
-    Result: null
+    responsecode: -1,
+    statusmessage: '',
+    result: null
 };

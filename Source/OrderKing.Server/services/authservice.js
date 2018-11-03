@@ -1,43 +1,53 @@
 const { poolPromise, sql } = require('../database/dbconnection');
 const moment = require('moment');
-const authreponse = require('../models/auth/auth-response');
-const responestatus = require('../resources/response-status');
+const reponse = require('../models/auth/auth-response');
+const status = require('../resources/response-status');
 const security = require('../services/securityservice');
-const sqlcmd = require('../database/auth-sqlcommand');
+const query = require('../database/authquery');
+const sessionLoginHandler = require('../eventHandlers/session-login-handler');
 
-
+//remove authentication from request of client
 exports.removeAuth = async function (accessToken) {
     const pool = await poolPromise;
     const result = await pool.request()
-        .input('@AccessToken', sql.NVarChar, accessToken)
-        .query(sqlcmd.queryLoginSession);
+        .input('AccessToken', sql.NVarChar, accessToken)
+        .query(query.queryLoginSession);
 
     if (result.recordset.length > 0) {
-        authreponse.model.StatusMessage = 'Removed';
-        authreponse.model.ExpiredDate = moment().format('dd/MM/yyyy HH:mm:ss');
-        authreponse.model.AccessToken = 'accessToken';
+        reponse.model.expireddate = moment().format('DD/MM/YYYY HH:mm:ss');
+        reponse.model.accesstoken = accessToken;
+        reponse.model.statusmessage = status.authen.removesuccess;
+        reponse.model.responsecode = status.authen.removesuccesscode;
+    }
+    else {
+        reponse.model.statusmessage = status.authen.removefailed;
+        reponse.model.responsecode = status.authen.removefailedcode;
     }
     return authreponse;
 };
 
-exports.executeAuth = async function (accountName, password) {
+//executing authentication for client and create access token
+exports.executeAuth = async function (accountName, password, ip, userAgent, referrer) {
     const pool = await poolPromise;
     const result = await pool.request()
         .input('AccountName', sql.NVarChar, accountName)
         .input('Password', sql.NVarChar, password)
-        .query(sqlcmd.getHashKey);
+        .query(query.getHashKey);
 
     if (result.recordset.length > 0) {
-        var accessToken = security.createHash(result.recordset[0].HashKey);
-        var now = moment().add(24, 'h');
-        authreponse.model.AccessToken = accessToken;
-        authreponse.model.ExpiredDate = now.format('DD/MM/YYYY HH:mm:ss');
-        authreponse.model.StatusMessage = responestatus.authen.Suscess;
-        authreponse.model.ResponseCode = responestatus.authen.SuscessCode;
+        var accessToken = security.generateHash(result.recordset[0].HashKey);
+        var expireddate = moment().add(24, 'h');
+        reponse.model.accesstoken = accessToken;
+        reponse.model.expireddate = expireddate.format('DD/MM/YYYY HH:mm:ss');
+        reponse.model.statusmessage = status.authen.suscess;
+        reponse.model.responsecode = status.authen.suscesscode;
+
+        sessionLoginHandler.fire('insert', result.recordset[0].Id, ip, userAgent,
+            referrer, accessToken, expireddate)
     }
     else {
-        authreponse.model.StatusMessage = responestatus.authen.Failed;
-        authreponse.model.ResponseCode = responestatus.authen.FailedCode;
+        reponse.model.statusmessage = status.authen.failed;
+        reponse.model.responsecode = status.authen.failedcode;
     }
     return authreponse;
 };

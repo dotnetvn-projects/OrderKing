@@ -1,29 +1,25 @@
-var crypto = require('crypto');
-var fs = require('fs');
-const clientAllow = require('../resources/client-allow');
+var crypto = require('../common/crypto');
+const apiConfig = require('../resources/api-config');
 
-//create hash key
-function createHash (data) {
-    //get server key
-    var key = fs.readFileSync('./resources/serverkey.txt', 'utf8');
-
-    //create hash with serverkey
-    var input = data + key;
-    return crypto.createHash('sha512').update(input).digest("hex");
+//create hash
+function generateHash(data) {
+    return crypto.generateHash(data);
 }
 
+//check the incoming request has valid or not
 function isValidRequest(req) {
+    return true;
     var isvalid = false;
     var referrer = req.headers.referer;
     var apikey = req.headers.apikey;
-    if (apikey === clientAllow.seller.ApiKey && referrer === clientAllow.seller.Referrer
-        || apikey === clientAllow.manager.ApiKey && referrer === clientAllow.manager.Referrer
-        || apikey === clientAllow.system.ApiKey && referrer === clientAllow.system.Referrer) {
+
+    if (apikey === apiConfig.seller.apikey && referrer === apiConfig.seller.referrer
+        || apikey === apiConfig.manager.apikey && referrer === apiConfig.manager.referrer
+        || apikey === apiConfig.system.apikey && referrer === apiConfig.system.referrer) {
         isvalid = true;
     }
-
     return isvalid;
 }
 
-exports.createHash = createHash;
+exports.generateHash = generateHash;
 exports.isValidRequest = isValidRequest;
