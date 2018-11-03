@@ -39,7 +39,7 @@ exports.executeAuth = async function (accountName, password, ip, userAgent, refe
         .query(query.getHashKey);
 
     if (result.recordset.length > 0) {
-        var accessToken = security.generateHash(result.recordset[0].HashKey);
+        var accessToken = security.generateHash(result.recordset[0].AccountName +'-'+ result.recordset[0].HashKey);
         var expireddate = moment().add(24, 'h');
         reponse.model.accesstoken = accessToken;
         reponse.model.expireddate = expireddate.format('DD/MM/YYYY HH:mm:ss');

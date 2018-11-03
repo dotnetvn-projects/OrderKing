@@ -2,7 +2,7 @@ var extension = require('../common/extension');
 
 //get user's hash key
 extension.defineProperty('getHashKey',
-    'SELECT Id, HashKey FROM Account WHERE AccountName = @AccountName AND Password = @Password ');
+    'SELECT AccountName, Id, HashKey FROM Account WHERE AccountName = @AccountName AND Password = @Password ');
 
 //get login session
 extension.defineProperty('queryLoginSession',
