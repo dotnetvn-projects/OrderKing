@@ -18,11 +18,15 @@ exports.removeAuth = async function (accessToken) {
         reponse.model.accesstoken = accessToken;
         reponse.model.statusmessage = status.authen.removesuccess;
         reponse.model.responsecode = status.authen.removesuccesscode;
+
+        //make session login expired
+        sessionLoginHandler.fire('makeExpired', accessToken);
     }
     else {
         reponse.model.statusmessage = status.authen.removefailed;
         reponse.model.responsecode = status.authen.removefailedcode;
     }
+
     return authreponse;
 };
 
@@ -43,7 +47,7 @@ exports.executeAuth = async function (accountName, password, ip, userAgent, refe
         reponse.model.responsecode = status.authen.suscesscode;
 
         sessionLoginHandler.fire('insert', result.recordset[0].Id, ip, userAgent,
-            referrer, accessToken, expireddate)
+            referrer, accessToken, expireddate);
     }
     else {
         reponse.model.statusmessage = status.authen.failed;

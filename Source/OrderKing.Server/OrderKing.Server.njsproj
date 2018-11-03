@@ -29,24 +29,27 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="common\common.js" />
     <Compile Include="common\crypto.js" />
-    <Compile Include="database\authquery.js" />
+    <Compile Include="common\extension.js" />
+    <Compile Include="common\logger.js" />
+    <Compile Include="database\auth-sqlcommand.js" />
     <Compile Include="database\dbconnection.js" />
     <Compile Include="eventHandlers\email-handler.js" />
+    <Compile Include="middlewares\validate-request.js" />
     <Compile Include="models\auth\auth-response.js" />
     <Compile Include="models\response.js" />
     <Compile Include="resources\response-status.js" />
     <Compile Include="routes\home.js" />
     <Compile Include="server.js" />
     <Compile Include="services\authservice.js" />
-    <Compile Include="services\logservice.js" />
     <Compile Include="services\securityservice.js" />
     <Compile Include="services\storeservice.js" />
     <Compile Include="services\userservice.js" />
     <Content Include="eventHandlers\log-handler.js" />
     <Content Include="eventHandlers\session-login-handler.js" />
     <Content Include="libman.json" />
-    <Content Include="middlewares\exception.js" />
+    <Content Include="middlewares\error-catcher.js" />
     <Content Include="resources\api-config.js" />
     <Content Include="resources\dbconfig.txt" />
     <Content Include="package.json" />

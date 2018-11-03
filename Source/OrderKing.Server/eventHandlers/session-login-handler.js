@@ -1,6 +1,6 @@
 const { poolPromise, sql } = require('../database/dbconnection');
 const moment = require('moment');
-const query = require('../database/authquery');
+const sqlcmd = require('../database/auth-sqlcommand');
 var events = require('events');
 
 
@@ -14,7 +14,7 @@ eventEmitter.on('update', async (accountId) => {
     const result = await pool.request()
         .input('AccountId', sql.Int, accountId)
         .input('LastAccessTime', sql.DateTime, now)
-        .query(query.updateLastAccessTimeLoginSession);
+        .query(sqlcmd.updateLastAccessTimeLoginSession);
     console.log(result.rowsAffected[0]);
 });
 
@@ -33,10 +33,17 @@ eventEmitter.on('insert', async (accountId, ip, userAgent, referrer,
         .input('LastAccessTime', sql.DateTime, now)
         .input('AccessToken', sql.NVarChar, accountToken)
         .input('AccessTokenExpired', sql.DateTime, expired)
-        .query(query.insertLoginSession);
-
-   
+        .query(sqlcmd.insertLoginSession);
+    
        console.log(result.rowsAffected[0]);
+});
+
+eventEmitter.on('makeExpired', async (accessToken) => {
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('AccessToken', sql.NVarChar, accessToken)
+        .query(sqlcmd.updateExpiredDateLoginSession);
+    console.log(result.rowsAffected[0]);
 });
 
 var action = function (type, accountId, ip, userAgent, referrer, accountToken, expireddate) {

@@ -2,6 +2,7 @@
 const format = require('string-format');
 const service = require('../services/authservice');
 const response = require('../models/response');
+const common = require('../common/common');
 const status = require('../resources/response-status');
 const express = require('express');
 const authrouter = express.Router();
@@ -15,46 +16,48 @@ authrouter.get('/', function (req, res) {
 });
 
 //auth user api
-authrouter.post('/authuser', async function (req, res) {
+authrouter.post('/auth-user', async function (req, res) {
     var ip = req.connection.remoteAddress;
     var userAgent = req.headers['user-agent'];
     var message = null;
     logHandler.fire('info', format('ip [{0}] has requested for authentication', ip));
-   
+
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    try {
-        if (security.isValidRequest(req) === false) {
-            logHandler.fire('error', format('ip [{0}] {1} ', ip, 'has been rejected by server when calling authentication'));
-            message = createErrorMessage();
-        }
-        else {
-            var account = req.body.AccountName;
-            var password = req.body.Password;
-            var result = await service.executeAuth(account, password, ip, userAgent);
 
-            message = createSuccessMessage(result.model.accesstoken, result.model.expireddate,
-                result.model.responsecode, result.model.statusmessage);
+    var account = req.body.AccountName;
+    var password = req.body.Password;
+    var result = await service.executeAuth(account, password, ip, userAgent);
 
-            logHandler.fire('info', format('[{0}][ip {1}] has been authenticated sucessful', account, ip));
-        }       
-    }
-    catch (ex) {
-        logHandler.fire('error', format('there is an error occurred while executing authentication for ip [{0}]', ip));
-        logHandler.fire('error', ex);
-        message = createErrorMessage();
-    }
+    message = createSuccessMessage(result.model.accesstoken, result.model.expireddate,
+        result.model.responsecode, result.model.statusmessage);
+
+    logHandler.fire('info', format('[{0}][ip {1}] has been authenticated sucessful', account, ip));
     res.end(JSON.stringify(message));
+    
 });
 
-function createErrorMessage() {
-    var message = response.model;
-    message.responsecode = status.invalidRequest.code;
-    message.statusmessage = status.invalidRequest.message;
-    message.result = null;
-    return message;
-}
+//remove auth
+authrouter.post('/remove-auth', async function (req, res) {
+    var ip = req.connection.remoteAddress;
+    var account = '';
+    if (security.isAcceptedRequest(req) === false) {
+        logHandler.fire('error', format('[{0}][ip {1}] {2} ', account, ip, 'has been rejected by server when calling remove authentication api'));
+        common.sendUnauthorizedRequest(res);
+    }
+    else {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        var accessToken = req.body.AccessToken;
+        var result = await service.removeAuth(accessToken);
+        var message = createSuccessMessage(accessToken, result.model.expireddate,
+            result.model.responsecode, result.model.statusmessage);
+        res.end(JSON.stringify(message));
+    } 
+});
 
-function createSuccessMessage(accessToken, expiredDate, responseCode, status) {
+//helper method
+function createSuccessMessage(accessToken, expiredDate,
+    responseCode, status) {
+
     var message = response.model;
     message.responsecode = responseCode;
     message.statusmessage = status;
@@ -68,6 +71,6 @@ function createSuccessMessage(accessToken, expiredDate, responseCode, status) {
     }
     return message;
 }
+//end helper method
 
-//export for outside
 module.exports = authrouter;
