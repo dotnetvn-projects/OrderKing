@@ -3,14 +3,14 @@ const moment = require('moment');
 const authreponse = require('../models/auth/auth-response');
 const responestatus = require('../resources/response-status');
 const security = require('../services/securityservice');
-const query = require('../database/authquery');
+const sqlcmd = require('../database/auth-sqlcommand');
 
 
 exports.removeAuth = async function (accessToken) {
     const pool = await poolPromise;
     const result = await pool.request()
         .input('@AccessToken', sql.NVarChar, accessToken)
-        .query(query.queryLoginSession);
+        .query(sqlcmd.queryLoginSession);
 
     if (result.recordset.length > 0) {
         authreponse.model.StatusMessage = 'Removed';
@@ -25,7 +25,7 @@ exports.executeAuth = async function (accountName, password) {
     const result = await pool.request()
         .input('AccountName', sql.NVarChar, accountName)
         .input('Password', sql.NVarChar, password)
-        .query(query.getHashKey);
+        .query(sqlcmd.getHashKey);
 
     if (result.recordset.length > 0) {
         var accessToken = security.createHash(result.recordset[0].HashKey);

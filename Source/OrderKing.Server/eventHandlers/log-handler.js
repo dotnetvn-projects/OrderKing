@@ -1,7 +1,7 @@
 //Log processing
 
 var events = require('events');
-var logger = require('../services/logservice');
+var logger = require('../common/logger');
 
 var eventEmitter = new events.EventEmitter();
 

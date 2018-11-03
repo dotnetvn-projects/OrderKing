@@ -29,7 +29,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="database\authquery.js" />
+    <Compile Include="common\extension.js" />
+    <Compile Include="common\logger.js" />
+    <Compile Include="database\auth-sqlcommand.js" />
     <Compile Include="database\dbconnection.js" />
     <Compile Include="eventHandlers\email-handler.js" />
     <Compile Include="models\auth\auth-response.js" />
@@ -38,7 +40,6 @@
     <Compile Include="routes\home.js" />
     <Compile Include="server.js" />
     <Compile Include="services\authservice.js" />
-    <Compile Include="services\logservice.js" />
     <Compile Include="services\securityservice.js" />
     <Compile Include="services\storeservice.js" />
     <Compile Include="services\userservice.js" />
@@ -63,6 +64,7 @@
     <Folder Include="models\user\" />
     <Folder Include="logs\" />
     <Folder Include="eventHandlers\" />
+    <Folder Include="common\" />
     <Folder Include="resources\" />
     <Folder Include="services\" />
     <Folder Include="routes\" />
