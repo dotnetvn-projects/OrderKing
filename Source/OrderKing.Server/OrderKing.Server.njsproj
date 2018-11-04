@@ -40,9 +40,16 @@
     <Compile Include="models\auth\auth-response.js" />
     <Compile Include="models\response.js" />
     <Compile Include="resources\response-status.js" />
+    <Compile Include="routes\catalog.js" />
     <Compile Include="routes\home.js" />
+    <Compile Include="routes\order.js" />
+    <Compile Include="routes\report.js" />
+    <Compile Include="routes\store.js" />
     <Compile Include="server.js" />
     <Compile Include="services\authservice.js" />
+    <Compile Include="services\catalogservice.js" />
+    <Compile Include="services\orderservice.js" />
+    <Compile Include="services\reportservice.js" />
     <Compile Include="services\securityservice.js" />
     <Compile Include="services\storeservice.js" />
     <Compile Include="services\userservice.js" />
@@ -55,7 +62,6 @@
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="routes\auth.js" />
-    <Content Include="services\categoryservice.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="database\" />
