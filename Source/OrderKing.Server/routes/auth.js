@@ -38,20 +38,12 @@ authrouter.post('/auth-user', async function (req, res) {
 
 //remove auth
 authrouter.post('/remove-auth', async function (req, res) {
-    var ip = req.connection.remoteAddress;
-    var account = '';
-    if (security.isAcceptedRequest(req) === false) {
-        logHandler.fire('error', format('[{0}][ip {1}] {2} ', account, ip, 'has been rejected by server when calling remove authentication api'));
-        common.sendUnauthorizedRequest(res);
-    }
-    else {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        var accessToken = req.body.AccessToken;
-        var result = await service.removeAuth(accessToken);
-        var message = createSuccessMessage(accessToken, result.model.expireddate,
-            result.model.responsecode, result.model.statusmessage);
-        res.end(JSON.stringify(message));
-    } 
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    var accessToken = req.body.AccessToken;
+    var result = await service.removeAuth(accessToken);
+    var message = createSuccessMessage(accessToken, result.model.expireddate,
+        result.model.responsecode, result.model.statusmessage);
+    res.end(JSON.stringify(message));    
 });
 
 //helper method

@@ -46,3 +46,15 @@ exports.sendUnauthorizedRequest = function sendUnauthorizedRequest(res) {
     res.end(JSON.stringify(message));
 };
 
+//send token expired
+exports.sendTokenExpired = function sendTokenExpired(res) {
+    res.writeHead(status.tokenExpired.code,
+        { 'Content-Type': 'application/json' });
+
+    var message = { responsecode: 0, statusmessage: '', result: null };
+    message.responsecode = status.tokenExpired.code;
+    message.statusmessage = status.tokenExpired.message;
+    message.result = null;
+    res.end(JSON.stringify(message));
+};
+

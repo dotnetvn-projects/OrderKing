@@ -1,18 +1,18 @@
-//auth status object
+//auth status defination
 
-//code: success => 100 to 110, failed => -100 to -110
-exports.authen = {
-    suscess: 'Successful authentication',
-    suscesscode: 100,
+//code: success => 200, failed => 500 (internal error)
+exports.common = {
+    suscess: 'Success',
+    suscesscode: 200,
 
-    Failed: 'Authentication failed',
-    FailedCode: -100,
+    failed: 'Failed',
+    failedcode: 500
+};
 
-    removesuccess: 'Remove authentication successful',
-    removesuccesscode: 101,
-
-    removefailed: 'Remove authentication failed',
-    removefailedcode: -101
+//code 410
+exports.tokenExpired = {
+    message: 'AccessToken is expired!',
+    code: 410
 };
 
 //code 401
