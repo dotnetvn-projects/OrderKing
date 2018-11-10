@@ -1,11 +1,11 @@
 const common = require('../common/common');
 const moment = require('moment');
 const format = require('string-format');
-const logHandler = require('../eventHandlers/log-handler');
+const logHandler = require('../eventHandlers/event.handler.log');
 const { poolPromise, sql } = require('../database/dbconnection');
-const apiConfig = require('../resources/api-config');
-const authenSqlCmd = require('../database/auth-sqlcommand');
-const sessionLoginHandler = require('../eventHandlers/session-login-handler');
+const apiConfig = require('../resources/resource.api.config');
+const authenSqlCmd = require('../database/sqlcommand.auth');
+const sessionLoginHandler = require('../eventHandlers/event.handler.sessionlogin');
 
 function isAcceptedRequest(req) {
     var isvalid = false;

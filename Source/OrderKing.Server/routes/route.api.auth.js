@@ -1,13 +1,11 @@
 'use strict';
 const format = require('string-format');
-const service = require('../services/authservice');
-const response = require('../models/response');
-const common = require('../common/common');
-const status = require('../resources/response-status');
+const moment = require('moment');
+const service = require('../services/service.auth');
+const response = require('../models/model.response');
 const express = require('express');
 const authrouter = express.Router();
-const security = require('../services/securityservice');
-var logHandler = require('../eventHandlers/log-handler');
+var logHandler = require('../eventHandlers/event.handler.log');
 
 //index page
 authrouter.get('/', function (req, res) {
@@ -53,6 +51,7 @@ function createSuccessMessage(accessToken, expiredDate,
     var message = response.model;
     message.responsecode = responseCode;
     message.statusmessage = status;
+    message.responsedate = moment().format('DD/MM/YYYY HH:mm:ss');
 
     if (accessToken !== '') {
         var data = {

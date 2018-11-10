@@ -1,10 +1,10 @@
 const { poolPromise, sql } = require('../database/dbconnection');
 const moment = require('moment');
-const reponse = require('../models/auth/auth-response');
-const status = require('../resources/response-status');
-const security = require('../services/securityservice');
-const authenSqlCmd = require('../database/auth-sqlcommand');
-const sessionLoginHandler = require('../eventHandlers/session-login-handler');
+const reponse = require('../models/auth/model.auth');
+const status = require('../resources/resource.api.status');
+const security = require('../services/service.security');
+const authenSqlCmd = require('../database/sqlcommand.auth');
+const sessionLoginHandler = require('../eventHandlers/event.handler.sessionlogin');
 
 //remove authentication from request of client
 exports.removeAuth = async function (accessToken) {

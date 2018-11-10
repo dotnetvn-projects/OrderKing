@@ -1,5 +1,5 @@
 const common = require('../common/common');
-const logHandler = require('../eventHandlers/log-handler');
+const logHandler = require('../eventHandlers/event.handler.log');
 const format = require('string-format');
 
 var exceptionMiddleware = function (err, req, res, next) {

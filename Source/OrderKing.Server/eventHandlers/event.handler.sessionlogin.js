@@ -1,6 +1,6 @@
 const { poolPromise, sql } = require('../database/dbconnection');
 const moment = require('moment');
-const authenSqlCmd = require('../database/auth-sqlcommand');
+const authenSqlCmd = require('../database/sqlcommand.auth');
 var events = require('events');
 
 
