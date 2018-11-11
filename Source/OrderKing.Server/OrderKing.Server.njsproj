@@ -45,11 +45,13 @@
     <Compile Include="models\model.response.js" />
     <Compile Include="models\user\model.userinfo.js" />
     <Compile Include="resources\resource.api.status.js" />
-    <Compile Include="routes\route.api.catalog.js" />
-    <Compile Include="routes\route.api.home.js" />
-    <Compile Include="routes\route.api.order.js" />
-    <Compile Include="routes\route.api.report.js" />
-    <Compile Include="routes\route.api.store.js" />
+    <Compile Include="routes\api.management\route.api.management.catalog.js" />
+    <Compile Include="routes\api.public\route.api.catalog.js" />
+    <Compile Include="routes\api.public\route.api.home.js" />
+    <Compile Include="routes\api.public\route.api.order.js" />
+    <Compile Include="routes\api.public\route.api.report.js" />
+    <Compile Include="routes\api.public\route.api.store.js" />
+    <Compile Include="routes\api.public\route.api.user.js" />
     <Compile Include="server.js" />
     <Compile Include="services\service.auth.js" />
     <Compile Include="services\service.catalog.js" />
@@ -82,6 +84,8 @@
     <Folder Include="common\" />
     <Folder Include="middlewares\" />
     <Folder Include="resources\" />
+    <Folder Include="routes\api.management\" />
+    <Folder Include="routes\api.public\" />
     <Folder Include="services\" />
     <Folder Include="routes\" />
   </ItemGroup>

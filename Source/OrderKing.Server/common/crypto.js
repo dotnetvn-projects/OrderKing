@@ -1,6 +1,6 @@
 var crypto = require('crypto');
 const moment = require('moment');
-const apiConfig = require('../resources/api-config');
+const apiConfig = require('../resources/resource.api.config');
 const algorithm = 'aes-256-ctr';
 const password = apiConfig.server.serverkey;
 

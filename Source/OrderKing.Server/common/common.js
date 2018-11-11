@@ -1,4 +1,4 @@
-const status = require('../resources/response-status');
+const status = require('../resources/resource.api.status');
 const crypto = require('../common/crypto');
 
 

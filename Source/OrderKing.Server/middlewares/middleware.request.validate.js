@@ -7,6 +7,7 @@ const apiConfig = require('../resources/resource.api.config');
 const authenSqlCmd = require('../database/sqlcommand.auth');
 const sessionLoginHandler = require('../eventHandlers/event.handler.sessionlogin');
 
+//filter request
 function isAcceptedRequest(req) {
     var isvalid = false;
     var referrer = req.headers.referer;
@@ -20,9 +21,11 @@ function isAcceptedRequest(req) {
     return isvalid;
 }
 
+//filter request
 var validateRequest = async function (req, res, next) {
     try {
         var ip = req.connection.remoteAddress;
+        var accountName = '';
         var isAccepted = isAcceptedRequest(req);
         if (isAccepted === false) {
             logHandler.fire('error', format('ip [{0}] {1} ', ip, 'has been rejected by server'));
@@ -44,7 +47,7 @@ var validateRequest = async function (req, res, next) {
                         .query(authenSqlCmd.queryLoginSession);
 
                     var tokenInfo = common.parseTokenInfo(accessToken);
-                    var accountName = result.recordset[0].AccountName;
+                    accountName = result.recordset[0].AccountName;
 
                     if (result.recordset.length <=0 || tokenInfo.account !== accountName) {
                         logHandler.fire('error', format('ip [{0}] {1} ', ip, 'has sent the request with fake accesstoken'));
@@ -67,8 +70,14 @@ var validateRequest = async function (req, res, next) {
                     }
                 }
             }
-            if (valid)
+            if (valid) {
+                if (accountName !== null && accountName !== '') {
+                    var url = req.headers.host + '/' + req.url;
+                    logHandler.fire('info', format('[{0}][ip {1}] {2} ', accountName, ip,
+                        'sent the request to ' + url));
+                }
                 next();
+            }
         }
     } catch (error) {
         next(error);

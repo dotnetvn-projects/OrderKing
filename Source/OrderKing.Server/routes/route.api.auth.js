@@ -26,7 +26,7 @@ authrouter.post('/auth-user', async function (req, res) {
     var password = req.body.Password;
     var result = await service.executeAuth(account, password, ip, userAgent);
 
-    message = createSuccessMessage(result.model.accesstoken, result.model.expireddate,
+    message = createResponseMessage(result.model.accesstoken, result.model.expireddate,
         result.model.responsecode, result.model.statusmessage);
 
     logHandler.fire('info', format('[{0}][ip {1}] has been authenticated sucessful', account, ip));
@@ -39,13 +39,13 @@ authrouter.post('/remove-auth', async function (req, res) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     var accessToken = req.body.AccessToken;
     var result = await service.removeAuth(accessToken);
-    var message = createSuccessMessage(accessToken, result.model.expireddate,
+    var message = createResponseMessage(accessToken, result.model.expireddate,
         result.model.responsecode, result.model.statusmessage);
     res.end(JSON.stringify(message));    
 });
 
 //helper method
-function createSuccessMessage(accessToken, expiredDate,
+function createResponseMessage(accessToken, expiredDate,
     responseCode, status) {
 
     var message = response.model;
