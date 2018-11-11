@@ -36,5 +36,5 @@ app.use(errorCatcher.setmiddleware);
 
 //Start listening connection from remote client
 app.listen(port, function () {
-    console.log("server is started !");
+    console.log("server is started !, port : " + port);
 });

@@ -5,6 +5,7 @@
     <Name>OrderKing.Server</Name>
     <RootNamespace>OrderKing.Server</RootNamespace>
     <LastActiveSolutionConfig>Debug|Any CPU</LastActiveSolutionConfig>
+    <NameOfLastUsedPublishProfile>publish</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -64,6 +65,7 @@
     <Content Include="eventHandlers\event.handler.sessionlogin.js" />
     <Content Include="libman.json" />
     <Content Include="middlewares\middleware.error.catcher.js" />
+    <None Include="publish.pubxml" />
     <Content Include="resources\resource.api.config.js" />
     <Content Include="resources\dbconfig.txt" />
     <Content Include="package.json" />
