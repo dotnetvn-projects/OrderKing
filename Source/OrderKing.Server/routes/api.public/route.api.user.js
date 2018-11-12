@@ -21,8 +21,22 @@ userrouter.post('/get-info', async function (req, res) {
 userrouter.post('/edit-info', async function (req, res) {
     var accessToken = req.body.AccessToken;
 
-    var result = await service.GetUserInfoByAccessToken(accessToken);
+    var fullName = req.body.fullName;
+    var email = req.body.Email;
+    var phoneNumber = req.body.PhoneNumber;
+    var address = req.body.Address;
+    var address2 = req.body.Address2;
+    var identityCard = req.body.IdentityCard;
+
     var message = null;
+    var info = await service.GetUserInfoByAccessToken(accessToken);
+    if (info.model.responsecode === 200) {
+        //todo
+    }
+    else {
+        //todo
+    }
+    
 
     res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(message));

@@ -65,7 +65,6 @@
     <Content Include="eventHandlers\event.handler.sessionlogin.js" />
     <Content Include="libman.json" />
     <Content Include="middlewares\middleware.error.catcher.js" />
-    <None Include="publish.pubxml" />
     <Content Include="resources\resource.api.config.js" />
     <Content Include="resources\dbconfig.txt" />
     <Content Include="package.json" />
