@@ -7,7 +7,7 @@ var exceptionMiddleware = function (err, req, res, next) {
     logHandler.fire('error', format('there is an error occurred while processing request from ip [{0}] to {1}', ip, req.url));
     logHandler.fire('error', err);
     common.sendBadRequest(res);
-    next();
+    next(err);
 };
 
 exports.setmiddleware = exceptionMiddleware;

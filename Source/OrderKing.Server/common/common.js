@@ -26,7 +26,8 @@ exports.sendInvalidRequest = function sendInvalidRequest(res) {
 
 //send bad request
 exports.sendBadRequest = function sendBadRequest(res) {
-    res.writeHead(status.badRequest.code, { 'Content-Type': 'application/json' });
+    //res.writeHead(status.badRequest.code, { 'Content-Type': 'application/json' });
+    res.status(status.badRequest.code);
     var message = { responsecode: 0, statusmessage: '', result: null };
     message.responsecode = status.badRequest.code;
     message.statusmessage = status.badRequest.message;

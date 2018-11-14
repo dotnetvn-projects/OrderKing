@@ -20,7 +20,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //in development mode, please comment out validateRequest middleware
-app.use(validateRequest.setmiddleware);
+//app.use(validateRequest.setmiddleware);
+
 
 //route api
 app.use('/', homeApi);
@@ -32,7 +33,12 @@ app.use('/api/public/store', storeApi);
 app.use('/api/public/user', userApi);
 
 //in development mode, please comment out errorCatcher middleware
-app.use(errorCatcher.setmiddleware);
+//app.use(errorCatcher.setmiddleware);
+
+app.use(function (err, req, res, next) {
+    // logic
+    console.log('errr');
+});
 
 //Start listening connection from remote client
 app.listen(port, function () {

@@ -1,13 +1,13 @@
 'use strict';
 const express = require('express');
 const userrouter = express.Router();
+const moment = require('moment');
 const response = require('../../models/model.response');
 const service = require('../../services/service.user');
 
 //get user info
 userrouter.post('/get-info', async function (req, res) {
     var accessToken = req.body.AccessToken;
-
     var result = await service.GetUserInfoByAccessToken(accessToken);
     var message = createResponseMessage(result.model.userinfo, 
         result.model.responsecode,
