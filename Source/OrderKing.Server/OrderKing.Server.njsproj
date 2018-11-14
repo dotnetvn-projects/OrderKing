@@ -33,6 +33,7 @@
     <Compile Include="common\common.js" />
     <Compile Include="common\crypto.js" />
     <Compile Include="common\extension.js" />
+    <Compile Include="common\io.js" />
     <Compile Include="common\logger.js" />
     <Compile Include="database\sqlcommand.auth.js" />
     <Compile Include="database\dbconnection.js" />
@@ -44,6 +45,7 @@
     <Compile Include="middlewares\middleware.request.validate.js" />
     <Compile Include="models\auth\model.auth.js" />
     <Compile Include="models\model.response.js" />
+    <Compile Include="models\store\model.storeinfo.js" />
     <Compile Include="models\user\model.userinfo.js" />
     <Compile Include="resources\resource.api.status.js" />
     <Compile Include="routes\api.management\route.api.management.catalog.js" />
@@ -85,6 +87,7 @@
     <Folder Include="common\" />
     <Folder Include="middlewares\" />
     <Folder Include="resources\" />
+    <Folder Include="resources\images\" />
     <Folder Include="routes\api.management\" />
     <Folder Include="routes\api.public\" />
     <Folder Include="services\" />

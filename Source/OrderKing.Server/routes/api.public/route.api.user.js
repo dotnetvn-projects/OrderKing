@@ -19,23 +19,23 @@ userrouter.post('/get-info', async function (req, res) {
 
 //edit user info
 userrouter.post('/edit-info', async function (req, res) {
-
+    var accessToken = req.body.AccessToken;
     var fullName = req.body.FullName;
     var email = req.body.Email;
     var phoneNumber = req.body.PhoneNumber;
     var address = req.body.Address;
     var address2 = req.body.Address2;
     var identityCard = req.body.IdentityCard;
-    var accountId = req.body.AccountId;
+    var accountId = await service.getAccountIdByAccessToken(accessToken);
 
     var result = await service.updateUserInfo({
-        FullName: fullName,
-        Email: email,
-        PhoneNumber: phoneNumber,
-        Address: address,
-        Address2: address2,
-        IdentityCard: identityCard,
-        AccountId: accountId
+        fullname: fullName,
+        email: email,
+        phonenumber: phoneNumber,
+        address: address,
+        address2: address2,
+        identitycard: identityCard,
+        accountid: accountId
     });
 
     var message = createResponseMessage(result.model.userinfo,
@@ -48,9 +48,9 @@ userrouter.post('/edit-info', async function (req, res) {
 
 //update avatar
 userrouter.post('/change-avatar', async function (req, res) {
-
+    var accessToken = req.body.AccessToken;
     var avatarImage = req.body.AvatarImage;
-    var accountId = req.body.AccountId;
+    var accountId = await service.getAccountIdByAccessToken(accessToken);
 
     var result = await service.updateAvartar({
         AvatarImage: avatarImage,
@@ -68,13 +68,13 @@ userrouter.post('/change-avatar', async function (req, res) {
 
 //update password
 userrouter.post('/change-pass', async function (req, res) {
-
+    var accessToken = req.body.AccessToken;
     var password = req.body.Password;
-    var accountId = req.body.AccountId;
+    var accountId = await service.getAccountIdByAccessToken(accessToken);
 
     var result = await service.changePassword({
-        Password: password,
-        AccountId: accountId
+        password: password,
+        accountid: accountId
     });
 
     var message = createResponseMessage(result.model.userinfo,
