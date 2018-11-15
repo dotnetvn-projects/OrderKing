@@ -65,7 +65,7 @@ catalogrouter.post('/delete-category', async (req, res, next) => {
 
         var accountId = await userService.getAccountIdByAccessToken(accessToken);
 
-        var result = await service.deleteCatagory(categoryId);
+        var result = await service.deactivateCategory(categoryId);
 
         var message = createResponseMessage(null,
             result.model.responsecode,

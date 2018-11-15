@@ -50,14 +50,14 @@ exports.updateCatagory = async function (categoryobject) {
 };
 
 //delete category
-exports.deleteCatagory = async function (categoryId) {
+exports.deactivateCategory = async function (categoryId) {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
 
     const pool = await poolPromise;
     const result = await pool.request()
         .input('Id', sql.BigInt, categoryId)
-        .query(catalogSqlCmd.deleteCategory);
+        .query(catalogSqlCmd.deactivateCategory);
 
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
         response.model.statusmessage = status.common.suscess;

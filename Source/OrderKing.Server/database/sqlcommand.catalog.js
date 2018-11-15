@@ -22,7 +22,7 @@ defineProperty('updateCategory', `
 `);
 
 //delete category
-defineProperty('deleteCategory', `
+defineProperty('deactivateCategory', `
     UPDATE Category
     SET IsActived = 0
     WHERE Id = @Id
