@@ -1,5 +1,7 @@
 const status = require('../resources/resource.api.status');
 const crypto = require('../common/crypto');
+const response = require('../models/model.response');
+const moment = require('moment');
 
 
 //get user info from accessToken
@@ -16,7 +18,9 @@ exports.parseTokenInfo = function (accessToken) {
 
 //send invalid request
 exports.sendInvalidRequest = function sendInvalidRequest(res) {
-    res.writeHead(status.invalidRequest.code, { 'Content-Type': 'application/json' });
+    res.status(status.invalidRequest.code);
+    res.setHeader('content-type', 'application/json');
+
     var message = { responsecode: 0, statusmessage: '', result: null };
     message.responsecode = status.invalidRequest.code;
     message.statusmessage = status.invalidRequest.message;
@@ -25,20 +29,21 @@ exports.sendInvalidRequest = function sendInvalidRequest(res) {
 };
 
 //send bad request
-exports.sendBadRequest = function sendBadRequest(res) {
-    //res.writeHead(status.badRequest.code, { 'Content-Type': 'application/json' });
+exports.sendBadRequest = function sendBadRequest(res, err) {
     res.status(status.badRequest.code);
+    res.setHeader('content-type', 'application/json');
+
     var message = { responsecode: 0, statusmessage: '', result: null };
     message.responsecode = status.badRequest.code;
     message.statusmessage = status.badRequest.message;
-    message.result = null;
+    message.result = err;
     res.end(JSON.stringify(message));
 };
 
 //send unauthorized request
 exports.sendUnauthorizedRequest = function sendUnauthorizedRequest(res) {
-    res.writeHead(status.unauthorizedRequest.code,
-        { 'Content-Type': 'application/json' });
+    res.status(status.unauthorizedRequest.code);
+    res.setHeader('content-type', 'application/json');
 
     var message = { responsecode: 0, statusmessage: '', result: null };
     message.responsecode = status.unauthorizedRequest.code;
@@ -49,8 +54,8 @@ exports.sendUnauthorizedRequest = function sendUnauthorizedRequest(res) {
 
 //send token expired
 exports.sendTokenExpired = function sendTokenExpired(res) {
-    res.writeHead(status.tokenExpired.code,
-        { 'Content-Type': 'application/json' });
+    res.status(status.tokenExpired.code);
+    res.setHeader('content-type', 'application/json');
 
     var message = { responsecode: 0, statusmessage: '', result: null };
     message.responsecode = status.tokenExpired.code;
@@ -59,3 +64,12 @@ exports.sendTokenExpired = function sendTokenExpired(res) {
     res.end(JSON.stringify(message));
 };
 
+//create response message for client
+exports.createResponseMessage = (data,statusCode, statusMessage) => {
+    var message = response.model;
+    message.responsecode = statusCode;
+    message.statusmessage = statusMessage;
+    message.responsedate = moment().format('DD/MM/YYYY HH:mm:ss');
+    message.result = data;
+    return message;
+};

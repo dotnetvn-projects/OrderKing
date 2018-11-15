@@ -33,7 +33,7 @@ app.use('/api/public/store', storeApi);
 app.use('/api/public/user', userApi);
 
 //in development mode, please comment out errorCatcher middleware
-//app.use(errorCatcher.setmiddleware);
+app.use(errorCatcher.setmiddleware);
 
 app.use(function (err, req, res, next) {
     // logic

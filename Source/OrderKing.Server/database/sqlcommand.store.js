@@ -7,7 +7,7 @@ var defineProperty = function define(name, value) {
 
 //get store info by access token
 defineProperty('getStoreInfoByAccessToken',
-    `SELECT Store.StoreName, Store.StoreAddress, Store.StorePhone, Store.Slogan
+    `SELECT Store.StoreName, Store.Email, Store.StoreAddress, Store.StorePhone, Store.Slogan
      FROM LoginSession
      INNER JOIN StoreMember ON LoginSession.AccountId = StoreMember.AccountId
      INNER JOIN Store ON Store.Id = StoreMember.StoreId
@@ -40,4 +40,30 @@ defineProperty('updateStoreInfo', `
 
 //add new member
 defineProperty('addNewMember', `
-    INSERT INTO StoreMember (StoreId, MemberId) VALUES (@StoreId, @MemberId)`);
+    INSERT INTO StoreMember (StoreId, AccountId) VALUES (@StoreId, @MemberId)`);
+
+//remove member
+defineProperty('removeMember', `
+    DELETE FROM StoreMember WHERE StoreId = @StoreId AND AccountId = @MemberId`);
+
+//update logo
+defineProperty('updateLogo',
+    `UPDATE [Store] SET Logo = @Logo WHERE Id = @StoreId`);
+
+//get member in store
+defineProperty('getMemberInStore', `
+    SELECT Store.StoreName, Account.AccountName, UserProfile.FullName,
+           UserProfile.Email, UserProfile.PhoneNumber, UserProfile.[Address],
+	       UserProfile.[Address2], UserProfile.IdentityCard 
+         FROM Store INNER JOIN StoreMember ON Store.Id = StoreMember.StoreId
+         INNER JOIN Account ON StoreMember.AccountId = Account.Id
+	     INNER JOIN UserProfile ON Account.Id = UserProfile.AccountId
+         WHERE Store.Id = @StoreId
+`);
+
+//create new store
+defineProperty('createNewStore', `
+    INSERT INTO Store(StoreName, OwnerId, CreatedDate, StoreAddress, StorePhone, Slogan, IsActived)
+    VALUES (@StoreName, @OwnerId, @CreatedDate, @StoreAddress, @StorePhone, @Slogan, @IsActive)
+    SELECT SCOPE_IDENTITY() AS StoreId
+`);

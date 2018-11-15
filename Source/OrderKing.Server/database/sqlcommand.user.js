@@ -15,8 +15,13 @@ defineProperty('getUserInfoByAccessToken',
                        INNER JOIN LoginSession ss ON ac.Id = ss.AccountId
                        WHERE ss.AccessToken = @AccessToken AND ac.IsActived = 1`);
 
+//get account by account id
 defineProperty('getAccountByAccountId',
     `SELECT ac.* FROM Account ac WHERE ac.Id = @AccountId AND ac.IsActived = 1`);
+
+//get account by account name
+defineProperty('getAccountByAccountName',
+    `SELECT ac.* FROM Account ac WHERE ac.AccountName = @AccountName AND ac.IsActived = 1`);
 
 //get accountid by access token
 defineProperty('getAccountIdByToken',
@@ -33,12 +38,21 @@ defineProperty('updateUserInfo',
 
 //update password
 defineProperty('updatePassword',
-    `UPDATE [Account]
-     SET Password = @Password
-     WHERE AccountId = @AccountId`);
+    `UPDATE [Account] SET Password = @Password WHERE AccountId = @AccountId`);
 
 //update avatar
 defineProperty('updateAvatar',
-    `UPDATE [UserProfile]
-     SET Avatar = @Avatar
-     WHERE AccountId = @AccountId`);
+    `UPDATE [UserProfile] SET Avatar = @Avatar WHERE AccountId = @AccountId`);
+
+//create account
+defineProperty('createAccount', `
+    INSERT INTO Account(AccountName, Password, CreatedDate, HashKey, IsActived)
+    VALUES (@AccountName, @Password, @CreatedDate, @HashKey, @IsActived)
+    SELECT SCOPE_IDENTITY() AS AccountId
+`);
+
+//create user profile
+defineProperty('createUserProfile', `
+    INSERT INTO UserProfile(AccountId, FullName, Email, PhoneNumber, Address, Address2, IdentityCard)
+    VALUES (@AccountId, @FullName, @Email, @PhoneNumber, @Address, @Address2, IdentityCard)
+`);

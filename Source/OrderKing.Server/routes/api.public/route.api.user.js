@@ -6,83 +6,96 @@ const response = require('../../models/model.response');
 const service = require('../../services/service.user');
 
 //get user info
-userrouter.post('/get-info', async function (req, res) {
-    var accessToken = req.body.AccessToken;
-    var result = await service.GetUserInfoByAccessToken(accessToken);
-    var message = createResponseMessage(result.model.userinfo, 
-        result.model.responsecode,
-        result.model.statusmessage);
+userrouter.post('/get-info', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var result = await service.getUserInfoByAccessToken(accessToken);
+        var message = createResponseMessage(result.model.userinfo,
+            result.model.responsecode,
+            result.model.statusmessage);
 
-    res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(message));    
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
 });
 
 //edit user info
-userrouter.post('/edit-info', async function (req, res) {
-    var accessToken = req.body.AccessToken;
-    var fullName = req.body.FullName;
-    var email = req.body.Email;
-    var phoneNumber = req.body.PhoneNumber;
-    var address = req.body.Address;
-    var address2 = req.body.Address2;
-    var identityCard = req.body.IdentityCard;
-    var accountId = await service.getAccountIdByAccessToken(accessToken);
+userrouter.post('/edit-info', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var userInfo = {
+            fullname: req.body.FullName,
+            email: req.body.Email,
+            phonenumber: req.body.PhoneNumber,
+            address: req.body.Address,
+            address2: req.body.Address2,
+            identitycard: req.body.IdentityCard
+        };
+        var accountId = await service.getAccountIdByAccessToken(accessToken);
 
-    var result = await service.updateUserInfo({
-        fullname: fullName,
-        email: email,
-        phonenumber: phoneNumber,
-        address: address,
-        address2: address2,
-        identitycard: identityCard,
-        accountid: accountId
-    });
+        var result = await service.updateUserInfo(userInfo, accountId);
 
-    var message = createResponseMessage(result.model.userinfo,
-        result.model.responsecode,
-        result.model.statusmessage);
+        var message = createResponseMessage(result.model.userinfo,
+            result.model.responsecode,
+            result.model.statusmessage);
 
-    res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(message));
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
 });
 
 //update avatar
-userrouter.post('/change-avatar', async function (req, res) {
-    var accessToken = req.body.AccessToken;
-    var avatarImage = req.body.AvatarImage;
-    var accountId = await service.getAccountIdByAccessToken(accessToken);
+userrouter.post('/change-avatar', async function (req, res, next) {
+    try {
+        var accessToken = req.body.AccessToken;
+        var avatarImage = req.body.AvatarImage;
+        var accountId = await service.getAccountIdByAccessToken(accessToken);
 
-    var result = await service.updateAvartar({
-        AvatarImage: avatarImage,
-        AccountId: accountId
-    });
+        var result = await service.updateAvartar({
+            avatar: avatarImage,
+            accountid: accountId
+        });
 
-    var message = createResponseMessage(result.model.userinfo,
-        result.model.responsecode,
-        result.model.statusmessage);
+        var message = createResponseMessage(null,
+            result.model.responsecode,
+            result.model.statusmessage);
 
-    res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(message));
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
 });
 
-
 //update password
-userrouter.post('/change-pass', async function (req, res) {
-    var accessToken = req.body.AccessToken;
-    var password = req.body.Password;
-    var accountId = await service.getAccountIdByAccessToken(accessToken);
+userrouter.post('/change-pass', async function (req, res, next) {
+    try {
+        var accessToken = req.body.AccessToken;
+        var password = req.body.Password;
+        var accountId = await service.getAccountIdByAccessToken(accessToken);
 
-    var result = await service.changePassword({
-        password: password,
-        accountid: accountId
-    });
+        var result = await service.changePassword({
+            password: password,
+            accountid: accountId
+        });
 
-    var message = createResponseMessage(result.model.userinfo,
-        result.model.responsecode,
-        result.model.statusmessage);
+        var message = createResponseMessage(result.model.userinfo,
+            result.model.responsecode,
+            result.model.statusmessage);
 
-    res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(message));
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
 });
 
 
@@ -92,7 +105,7 @@ function createResponseMessage(userinfo, responseCode, status) {
     message.responsecode = responseCode;
     message.statusmessage = status;
     message.responsedate = moment().format('DD/MM/YYYY HH:mm:ss');
-    message.result = userinfo;  
+    message.result = userinfo;
     return message;
 }
 //end helper method
