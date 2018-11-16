@@ -192,6 +192,7 @@ storerouter.post('/get-member-list', async (req, res) => {
 //TODO: get order list
 //TODO: search order
 
+//create new store and account
 storerouter.post('/create-new', async (req, res, next) => {
     try {
         var responsecode = status.common.failedcode;
@@ -209,8 +210,8 @@ storerouter.post('/create-new', async (req, res, next) => {
             address2: null,
             identitycard: null
         };
-
-        var accountResult = userService.createNewAccount(accountInfo);
+       
+        var accountResult = await userService.createNewAccount(accountInfo);
         if (accountResult.model.userinfo > 0) {
             var storeInfo = {
                 storename: req.body.StoreName,
@@ -218,11 +219,11 @@ storerouter.post('/create-new', async (req, res, next) => {
                 address: req.body.Address,
                 phone: req.body.StorePhone,
                 slogan: req.body.Slogan,
-                owner: accountResult
+                owner: accountResult.model.userinfo
             };
 
-            var storeResult = service.createNewStore(storeInfo);
-            if (storeResult.model.storeInfo > 0) {
+            var storeResult = await service.createNewStore(storeInfo);
+            if (storeResult.model.storeinfo > 0) {
                 message = common.createResponseMessage(
                     format('{0} has been created successfully !', storeInfo.storename),
                     storeResult.model.responsecode,
@@ -238,5 +239,6 @@ storerouter.post('/create-new', async (req, res, next) => {
         next(err);
     }
 });
+
 
 module.exports = storerouter;

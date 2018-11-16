@@ -147,18 +147,22 @@ exports.createNewStore = async (storeInfo) => {
     const pool = await poolPromise;
     const result = await pool.request()
         .input('StoreName', sql.NVarChar, storeInfo.storename)
+        .input('Email', sql.NVarChar, storeInfo.email)
         .input('OwnerId', sql.BigInt, storeInfo.owner)
         .input('CreatedDate', sql.DateTime, new Date(moment()))
         .input('StoreAddress', sql.NVarChar, storeInfo.address)
         .input('StorePhone', sql.NVarChar, storeInfo.phone)
         .input('Slogan', sql.NVarChar, storeInfo.slogan)
-        .input('IsActived', sql.Bit, '1')
         .query(storeSqlCmd.createNewStore);
 
     if (result.recordset.length > 0) {
+        await this.addNewMember({
+            memberid: storeInfo.owner, storeid: result.recordset[0].StoreId
+        });
+
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
-        response.model.storeinfo = result.recordset[0].StoreId;
+        response.model.storeinfo = result.recordset[0].StoreId;      
     }
     return response;
 };

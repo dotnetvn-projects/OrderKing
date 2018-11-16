@@ -54,5 +54,10 @@ defineProperty('createAccount', `
 //create user profile
 defineProperty('createUserProfile', `
     INSERT INTO UserProfile(AccountId, FullName, Email, PhoneNumber, Address, Address2, IdentityCard)
-    VALUES (@AccountId, @FullName, @Email, @PhoneNumber, @Address, @Address2, IdentityCard)
+    VALUES (@AccountId, @FullName, @Email, @PhoneNumber, @Address, @Address2, @IdentityCard)
+`);
+
+//delete account
+defineProperty('deleteAccount', `
+    DELETE FROM Account WHERE Id = @AccountId
 `);

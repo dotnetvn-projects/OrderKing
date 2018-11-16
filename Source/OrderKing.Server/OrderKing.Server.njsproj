@@ -46,6 +46,7 @@
     <Compile Include="models\auth\model.auth.js" />
     <Compile Include="models\category\model.category.js" />
     <Compile Include="models\model.response.js" />
+    <Compile Include="models\order\model.order.js" />
     <Compile Include="models\store\model.storeinfo.js" />
     <Compile Include="models\user\model.userinfo.js" />
     <Compile Include="resources\resource.api.status.js" />
@@ -80,6 +81,7 @@
     <Folder Include="models\" />
     <Folder Include="models\auth\" />
     <Folder Include="models\category\" />
+    <Folder Include="models\order\" />
     <Folder Include="models\product\" />
     <Folder Include="models\store\" />
     <Folder Include="models\user\" />

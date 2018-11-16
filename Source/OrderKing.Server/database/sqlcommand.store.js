@@ -63,7 +63,7 @@ defineProperty('getMemberInStore', `
 
 //create new store
 defineProperty('createNewStore', `
-    INSERT INTO Store(StoreName, OwnerId, CreatedDate, StoreAddress, StorePhone, Slogan, IsActived)
-    VALUES (@StoreName, @OwnerId, @CreatedDate, @StoreAddress, @StorePhone, @Slogan, @IsActive)
+    INSERT INTO Store(StoreName, OwnerId, Email, CreatedDate, StoreAddress, StorePhone, Slogan)
+    VALUES (@StoreName, @OwnerId, @Email, @CreatedDate, @StoreAddress, @StorePhone, @Slogan)
     SELECT SCOPE_IDENTITY() AS StoreId
 `);

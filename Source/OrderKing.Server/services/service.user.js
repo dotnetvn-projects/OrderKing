@@ -152,12 +152,13 @@ exports.createNewAccount = async (info) => {
 
     var hash = security.generateHash(info.accountname);
     var password = security.encrypt(info.accountname + "-" + info.password + "-" + hash);
+
     const pool = await poolPromise;
-    const result = await pool.request()
-        .input("AccountName", sql.BigInt, info.accountname)
-        .input("Password", sql.BigInt, password)
+    var result = await pool.request()
+        .input("AccountName", sql.NVarChar, info.accountname)
+        .input("Password", sql.NVarChar, password)
         .input("CreatedDate", sql.DateTime, new Date(moment()))
-        .input("HashKey", sql.BigInt, hash)
+        .input("HashKey", sql.NVarChar, hash)
         .input("IsActived", sql.Bit, '1')
         .query(userSqlCmd.createAccount);
 
@@ -170,12 +171,12 @@ exports.createNewAccount = async (info) => {
             .input("PhoneNumber", sql.NVarChar, info.phonenumber)
             .input("Address", sql.NVarChar, info.address)
             .input("Address2", sql.NVarChar, info.address2)
-                .input("IdentityCard", sql.NVarChar, info.identitycard)
+            .input("IdentityCard", sql.NVarChar, info.identitycard)
             .query(userSqlCmd.createUserProfile);
 
-        response.model.statusmessage = status.common.failed;
-        response.model.responsecode = status.common.failedcode;
-        response.model.userinfo = result.recordset[0].AccountId;
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        response.model.userinfo = accountId;
     }
 
     return response;
