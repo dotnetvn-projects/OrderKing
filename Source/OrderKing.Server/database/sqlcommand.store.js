@@ -67,3 +67,10 @@ defineProperty('createNewStore', `
     VALUES (@StoreName, @OwnerId, @Email, @CreatedDate, @StoreAddress, @StorePhone, @Slogan)
     SELECT SCOPE_IDENTITY() AS StoreId
 `);
+
+//get store owner id
+defineProperty('getStoreOwnerId', `
+    SELECT Store.Id FROM LoginSession INNER JOIN Store
+                     ON Store.OwnerId = LoginSession.AccountId
+   WHERE AccessToken = @AccessToken
+`);

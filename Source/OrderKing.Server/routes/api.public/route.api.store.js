@@ -5,6 +5,7 @@ const userService = require('../../services/service.user');
 const common = require('../../common/common');
 const status = require('../../resources/resource.api.status');
 const format = require('string-format');
+const security = require('../../services/service.security');
 
 //url: /api/public/store
 //get store info
@@ -56,27 +57,34 @@ storerouter.post('/edit-info', async (req, res, next) => {
 storerouter.post('/add-member', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
-        var storeId = await service.getStoreIdByAccessToken(accessToken);
-        var account = await userService.getAccountByAccountName(req.body.AccountName);
+        var isStoreOwner = await security.isStoreOwner(accessToken);
 
-        if (storeId === -1 || account === null) {
-            common.sendBadRequest(res, 'Request data is invalid !');
+        if (isStoreOwner === false) {
+            common.sendUnauthorizedRequest(res);
         }
         else {
-            var info = {
-                memberid: account.Id,
-                storeid: storeId
-            };
+            var storeId = await service.getStoreIdByAccessToken(accessToken);
+            var account = await userService.getAccountByAccountName(req.body.AccountName);
 
-            var result = await service.addNewMember(info);
+            if (storeId === -1 || account === null) {
+                common.sendBadRequest(res, 'Request data is invalid !');
+            }
+            else {
+                var info = {
+                    memberid: account.Id,
+                    storeid: storeId
+                };
 
-            var message = common.createResponseMessage(
-                format('{0} has been added to store successfully!', account.AccountName),
-                result.model.responsecode,
-                result.model.statusmessage);
+                var result = await service.addNewMember(info);
 
-            res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(message));
+                var message = common.createResponseMessage(
+                    format('{0} has been added to store successfully!', account.AccountName),
+                    result.model.responsecode,
+                    result.model.statusmessage);
+
+                res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(message));
+            }
         }
     }
     catch (err) {
@@ -89,27 +97,34 @@ storerouter.post('/add-member', async (req, res, next) => {
 storerouter.post('/remove-member', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
-        var storeId = await service.getStoreIdByAccessToken(accessToken);
-        var account = await userService.getAccountByAccountName(req.body.AccountName);
+        var isStoreOwner = await security.isStoreOwner(accessToken);
 
-        if (storeId === -1 || account === null) {
-            common.sendBadRequest(res, 'Request data is invalid !');
+        if (isStoreOwner === false) {
+            common.sendUnauthorizedRequest(res);
         }
         else {
-            var info = {
-                memberid: account.Id,
-                storeid: storeId
-            };
+            var storeId = await service.getStoreIdByAccessToken(accessToken);
+            var account = await userService.getAccountByAccountName(req.body.AccountName);
 
-            var result = await service.removeMember(info);
+            if (storeId === -1 || account === null) {
+                common.sendBadRequest(res, 'Request data is invalid !');
+            }
+            else {
+                var info = {
+                    memberid: account.Id,
+                    storeid: storeId
+                };
 
-            var message = common.createResponseMessage(
-                format('{0} has been removed from store successfully!', account.AccountName),
-                result.model.responsecode,
-                result.model.statusmessage);
+                var result = await service.removeMember(info);
 
-            res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(message));
+                var message = common.createResponseMessage(
+                    format('{0} has been removed from store successfully!', account.AccountName),
+                    result.model.responsecode,
+                    result.model.statusmessage);
+
+                res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(message));
+            }
         }
     }
     catch (err) {
@@ -121,26 +136,33 @@ storerouter.post('/remove-member', async (req, res, next) => {
 storerouter.post('/update-logo', async (req, res) => {
     try {
         var accessToken = req.body.AccessToken;
-        var storeId = await service.getStoreIdByAccessToken(accessToken);
-        var logo = req.body.Logo;
+        var isStoreOwner = await security.isStoreOwner(accessToken);
 
-        if (storeId === -1) {
-            common.sendBadRequest(res, 'Request data is invalid !');
+        if (isStoreOwner === false) {
+            common.sendUnauthorizedRequest(res);
         }
         else {
-            var info = {
-                logo: logo,
-                storeid: storeId
-            };
+            var storeId = await service.getStoreIdByAccessToken(accessToken);
+            var logo = req.body.Logo;
 
-            var result = await service.updateLogo(info);
+            if (storeId === -1) {
+                common.sendBadRequest(res, 'Request data is invalid !');
+            }
+            else {
+                var info = {
+                    logo: logo,
+                    storeid: storeId
+                };
 
-            var message = common.createResponseMessage(null,
-                result.model.responsecode,
-                result.model.statusmessage);
+                var result = await service.updateLogo(info);
 
-            res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(message));
+                var message = common.createResponseMessage(null,
+                    result.model.responsecode,
+                    result.model.statusmessage);
+
+                res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(message));
+            }
         }
     }
     catch (err) {
@@ -152,36 +174,43 @@ storerouter.post('/update-logo', async (req, res) => {
 storerouter.post('/get-member-list', async (req, res) => {
     try {
         var accessToken = req.body.AccessToken;
-        var storeId = await service.getStoreIdByAccessToken(accessToken);
+        var isStoreOwner = await security.isStoreOwner(accessToken);
 
-        if (storeId === -1) {
-            common.sendBadRequest(res, 'Request data is invalid !');
+        if (isStoreOwner === false) {
+            common.sendUnauthorizedRequest(res);
         }
         else {
+            var storeId = await service.getStoreIdByAccessToken(accessToken);
 
-            var result = await service.getMemberInStore(storeId);
-            var members = [];
-            if (result.model.storeinfo.length > 0) {
-                result.model.storeinfo.forEach(function (value) {
-                    members.push({
-                        storename: value.StoreName,
-                        accountname: value.AccountName,
-                        fullname: value.FullName,
-                        email: value.Email,
-                        phonenumber: value.PhoneNumber,
-                        address: value.Address,
-                        address2: value.Address2,
-                        identityCard: value.IdentityCard
-                    });
-                });
+            if (storeId === -1) {
+                common.sendBadRequest(res, 'Request data is invalid !');
             }
+            else {
 
-            var message = common.createResponseMessage(members,
-                result.model.responsecode,
-                result.model.statusmessage);
+                var result = await service.getMemberInStore(storeId);
+                var members = [];
+                if (result.model.storeinfo.length > 0) {
+                    result.model.storeinfo.forEach(function (value) {
+                        members.push({
+                            storename: value.StoreName,
+                            accountname: value.AccountName,
+                            fullname: value.FullName,
+                            email: value.Email,
+                            phonenumber: value.PhoneNumber,
+                            address: value.Address,
+                            address2: value.Address2,
+                            identityCard: value.IdentityCard
+                        });
+                    });
+                }
 
-            res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(message));
+                var message = common.createResponseMessage(members,
+                    result.model.responsecode,
+                    result.model.statusmessage);
+
+                res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(message));
+            }
         }
     }
     catch (err) {
@@ -210,7 +239,7 @@ storerouter.post('/create-new', async (req, res, next) => {
             address2: null,
             identitycard: null
         };
-       
+
         var accountResult = await userService.createNewAccount(accountInfo);
         if (accountResult.model.userinfo > 0) {
             var storeInfo = {
