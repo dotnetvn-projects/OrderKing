@@ -10,7 +10,7 @@ defineProperty('getOrderListByStore', `
     SELECT [Order].Id, Store.StoreName, [Order].OrderCode, [Order].SeqNum,
            [Order].TotalPrice, [Order].TotalAmount,[Order].CreatedDate, [Order].PrintedDate,
            CASE [Order].[OrderStatus] 
-           WHEN 1 THEN 'Ho?n Th?nh' 
+           WHEN 1 THEN 'Hoàn Thành' 
                   ELSE 'H?y' END AS OrderStatus,
           Account.AccountName AS SellerAccount, UserProfile.FullName AS Seller 
     FROM [Order]

@@ -269,5 +269,28 @@ storerouter.post('/create-new', async (req, res, next) => {
     }
 });
 
+//lock a member instore
+storerouter.post('/lock-member', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var isStoreOwner = await security.isStoreOwner(accessToken);
+
+        if (isStoreOwner === false) {
+            common.sendUnauthorizedRequest(res);
+        }
+        else {
+            var account = req.body.AccountName;
+            var result = await userService.lockAccount(account);
+            var message = common.createResponseMessage(format('{0} has been locked !', account),
+                result.model.responsecode, result.model.statusmessage);
+
+            res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(message));
+        }
+    }
+    catch (err) {
+        next(err);
+    }
+});
 
 module.exports = storerouter;

@@ -181,3 +181,20 @@ exports.createNewAccount = async (info) => {
 
     return response;
 };
+
+//get account by account id
+exports.lockAccount = async (account) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input("AccountName", sql.NVarChar, account)
+        .query(userSqlCmd.lockMember);
+
+    if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+    }
+    return response;
+};

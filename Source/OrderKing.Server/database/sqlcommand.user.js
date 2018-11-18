@@ -61,3 +61,8 @@ defineProperty('createUserProfile', `
 defineProperty('deleteAccount', `
     DELETE FROM Account WHERE Id = @AccountId
 `);
+
+//lock member
+defineProperty('lockMember', `
+    UPDATE Account SET IsActived = 0 WHERE AccountName = @AccountName
+`);
