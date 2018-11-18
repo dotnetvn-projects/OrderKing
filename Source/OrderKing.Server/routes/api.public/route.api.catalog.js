@@ -5,6 +5,15 @@ const storeService = require('../../services/service.store');
 const security = require('../../services/service.security');
 const common = require('../../common/common');
 
+//****when implement getting list of category or product,
+//do encrypting id before send respone message for client
+//use encrypt function of security has been declared above*****
+// example: var id = security.encrypt(recordset.id);
+
+//****for modifying functions as : update or delete category and product
+//    do decrypting id from client first*****
+// example: var categoryId = security.decrypt(res.body.Id);
+
 //create new category
 catalogrouter.post('/create-category', async (req, res, next) => {
     try {
@@ -37,6 +46,8 @@ catalogrouter.post('/create-category', async (req, res, next) => {
 });
 
 //update category
+//Need to fix: update only category name
+//need to fix: call decrypt id 
 catalogrouter.post('/update-category', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
@@ -46,6 +57,7 @@ catalogrouter.post('/update-category', async (req, res, next) => {
             common.sendUnauthorizedRequest(res);
         }
         else {
+
             var storeId = await storeService.getStoreIdByAccessToken(accessToken);
             var category = {
                 storeId: storeId,
@@ -70,6 +82,7 @@ catalogrouter.post('/update-category', async (req, res, next) => {
 });
 
 //deactive category
+//need to fix: call decrypt id 
 catalogrouter.post('/delete-category', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;

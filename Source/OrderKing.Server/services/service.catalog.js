@@ -14,13 +14,11 @@ exports.createCatagory = async function (categoryobject) {
         .input('StoreId', sql.BigInt, categoryobject.storeId)
         .input('Name', sql.NVarChar, categoryobject.name)
         .input('CreatedDate', sql.DateTime, new Date(moment()))
-        .input('IsActived', sql.Bit, '1')
         .query(catalogSqlCmd.createCategory);
 
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
-        categoryobject.Id = result.recordset[0].CategoryId;
         response.model.category = categoryobject;
     }
 

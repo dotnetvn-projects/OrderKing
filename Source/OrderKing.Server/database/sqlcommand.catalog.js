@@ -7,8 +7,8 @@ var defineProperty = function define(name, value) {
 
 //create new category
 defineProperty('createCategory', `
-    INSERT INTO Category(StoreId, Name, CreatedDate, IsActived)
-    VALUES (@StoreId, @Name, @CreatedDate, @IsActived);
+    INSERT INTO Category(StoreId, Name, CreatedDate)
+    VALUES (@StoreId, @Name, @CreatedDate);
     SELECT SCOPE_IDENTITY() AS CategoryId
 `);
 

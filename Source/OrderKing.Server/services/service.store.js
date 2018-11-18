@@ -166,3 +166,5 @@ exports.createNewStore = async (storeInfo) => {
     }
     return response;
 };
+
+//lock member in store
