@@ -15,25 +15,8 @@ orderrouter.post('/get-order-list', async (req, res, next) => {
         else {
 
             var result = await service.getOrderListByStore(storeId);
-            var orders = [];
-            if (result.model.orderinfo.length > 0) {
-                result.model.orderinfo.forEach(function (value) {
-                    orders.push({
-                        storename: value.StoreName,
-                        ordercode: value.OrderCode,
-                        seqnum: value.SeqNum,
-                        totalprice: value.TotalPrice,
-                        amount: value.TotalAmount,
-                        createddate: value.CreatedDate,
-                        printeddate: value.PrintedDate,
-                        orderstatus: value.OrderStatus,
-                        selleraccount: value.SellerAccount,
-                        seller: value.Seller
-                    });
-                });
-            }
 
-            var message = common.createResponseMessage(orders,
+            var message = common.createResponseMessage(result.model.orderinfo,
                 result.model.responsecode,
                 result.model.statusmessage);
 
@@ -57,27 +40,18 @@ orderrouter.post('/search-order', async (req, res, next) => {
             common.sendBadRequest(res, 'Request data is invalid !');
         }
         else {
+            var searchInfo = {
+                storeid: storeid,
+                ordercode: req.body.OrderCode,
+                startdate: req.body.StartDate,
+                enddate: req.body.EndDate,
+                status: req.body.OrderStatus,
+                seller: req.body.Seller
+            };
 
-            var result = await service.getOrderListByStore(storeId);
-            var orders = [];
-            if (result.model.orderinfo.length > 0) {
-                result.model.orderinfo.forEach(function (value) {
-                    orders.push({
-                        storename: value.StoreName,
-                        ordercode: value.OrderCode,
-                        seqnum: value.SeqNum,
-                        totalprice: value.TotalPrice,
-                        amount: value.TotalAmount,
-                        createddate: value.CreatedDate,
-                        printeddate: value.PrintedDate,
-                        orderstatus: value.OrderStatus,
-                        selleraccount: value.SellerAccount,
-                        seller: value.Seller
-                    });
-                });
-            }
-
-            var message = common.createResponseMessage(orders,
+            var result = await service.searchOrderListByStore(searchInfo);
+            
+            var message = common.createResponseMessage(result.model.orderinfo,
                 result.model.responsecode,
                 result.model.statusmessage);
 
@@ -89,5 +63,6 @@ orderrouter.post('/search-order', async (req, res, next) => {
         next(err);
     }
 });
+
 
 module.exports = orderrouter;

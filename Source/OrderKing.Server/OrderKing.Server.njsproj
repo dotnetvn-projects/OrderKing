@@ -73,6 +73,7 @@
     <Content Include="resources\dbconfig.txt" />
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <Content Include="resources\resource.api.value.js" />
     <Content Include="routes\route.api.auth.js" />
   </ItemGroup>
   <ItemGroup>
