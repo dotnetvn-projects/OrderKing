@@ -25,8 +25,13 @@ defineProperty('getOrderListByStore', `
 //create new order
 defineProperty('createNewOrder', `
     INSERT INTO [Order] (OrderCode, SeqNum, SellerId, StoreId, 
-                TotalPrice, TotalAmount, CreatedDate, OrderStatus, PrintedDate)
-          VALUES (@OrdereCode, @SeqNum, @SellerId, @StoreId, GETDATE(), @OrderStatus, @PrintedDate)
+                TotalPrice, TotalAmount, CreatedDate, OrderStatus)
+          VALUES ('0', @SeqNum, @SellerId, @StoreId, @TotalPrice, @TotalAmount, GETDATE(), @OrderStatus)
+`);
+
+//update ordercode
+defineProperty('updateOrderCode', `
+    UPDATE [Order] SET OrderCode = @OrderCode WHERE Id = @OrderId
 `);
 
 //create order detail

@@ -7,6 +7,22 @@ const moment = require('moment');
 const statusValue = require('../resources/resource.api.value');
 const format = require('string-format');
 
+//helper function
+
+//generate order code
+function generateOrderCode(id) {
+    if (id < 10) {
+        return 'DH00' + id;
+    } else if (id < 100 && id > 9) {
+        return 'DH0' + id;
+    }
+    else {
+        return 'DH' + id;
+    }
+}
+
+//end helper
+
 //get order list by store id
 exports.getOrderListByStore = async (storeId) => {
     response.model.statusmessage = status.common.failed;
@@ -106,25 +122,42 @@ exports.searchOrderListByStore = async (searchPattern) => {
     return response;
 };
 
+
 //add new order
 exports.createNewOrder = async (orderInfo) => {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
 
+    var seqNum = -1;
+    if (orderInfo.seqnum !== undefined && orderInfo.seqnum > 0) {
+        seqNum = orderInfo.seqNum;
+    }
+
     const pool = await poolPromise;
-    const result = await pool.request()
-        .input('OrderCode', sql.BigInt, orderInfo.ordercode)
-        .input('SeqNum', sql.NVarChar, orderInfo.seqnum)
+    var result = await pool.request()
+        .input('SeqNum', sql.NVarChar, seqNum)
         .input('SellerId', sql.NVarChar, orderInfo.sellerid)
         .input('StoreId', sql.NVarChar, orderInfo.storeid)
+        .input('TotalPrice', sql.Int, orderInfo.price)
+        .input('TotalAmount', sql.Int, orderInfo.amount)
         .input('OrderStatus', sql.NVarChar, statusValue.orderStatus.NotCompleted)
-        .input('PrintedDate', sql.DateTime, null)
         .query(orderSqlCmd.createNewOrder);
 
     if (result.recordset.length > 0) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
-        response.model.orderinfo = result.recordset[0].OrderId;
+
+        var orderId = result.recordset[0].OrderId;
+        var orderCode = generateOrderCode(orderId);
+
+        result = await pool.request()
+            .input('OrderCode', sql.NVarChar, orderCode)
+            .input('OrderId', sql.BigInt, orderId)
+            .query(orderSqlCmd.updateOrderCode);
+
+        response.model.orderinfo = {
+            code: orderCode, orderid: orderId
+        };
     }
 
     return response;
@@ -153,21 +186,21 @@ exports.createOrderDetail = async (orderDetailInfo) => {
 };
 
 //update order status
-exports.updateOrderStatus = async (orderDetailInfo) => {
+exports.updateOrderStatus = async (statusInfo) => {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
 
     const pool = await poolPromise;
     const result = await pool.request()
-        .input('OrderId', sql.BigInt, orderDetailInfo.orderid)
-        .input('StoreId', sql.BigInt, orderDetailInfo.storeid)
-        .input('Status', sql.NVarChar, orderInfo.orderstatus)
+        .input('OrderId', sql.BigInt, statusInfo.orderid)
+        .input('StoreId', sql.BigInt, statusInfo.storeid)
+        .input('Status', sql.NVarChar, statusInfo.orderstatus)
         .query(orderSqlCmd.updateOrderStatus);
 
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
-        response.model.orderinfo = orderDetailInfo.orderid;
+        response.model.orderinfo = statusInfo.orderid;
     }
 
     return response;
