@@ -35,11 +35,6 @@ app.use('/api/public/user', userApi);
 //in development mode, please comment out errorCatcher middleware
 app.use(errorCatcher.setmiddleware);
 
-app.use(function (err, req, res, next) {
-    // logic
-    console.log('errr');
-});
-
 //Start listening connection from remote client
 app.listen(port, function () {
     console.log("server is started !, port : " + port);

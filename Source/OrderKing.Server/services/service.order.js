@@ -31,7 +31,7 @@ exports.getOrderListByStore = async (storeId) => {
     const pool = await poolPromise;
     const result = await pool.request()
         .input('StoreId', sql.BigInt, storeId)
-        .query(orderSqlCmd.getOrderListByStore);
+        .query(format(orderSqlCmd.getOrderListByStore, ' '));
 
     if (result.recordset.length > 0) {
         var orders = [];
@@ -58,6 +58,43 @@ exports.getOrderListByStore = async (storeId) => {
     }
     return response;
 };
+
+//get orders of seller
+exports.getOrderListBySellerId = async (sellerid) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('StoreId', sql.BigInt, storeId)
+        .query(format(orderSqlCmd.getOrderListByStore,' AND SellerId= '+ sellerid));
+
+    if (result.recordset.length > 0) {
+        var orders = [];
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+
+        result.recordset.forEach(function (value) {
+            orders.push({
+                orderid: security.encrypt(value.Id),
+                storename: value.StoreName,
+                ordercode: value.OrderCode,
+                seqnum: value.SeqNum,
+                totalprice: value.TotalPrice,
+                amount: value.TotalAmount,
+                createddate: value.CreatedDate,
+                printeddate: value.PrintedDate,
+                orderstatus: value.OrderStatus,
+                selleraccount: value.SellerAccount,
+                seller: value.Seller
+            });
+        });
+
+        response.model.orderinfo = orders;
+    }
+    return response;
+};
+
 
 //search order by store:
 exports.searchOrderListByStore = async (searchPattern) => {

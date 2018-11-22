@@ -85,7 +85,7 @@ exports.changePassword = async function (dataObject) {
 
     if (account !== null) {
         var accountName = account.AccountName;
-        var password = security.generateHash(accountName + "-" + dataObject.password);
+        var password = security.encrypt(accountName + "-" + dataObject.password + "-" + account.HashKey );
 
         const pool = await poolPromise;
         const result = await pool.request()

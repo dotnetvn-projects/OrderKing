@@ -14,34 +14,43 @@ authrouter.get('/', function (req, res) {
 });
 
 //auth user api
-authrouter.post('/auth-user', async function (req, res) {
-    var ip = req.connection.remoteAddress;
-    var userAgent = req.headers['user-agent'];
-    var message = null;
-    logHandler.fire('info', format('ip [{0}] has requested for authentication', ip));
+authrouter.post('/auth-user', async function (req, res, next) {
+    try {
+        var ip = req.connection.remoteAddress;
+        var userAgent = req.headers['user-agent'];
+        var message = null;
+        logHandler.fire('info', format('ip [{0}] has requested for authentication', ip));
 
-    res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.writeHead(200, { 'Content-Type': 'application/json' });
 
-    var account = req.body.AccountName;
-    var password = req.body.Password;
-    var result = await service.executeAuth(account, password, ip, userAgent);
+        var account = req.body.AccountName;
+        var password = req.body.Password;
+        var result = await service.executeAuth(account, password, ip, userAgent);
 
-    message = createResponseMessage(result.model.accesstoken, result.model.expireddate,
-        result.model.responsecode, result.model.statusmessage);
+        message = createResponseMessage(result.model.accesstoken, result.model.expireddate,
+            result.model.responsecode, result.model.statusmessage);
 
-    logHandler.fire('info', format('[{0}][ip {1}] has been authenticated sucessful', account, ip));
-    res.end(JSON.stringify(message));
-    
+        logHandler.fire('info', format('[{0}][ip {1}] has been authenticated sucessful', account, ip));
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
 });
 
 //remove auth
-authrouter.post('/remove-auth', async function (req, res) {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    var accessToken = req.body.AccessToken;
-    var result = await service.removeAuth(accessToken);
-    var message = createResponseMessage(accessToken, result.model.expireddate,
-        result.model.responsecode, result.model.statusmessage);
-    res.end(JSON.stringify(message));    
+authrouter.post('/remove-auth', async function (req, res, next) {
+    try {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        var accessToken = req.body.AccessToken;
+        var result = await service.removeAuth(accessToken);
+        var message = createResponseMessage(accessToken, result.model.expireddate,
+            result.model.responsecode, result.model.statusmessage);
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
 });
 
 //helper method
