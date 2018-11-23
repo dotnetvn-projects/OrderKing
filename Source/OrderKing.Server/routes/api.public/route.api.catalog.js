@@ -27,7 +27,8 @@ catalogrouter.post('/create-category', async (req, res, next) => {
             var storeId = await storeService.getStoreIdByAccessToken(accessToken);
             var category = {
                 storeId: storeId,
-                name: req.body.Name
+                name: req.body.Name,
+                image: req.body.ImageDisplay
             };
 
             var result = await service.createCatagory(category);
@@ -46,8 +47,6 @@ catalogrouter.post('/create-category', async (req, res, next) => {
 });
 
 //update category
-//Need to fix: update only category name
-//need to fix: call decrypt id 
 catalogrouter.post('/update-category', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
@@ -57,13 +56,14 @@ catalogrouter.post('/update-category', async (req, res, next) => {
             common.sendUnauthorizedRequest(res);
         }
         else {
-
             var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+            var cateId = await security.decrypt(req.body.Id);
+
             var category = {
                 storeId: storeId,
                 name: req.body.Name,
-                id: req.body.Id,
-                isActived: req.body.IsActived
+                image: req.body.ImageDisplay,
+                id: cateId
             };
 
             var result = await service.updateCatagory(category);
@@ -82,7 +82,6 @@ catalogrouter.post('/update-category', async (req, res, next) => {
 });
 
 //deactive category
-//need to fix: call decrypt id 
 catalogrouter.post('/delete-category', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
@@ -92,9 +91,14 @@ catalogrouter.post('/delete-category', async (req, res, next) => {
             common.sendUnauthorizedRequest(res);
         }
         else {
-            var categoryId = req.body.Id;
+            var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+            var cateId = await security.decrypt(req.body.Id);
 
-            var result = await service.deactivateCategory(categoryId);
+            var category = {
+                storeId: storeId,
+                id: cateId
+            };
+            var result = await service.deactivateCategory(category);
 
             var message = common.createResponseMessage(null,
                 result.model.responsecode,
@@ -109,5 +113,24 @@ catalogrouter.post('/delete-category', async (req, res, next) => {
     }
 });
 
+//get category list in store
+catalogrouter.post('/category-list', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+
+        var result = await service.getCategoryInStore(storeId);
+
+        var message = common.createResponseMessage(result.model.category,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));      
+    }
+    catch (err) {
+        next(err);
+    }
+});
 
 module.exports = catalogrouter;
