@@ -176,7 +176,6 @@ exports.getProductsInStore = async (storeId) => {
         var products = [];
         result.recordset.forEach(function (value) {
             products.push({
-                categoryId: security.encrypt(value.CategoryId),
                 categoryName: value.CategoryName,
                 id: security.encrypt(value.Id),
                 name: value.Name,
@@ -208,7 +207,6 @@ exports.getProductsInStoreByCate = async (productobject) => {
         var products = [];
         result.recordset.forEach(function (value) {
             products.push({
-                categoryId: security.encrypt(value.CategoryId),
                 categoryName: value.CategoryName,
                 id: security.encrypt(value.Id),
                 name: value.Name,
