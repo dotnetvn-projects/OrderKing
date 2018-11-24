@@ -36,7 +36,7 @@ defineProperty('createProduct', `
     VALUES(@Name, @Description, @StoreId, @CategoryId, GETDATE(), @Price, 1)
 `);
 
-//create product
+//update product
 defineProperty('updateProduct', `
     UPDATE Product 
     SET Name = @Name, Description = @Description, 
@@ -63,9 +63,9 @@ defineProperty('deactiveProduct', `
 `);
 
 //get product in store
-defineProperty('getProductInStore', `
+defineProperty('getProductsInStore', `
     SELECT Product.Id, Product.[Name], Product.Description, Product.CreatedDate,
-           Product.Price, Category.[Name], Store.StoreName
+           Product.Price, Product.CategoryId, Category.[Name] AS CategoryName, Store.StoreName
     FROM Product INNER JOIN Store ON Store.Id = Product.StoreId
     INNER JOIN Category ON Product.CategoryId = Category.Id AND Store.Id = Category.StoreId
     WHERE Product.StoreId = @StoreId AND Product.IsActived = 1 AND Category.IsActived =1
@@ -73,12 +73,12 @@ defineProperty('getProductInStore', `
 `);
 
 //get product in store by category
-defineProperty('getProductInStoreByCate', `
+defineProperty('getProductsInStoreByCate', `
     SELECT Product.Id, Product.[Name], Product.Description, Product.CreatedDate,
-           Product.Price, Category.[Name], Store.StoreName
+           Product.Price, Product.CategoryId, Category.[Name] AS CategoryName, Store.StoreName
     FROM Product INNER JOIN Store ON Store.Id = Product.StoreId
     INNER JOIN Category ON Product.CategoryId = Category.Id AND Store.Id = Category.StoreId
-    WHERE Product.StoreId = @StoreId AND Category.Id = @CateId
+    WHERE Product.StoreId = @StoreId AND Category.Id = @CategoryId
           AND Product.IsActived = 1 AND Category.IsActived =1
     ORDER BY Product.CreatedDate DESC
 `);
