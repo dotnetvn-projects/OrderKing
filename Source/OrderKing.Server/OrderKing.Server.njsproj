@@ -39,6 +39,7 @@
     <Compile Include="database\dbconnection.js" />
     <Compile Include="database\sqlcommand.catalog.js" />
     <Compile Include="database\sqlcommand.order.js" />
+    <Compile Include="database\sqlcommand.report.js" />
     <Compile Include="database\sqlcommand.store.js" />
     <Compile Include="database\sqlcommand.user.js" />
     <Compile Include="eventHandlers\event.handler.email.js" />
@@ -79,6 +80,7 @@
     <Content Include="README.md" />
     <Content Include="resources\resource.api.value.js" />
     <Content Include="routes\route.api.auth.js" />
+    <Content Include="start.bat" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="database\" />

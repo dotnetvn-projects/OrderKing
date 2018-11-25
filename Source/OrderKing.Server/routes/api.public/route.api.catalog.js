@@ -148,7 +148,7 @@ catalogrouter.post('/create-product', async (req, res, next) => {
                 storeId: storeId,
                 name: req.body.Name,
                 description: req.body.Description,
-                categoryId: req.body.CategoryId,
+                categoryId: security.decrypt(req.body.CategoryId),
                 price: req.body.Price
             };
 
