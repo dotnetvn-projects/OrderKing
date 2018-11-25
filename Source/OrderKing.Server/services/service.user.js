@@ -198,3 +198,21 @@ exports.lockAccount = async (account) => {
     }
     return response;
 };
+
+//get avatar
+exports.getAvatar = async (accountId) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input("AccountId", sql.BigInt, accountId)
+        .query(userSqlCmd.getAvatar);
+
+    if (result.recordset.length > 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        response.model.userinfo = result.recordset[0].Avatar;
+    }
+    return response;
+};

@@ -66,3 +66,8 @@ defineProperty('deleteAccount', `
 defineProperty('lockMember', `
     UPDATE Account SET IsActived = 0 WHERE AccountName = @AccountName
 `);
+
+//get avatar
+defineProperty('getAvatar', `
+    SELECT [Avatar] FROM UserProfile WHERE AccountId = @AccountId
+`);
