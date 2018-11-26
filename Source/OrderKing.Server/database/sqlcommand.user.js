@@ -53,8 +53,8 @@ defineProperty('createAccount', `
 
 //create user profile
 defineProperty('createUserProfile', `
-    INSERT INTO UserProfile(AccountId, FullName, Email, PhoneNumber, Address, Address2, IdentityCard)
-    VALUES (@AccountId, @FullName, @Email, @PhoneNumber, @Address, @Address2, @IdentityCard)
+    INSERT INTO UserProfile(AccountId, FullName, Email, PhoneNumber, Address, Address2, IdentityCard, Avatar)
+    VALUES (@AccountId, @FullName, @Email, @PhoneNumber, @Address, @Address2, @IdentityCard, @Avatar)
 `);
 
 //delete account

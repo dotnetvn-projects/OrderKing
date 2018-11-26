@@ -32,14 +32,14 @@ defineProperty('getCategoryInStore',
 
 //create product
 defineProperty('createProduct', `
-    INSERT INTO Product(Name, Description, StoreId, CategoryId, CreatedDate, Price, IsActived)
-    VALUES(@Name, @Description, @StoreId, @CategoryId, GETDATE(), @Price, 1)
+    INSERT INTO Product(Name, Image, Description, StoreId, CategoryId, CreatedDate, Price, IsActived)
+    VALUES(@Name, @Image, @Description, @StoreId, @CategoryId, GETDATE(), @Price, 1)
 `);
 
 //update product
 defineProperty('updateProduct', `
     UPDATE Product 
-    SET Name = @Name, Description = @Description, 
+    SET Name = @Name, Image = @Image, Description = @Description, 
         CategoryId = @CategoryId, Price = @Price)
     WHERE Id = @Id and StoreId = @StoreId
 `);

@@ -1,11 +1,9 @@
 'use strict';
 const express = require('express');
 const userrouter = express.Router();
-const moment = require('moment');
-const response = require('../../models/model.response');
 const service = require('../../services/service.user');
 const common = require('../../common/common');
-const io = require('../../common/io');
+
 
 //get user info
 userrouter.post('/get-info', async (req, res, next) => {
@@ -56,11 +54,10 @@ userrouter.post('/edit-info', async (req, res, next) => {
 userrouter.post('/change-avatar', async function (req, res, next) {
     try {
         var accessToken = req.body.AccessToken;
-        var avatarImage = req.body.AvatarImage;
         var accountId = await service.getAccountIdByAccessToken(accessToken);
 
         var result = await service.updateAvartar({
-            avatar: avatarImage,
+            avatar: Buffer.from(dataObject.avatar, 'base64'),
             accountid: accountId
         });
 
@@ -108,16 +105,8 @@ userrouter.get('/avatar', async function (req, res, next) {
         var accountId = await service.getAccountIdByAccessToken(accessToken);
 
         var result = await service.getAvatar(accountId);
-        var img = null;
-
-        if (result.model.userinfo === null) {
-            var defaultImg = io.readFileToBinary('./resources/images/no-avatar.png');
-            img = defaultImg;
-        }
-        else {
-            img = new Buffer(result.model.userinfo);
-        }
-
+        var img  = new Buffer(result.model.userinfo);
+        
         res.writeHead(result.model.responsecode, {
             'Content-Type': 'image/jpeg',
             'Content-Length': img.length

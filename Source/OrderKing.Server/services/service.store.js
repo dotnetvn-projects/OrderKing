@@ -93,11 +93,9 @@ exports.updateLogo = async function (dataObject) {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
 
-    var buf = Buffer.from(dataObject.logo, 'base64');
-
     const pool = await poolPromise;
     const result = await pool.request()
-        .input("Logo", sql.VarBinary, buf)
+        .input("Logo", sql.VarBinary, dataObject.logo)
         .input("StoreId", sql.BigInt, dataObject.storeid)
         .query(storeSqlCmd.updateLogo);
 
@@ -153,6 +151,7 @@ exports.createNewStore = async (storeInfo) => {
         .input('StoreAddress', sql.NVarChar, storeInfo.address)
         .input('StorePhone', sql.NVarChar, storeInfo.phone)
         .input('Slogan', sql.NVarChar, storeInfo.slogan)
+        .input('Logo', sql.VarBinary, storeInfo.logo)
         .query(storeSqlCmd.createNewStore);
 
     if (result.recordset.length > 0) {
@@ -163,6 +162,24 @@ exports.createNewStore = async (storeInfo) => {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
         response.model.storeinfo = result.recordset[0].StoreId;      
+    }
+    return response;
+};
+
+//get logo
+exports.getLogo = async (accessToken) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input("AccessToken", sql.NVarChar, accessToken)
+        .query(userSqlCmd.getStoreLogo);
+
+    if (result.recordset.length > 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        response.model.storeinfo = result.recordset[0].Logo;
     }
     return response;
 };

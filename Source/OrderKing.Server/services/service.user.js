@@ -61,11 +61,9 @@ exports.updateAvartar = async function (dataObject) {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
 
-    var buf = Buffer.from(dataObject.avatar, 'base64');
-
     const pool = await poolPromise;
     const result = await pool.request()
-        .input("Avatar", sql.VarBinary, buf)
+        .input("Avatar", sql.VarBinary, dataObject.avatar)
         .input("AccountId", sql.BigInt, dataObject.accountid)
         .query(userSqlCmd.updateAvatar);
 
@@ -164,8 +162,10 @@ exports.createNewAccount = async (info) => {
 
     if (result.recordset.length > 0) {
         var accountId = result.recordset[0].AccountId;
+
         result = await pool.request()
             .input("AccountId", sql.BigInt, accountId)
+            .input("Avatar", sql.VarBinary, info.avatar)
             .input("FullName", sql.NVarChar, info.fullname)
             .input("Email", sql.NVarChar, info.email)
             .input("PhoneNumber", sql.NVarChar, info.phonenumber)

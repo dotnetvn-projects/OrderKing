@@ -6,6 +6,7 @@ const common = require('../../common/common');
 const status = require('../../resources/resource.api.status');
 const format = require('string-format');
 const security = require('../../services/service.security');
+const io = require('../../common/io');
 
 //url: /api/public/store
 //get store info
@@ -150,7 +151,7 @@ storerouter.post('/update-logo', async (req, res) => {
             }
             else {
                 var info = {
-                    logo: logo,
+                    logo: Buffer.from(logo, 'base64'),
                     storeid: storeId
                 };
 
@@ -218,9 +219,6 @@ storerouter.post('/get-member-list', async (req, res) => {
     }
 });
 
-//TODO: get order list
-//TODO: search order
-
 //create new store and account
 storerouter.post('/create-new', async (req, res, next) => {
     try {
@@ -237,8 +235,16 @@ storerouter.post('/create-new', async (req, res, next) => {
             phonenumber: req.body.StorePhone,
             address: req.body.Address,
             address2: null,
-            identitycard: null
+            identitycard: null,
+            avatar: null
         };
+
+        if (req.body.Avatar === null || req.body.Avatar === '' || req.body.Avatar === undefined) {
+            accountInfo.avatar = io.readFileToBinary('./resources/images/no-avatar.png');
+        }
+        else {
+            accountInfo.avatar = new Buffer(req.body.Avatar, 'base64');
+        }
 
         var accountResult = await userService.createNewAccount(accountInfo);
         if (accountResult.model.userinfo > 0) {
@@ -248,8 +254,16 @@ storerouter.post('/create-new', async (req, res, next) => {
                 address: req.body.Address,
                 phone: req.body.StorePhone,
                 slogan: req.body.Slogan,
-                owner: accountResult.model.userinfo
+                owner: accountResult.model.userinfo,
+                logo: null
             };
+
+            if (req.body.Logo === null || req.body.Logo === '' || req.body.Logo === undefined) {
+                storeInfo.logo = io.readFileToBinary('./resources/images/no-image.png');
+            }
+            else {
+                storeInfo.logo = new Buffer(req.body.Logo, 'base64');
+            }
 
             var storeResult = await service.createNewStore(storeInfo);
             if (storeResult.model.storeinfo > 0) {
@@ -287,6 +301,26 @@ storerouter.post('/lock-member', async (req, res, next) => {
             res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(message));
         }
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//get logo
+storerouter.get('/logo', async (req, res, next) => {
+    try {
+        var accessToken = req.query.access_token;
+
+        var result = await service.getLogo(accessToken);
+
+        var img = new Buffer(result.model.storeinfo);
+
+        res.writeHead(result.model.responsecode, {
+            'Content-Type': 'image/jpeg',
+            'Content-Length': img.length
+        });
+        res.end(img);
     }
     catch (err) {
         next(err);

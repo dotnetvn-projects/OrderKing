@@ -63,14 +63,21 @@ defineProperty('getMemberInStore', `
 
 //create new store
 defineProperty('createNewStore', `
-    INSERT INTO Store(StoreName, OwnerId, Email, CreatedDate, StoreAddress, StorePhone, Slogan)
-    VALUES (@StoreName, @OwnerId, @Email, @CreatedDate, @StoreAddress, @StorePhone, @Slogan)
+    INSERT INTO Store(StoreName, OwnerId, Email, CreatedDate, StoreAddress, StorePhone, Slogan, Logo)
+    VALUES (@StoreName, @OwnerId, @Email, @CreatedDate, @StoreAddress, @StorePhone, @Slogan, @Logo)
     SELECT SCOPE_IDENTITY() AS StoreId
 `);
 
 //get store owner id
 defineProperty('getStoreOwnerId', `
-    SELECT Store.Id FROM LoginSession INNER JOIN Store
-                     ON Store.OwnerId = LoginSession.AccountId
-   WHERE AccessToken = @AccessToken
+    SELECT Store.Id 
+    FROM LoginSession INNER JOIN Store ON Store.OwnerId = LoginSession.AccountId
+    WHERE AccessToken = @AccessToken
 `);
+
+//get logo
+defineProperty('getStoreLogo', `SELECT Store.Logo 
+    FROM LoginSession 
+    INNER JOIN StoreMember ON LoginSession.AccountId = StoreMember.AccountId
+    INNER JOIN Store ON Store.Id = StoreMember.StoreId
+    WHERE AccessToken = @AccessToken`);

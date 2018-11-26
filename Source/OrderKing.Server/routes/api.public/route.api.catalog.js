@@ -4,6 +4,7 @@ const service = require('../../services/service.catalog');
 const storeService = require('../../services/service.store');
 const security = require('../../services/service.security');
 const common = require('../../common/common');
+const io = require('../../common/io');
 
 //****when implement getting list of category or product,
 //do encrypting id before send respone message for client
@@ -28,9 +29,15 @@ catalogrouter.post('/create-category', async (req, res, next) => {
             var category = {
                 storeId: storeId,
                 name: req.body.Name,
-                image: req.body.ImageDisplay
+                image:null
             };
 
+            if (req.body.ImageDisplay === null || req.body.ImageDisplay === '' || req.body.ImageDisplay === undefined) {
+                category.image = io.readFileToBinary('./resources/images/no-image.png');
+            }
+            else {
+                category.image = new Buffer(req.body.ImageDisplay, 'base64');
+            }
             var result = await service.createCatagory(category);
 
             var message = common.createResponseMessage(result.model.category,
@@ -62,9 +69,16 @@ catalogrouter.post('/update-category', async (req, res, next) => {
             var category = {
                 storeId: storeId,
                 name: req.body.Name,
-                image: req.body.ImageDisplay,
+                image: null,
                 id: cateId
             };
+
+            if (req.body.ImageDisplay === null || req.body.ImageDisplay === '' || req.body.ImageDisplay === undefined) {
+                category.image = io.readFileToBinary('./resources/images/no-image.png');
+            }
+            else {
+                category.image = new Buffer(req.body.ImageDisplay, 'base64');
+            }
 
             var result = await service.updateCatagory(category);
 
@@ -149,8 +163,16 @@ catalogrouter.post('/create-product', async (req, res, next) => {
                 name: req.body.Name,
                 description: req.body.Description,
                 categoryId: security.decrypt(req.body.CategoryId),
-                price: req.body.Price
+                price: req.body.Price,
+                image: null
             };
+
+            if (req.body.ImageDisplay === null || req.body.ImageDisplay === '' || req.body.ImageDisplay === undefined) {
+                product.image = io.readFileToBinary('./resources/images/default-product.png');
+            }
+            else {
+                product.image = new Buffer(req.body.ImageDisplay, 'base64');
+            }
 
             var result = await service.createProduct(product);
 
@@ -187,9 +209,16 @@ catalogrouter.post('/update-product', async (req, res, next) => {
                 description: req.body.Description,
                 categoryId: cateId,
                 price: req.body.Price,
-                id: productId
+                id: productId,
+                image: null
             };
 
+            if (req.body.ImageDisplay === null || req.body.ImageDisplay === '' || req.body.ImageDisplay === undefined) {
+                product.image = io.readFileToBinary('./resources/images/default-product.png');
+            }
+            else {
+                product.image = new Buffer(req.body.ImageDisplay, 'base64');
+            }
             var result = await service.updateProduct(product);
 
             var message = common.createResponseMessage(result.model.product,

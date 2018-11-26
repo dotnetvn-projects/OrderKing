@@ -72,8 +72,9 @@
     <Content Include="libman.json" />
     <Content Include="middlewares\middleware.error.catcher.js" />
     <Content Include="ref.txt" />
-    <Content Include="resources\images\defaultproduct.png" />
+    <Content Include="resources\images\default-product.png" />
     <Content Include="resources\images\no-avatar.png" />
+    <Content Include="resources\images\no-image.png" />
     <Content Include="resources\resource.api.config.js" />
     <Content Include="resources\dbconfig.txt" />
     <Content Include="package.json" />
