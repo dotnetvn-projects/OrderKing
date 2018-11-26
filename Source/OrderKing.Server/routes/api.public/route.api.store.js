@@ -93,7 +93,6 @@ storerouter.post('/add-member', async (req, res, next) => {
     }
 });
 
-
 //remove member from store
 storerouter.post('/remove-member', async (req, res, next) => {
     try {

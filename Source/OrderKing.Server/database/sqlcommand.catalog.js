@@ -46,7 +46,7 @@ defineProperty('updateProduct', `
 
 //create product image
 defineProperty('createProductImage', `
-    INSERT INTO ProductImage(ProductId, Image, IsDefault) VALUES (@ProductId, @Image, @IsDefault)
+    INSERT INTO ProductImage(ProductId, Image) VALUES (@ProductId, @Image)
 `);
 
 //set default image display for product
