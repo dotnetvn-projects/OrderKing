@@ -314,4 +314,42 @@ catalogrouter.post('/product-list-by-cate', async (req, res, next) => {
     }
 });
 
+//get product image
+catalogrouter.post('/product-img', async (req, res, next) => {
+    try {
+        var productId = security.decrypt(req.query.pid);
+
+        var result = await service.getProductImage(productId);
+        var img = new Buffer(result.model.product);
+
+        res.writeHead(result.model.responsecode, {
+            'Content-Type': 'image/jpeg',
+            'Content-Length': img.length
+        });
+        res.end(img); 
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//get category image
+catalogrouter.post('/cate-img', async (req, res, next) => {
+    try {
+        var categoryId = security.decrypt(req.query.cid);
+
+        var result = await service.getCategoryImage(categoryId);
+        var img = new Buffer(result.model.category);
+
+        res.writeHead(result.model.responsecode, {
+            'Content-Type': 'image/jpeg',
+            'Content-Length': img.length
+        });
+        res.end(img);
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
 module.exports = catalogrouter;

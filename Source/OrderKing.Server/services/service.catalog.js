@@ -224,3 +224,39 @@ exports.getProductsInStoreByCate = async (productobject) => {
 
     return productResponse;
 };
+
+//get product image
+exports.getProductImage = async (productId) => {
+    productResponse.model.statusmessage = status.common.failed;
+    productResponse.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input("Id", sql.BigInt, productId)
+        .query(userSqlCmd.getProductImage);
+
+    if (result.recordset.length > 0) {
+        productResponse.model.statusmessage = status.common.suscess;
+        productResponse.model.responsecode = status.common.suscesscode;
+        productResponse.model.product = result.recordset[0].Image;
+    }
+    return response;
+};
+
+//get category image
+exports.getCategoryImage = async (categoryId) => {
+    categoryResponse.model.statusmessage = status.common.failed;
+    categoryResponse.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input("Id", sql.BigInt, categoryId)
+        .query(userSqlCmd.getCategoryImage);
+
+    if (result.recordset.length > 0) {
+        categoryResponse.model.statusmessage = status.common.suscess;
+        categoryResponse.model.responsecode = status.common.suscesscode;
+        categoryResponse.model.category = result.recordset[0].Image;
+    }
+    return response;
+};

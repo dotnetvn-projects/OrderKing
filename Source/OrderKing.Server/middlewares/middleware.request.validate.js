@@ -34,7 +34,8 @@ var validateRequest = async function (req, res, next) {
         else {
             var valid = true;
             var accessToken = req.body.AccessToken;
-            if (req.url.indexOf('auth-user') === -1) {
+            if (req.url.indexOf('auth-user') === -1 && req.url.indexOf('product-img') === -1
+                    && req.url.indexOf('cate-img') === -1) {
                 if (accessToken === undefined || accessToken === '') {
                     logHandler.fire('error', format('ip [{0}] {1} ', ip, 'has sent a request without accesstoken'));
                     common.sendInvalidRequest(res);

@@ -83,7 +83,10 @@ defineProperty('getProductsInStoreByCate', `
     ORDER BY Product.CreatedDate DESC
 `);
 
-//get product image default
-defineProperty('getProductImageDefault',
-    `SELECT Image From ProductImage 
-     WHERE ProductId = @ProductId AND IsDefault = 1`);
+//get product image
+defineProperty('getProductImage',
+    `SELECT Image From Product WHERE Id = @Id`);
+
+//get product image
+defineProperty('getCategoryImage',
+    `SELECT Image From Category WHERE Id = @Id`);
