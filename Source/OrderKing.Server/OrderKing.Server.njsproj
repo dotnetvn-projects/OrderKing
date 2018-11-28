@@ -32,7 +32,7 @@
   <ItemGroup>
     <Compile Include="common\common.js" />
     <Compile Include="common\crypto.js" />
-    <Compile Include="common\extension.js" />
+    <Compile Include="common\image.process.js" />
     <Compile Include="common\io.js" />
     <Compile Include="common\logger.js" />
     <Compile Include="database\sqlcommand.auth.js" />

@@ -7,6 +7,7 @@ const status = require('../../resources/resource.api.status');
 const format = require('string-format');
 const security = require('../../services/service.security');
 const io = require('../../common/io');
+const imageProcess = require('../../common/image.process');
 
 //url: /api/public/store
 //get store info
@@ -143,14 +144,24 @@ storerouter.post('/update-logo', async (req, res) => {
         }
         else {
             var storeId = await service.getStoreIdByAccessToken(accessToken);
-            var logo = req.body.Logo;
 
             if (storeId === -1) {
                 common.sendBadRequest(res, 'Request data is invalid !');
             }
             else {
+                var storeLogo = await service.getLogo(storeId);
+                var base64data = new Buffer(storeLogo.model.storeinfo, 'binary').toString('base64');
+                var buff = Buffer.from(req.body.Logo, 'base64');
+                var imageData = null;
+                if (base64data !== req.body.Logo) {
+                    imageData = imageProcess.resizeFromBuffer(buff, 250, 250, 90);
+                }
+                else {
+                    imageData = buff;
+                }
+
                 var info = {
-                    logo: Buffer.from(logo, 'base64'),
+                    logo: imageData,
                     storeid: storeId
                 };
 
@@ -242,7 +253,8 @@ storerouter.post('/create-new', async (req, res, next) => {
             accountInfo.avatar = io.readFileToBinary('./resources/images/no-avatar.png');
         }
         else {
-            accountInfo.avatar = new Buffer(req.body.Avatar, 'base64');
+            var buff = new Buffer(req.body.Avatar, 'base64');
+            accountInfo.avatar = imageProcess.resizeFromBuffer(buff, 250, 250, 80);
         }
 
         var accountResult = await userService.createNewAccount(accountInfo);
@@ -261,7 +273,8 @@ storerouter.post('/create-new', async (req, res, next) => {
                 storeInfo.logo = io.readFileToBinary('./resources/images/no-image.png');
             }
             else {
-                storeInfo.logo = new Buffer(req.body.Logo, 'base64');
+                 buff = new Buffer(req.body.Logo, 'base64');
+                 storeInfo.logo = imageProcess.resizeFromBuffer(buff, 250, 250, 80);
             }
 
             var storeResult = await service.createNewStore(storeInfo);

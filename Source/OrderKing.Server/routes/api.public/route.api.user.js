@@ -3,6 +3,7 @@ const express = require('express');
 const userrouter = express.Router();
 const service = require('../../services/service.user');
 const common = require('../../common/common');
+const imageProcess = require('../../common/image.process');
 
 
 //get user info
@@ -56,8 +57,18 @@ userrouter.post('/change-avatar', async function (req, res, next) {
         var accessToken = req.body.AccessToken;
         var accountId = await service.getAccountIdByAccessToken(accessToken);
 
+        var imageData = null;
+        var avatarImage = await service.getAvatar(accountId);
+        var base64data = new Buffer(avatarImage.model.userinfo, 'binary').toString('base64');
+        var buff = Buffer.from(req.body.Avatar, 'base64');
+        if (base64data !== req.body.ImageDisplay) {
+            imageData = imageProcess.resizeFromBuffer(buff, 250, 250, 90);
+        }
+        else {
+            imageData = buff;
+        }
         var result = await service.updateAvartar({
-            avatar: Buffer.from(dataObject.avatar, 'base64'),
+            avatar: imageData,
             accountid: accountId
         });
 
@@ -105,13 +116,13 @@ userrouter.get('/avatar', async function (req, res, next) {
         var accountId = await service.getAccountIdByAccessToken(accessToken);
 
         var result = await service.getAvatar(accountId);
-        var img  = new Buffer(result.model.userinfo);
-        
+        var img = new Buffer(result.model.userinfo);
+
         res.writeHead(result.model.responsecode, {
             'Content-Type': 'image/jpeg',
             'Content-Length': img.length
         });
-        res.end(img); 
+        res.end(img);
     }
     catch (err) {
         next(err);

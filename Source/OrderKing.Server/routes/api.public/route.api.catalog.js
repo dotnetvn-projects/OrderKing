@@ -5,6 +5,7 @@ const storeService = require('../../services/service.store');
 const security = require('../../services/service.security');
 const common = require('../../common/common');
 const io = require('../../common/io');
+const imageProcess = require('../../common/image.process');
 
 //****when implement getting list of category or product,
 //do encrypting id before send respone message for client
@@ -36,7 +37,8 @@ catalogrouter.post('/create-category', async (req, res, next) => {
                 category.image = io.readFileToBinary('./resources/images/no-image.png');
             }
             else {
-                category.image = new Buffer(req.body.ImageDisplay, 'base64');
+                var buff = Buffer.from(req.body.ImageDisplay, 'base64');
+                category.image = imageProcess.resizeFromBuffer(buff, 120, 120, 100);
             }
             var result = await service.createCatagory(category);
 
@@ -77,7 +79,15 @@ catalogrouter.post('/update-category', async (req, res, next) => {
                 category.image = io.readFileToBinary('./resources/images/no-image.png');
             }
             else {
-                category.image = new Buffer(req.body.ImageDisplay, 'base64');
+                var categoryImage = await service.getCategoryImage(cateId);
+                var base64data = new Buffer(categoryImage.model.category, 'binary').toString('base64');
+                var buff = Buffer.from(req.body.ImageDisplay, 'base64');
+                if (base64data !== req.body.ImageDisplay) {
+                    category.image = imageProcess.resizeFromBuffer(buff, 120, 120, 90);
+                }
+                else {
+                    category.image = buff;
+                }
             }
 
             var result = await service.updateCatagory(category);
@@ -171,7 +181,8 @@ catalogrouter.post('/create-product', async (req, res, next) => {
                 product.image = io.readFileToBinary('./resources/images/default-product.png');
             }
             else {
-                product.image = new Buffer(req.body.ImageDisplay, 'base64');
+                var buff = Buffer.from(req.body.ImageDisplay, 'base64');
+                product.image = imageProcess.resizeFromBuffer(buff, 500, 500, 100);
             }
 
             var result = await service.createProduct(product);
@@ -217,7 +228,15 @@ catalogrouter.post('/update-product', async (req, res, next) => {
                 product.image = io.readFileToBinary('./resources/images/default-product.png');
             }
             else {
-                product.image = new Buffer(req.body.ImageDisplay, 'base64');
+                var productImage = await service.getProductImage(productId);
+                var base64data = new Buffer(productImage.model.product, 'binary').toString('base64');
+                var buff = Buffer.from(req.body.ImageDisplay, 'base64');
+                if (base64data !== req.body.ImageDisplay) {                
+                    product.image = imageProcess.resizeFromBuffer(buff, 500, 500, 90);
+                }
+                else {
+                    product.image = buff;
+                }
             }
             var result = await service.updateProduct(product);
 
