@@ -106,7 +106,7 @@ catalogrouter.post('/update-category', async (req, res, next) => {
 });
 
 //deactive category
-catalogrouter.post('/delete-category', async (req, res, next) => {
+catalogrouter.post('/remove-category', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
         var isStoreOwner = await security.isStoreOwner(accessToken);
@@ -255,7 +255,7 @@ catalogrouter.post('/update-product', async (req, res, next) => {
 
 
 //deactive product
-catalogrouter.post('/delete-product', async (req, res, next) => {
+catalogrouter.post('/remove-product', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
         var isStoreOwner = await security.isStoreOwner(accessToken);
