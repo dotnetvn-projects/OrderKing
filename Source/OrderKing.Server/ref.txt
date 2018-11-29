@@ -1,2 +1,75 @@
 compress image: https://github.com/lovell/sharp
 cache: https://medium.com/the-node-js-collection/simple-server-side-cache-for-express-js-with-node-js-45ff296ca0f0
+
+
+
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Script.Serialization;
+
+namespace TestApi
+{
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
+            TestUploadImageAsync().Wait();
+        }
+
+        private static void TestAuth()
+        {
+            string apikey = "jhjdzDCeiMN8cgBRiDz85qPaMSnQ4epgYV4ft7Kh";
+            string referrer = "https://www.asnet2.com/";
+
+            HttpClient client = new HttpClient();
+            Dictionary<string, string> values = new Dictionary<string, string>
+            {
+               { "MemberNum", "ZZZZZ001" },
+               { "PassValue", "Password001" }
+            };
+
+            client.DefaultRequestHeaders.Referrer = new Uri(referrer);
+            client.DefaultRequestHeaders.Add("ApiKey", apikey);
+
+
+
+            FormUrlEncodedContent content = new FormUrlEncodedContent(values);
+
+            HttpResponseMessage response = client.PostAsync("http://192.168.200.102/asauth/login", content).Result;
+
+            string responseString = response.Content.ReadAsStringAsync().Result;
+
+            JavaScriptSerializer jss = new JavaScriptSerializer();
+            dynamic d = jss.Deserialize<dynamic>(responseString);
+            dynamic c = d["LimDate"];
+            Console.WriteLine(responseString);
+            Console.ReadLine();
+        }
+
+        private static async Task TestUploadImageAsync()
+        {
+            byte[] file_bytes = File.ReadAllBytes(@"test.jpg");
+            HttpClient httpClient = new HttpClient();
+            MultipartFormDataContent form = new MultipartFormDataContent
+            {
+                { new StringContent("92383a9844ad94af1bc4c3c078c42423d9f4d63637eb4620b929d333d19be4b38eb9198be63e5efa4287"), "AccessToken" }
+            };
+
+            form.Add(new ByteArrayContent(file_bytes, 0, file_bytes.Length), "Avatar", "test.jpg");
+
+
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response =
+                    await client.PostAsync("http://localhost:1337/api/public/user/change-avatar"
+                    , form);
+
+                string sd = response.Content.ReadAsStringAsync().Result;
+            }
+        }
+    }
+}

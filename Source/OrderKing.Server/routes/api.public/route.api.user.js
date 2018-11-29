@@ -4,7 +4,9 @@ const userrouter = express.Router();
 const service = require('../../services/service.user');
 const common = require('../../common/common');
 const imageProcess = require('../../common/image.process');
-
+const io = require('../../common/io');
+var multipart = require('connect-multiparty');
+var multipartMiddleware = multipart();
 
 //get user info
 userrouter.post('/get-info', async (req, res, next) => {
@@ -52,17 +54,21 @@ userrouter.post('/edit-info', async (req, res, next) => {
 });
 
 //update avatar
-userrouter.post('/change-avatar', async function (req, res, next) {
+userrouter.post('/change-avatar', multipartMiddleware, async function (req, res, next) {
     try {
-        var accessToken = req.body.AccessToken;
+        var accessToken = req.body.null;
         var accountId = await service.getAccountIdByAccessToken(accessToken);
 
         var imageData = null;
+        var base64data = null;
         var avatarImage = await service.getAvatar(accountId);
-        var base64data = new Buffer(avatarImage.model.userinfo, 'binary').toString('base64');
-        var buff = Buffer.from(req.body.Avatar, 'base64');
-        if (base64data !== req.body.ImageDisplay) {
+        if (avatarImage.model.userinfo !== null) {
+            base64data = new Buffer(avatarImage.model.userinfo, 'binary').toString('base64');
+        }
+        var buff = io.readFileToBinary(req.files.null.path);
+        if (base64data !== buff.toString('base64')) {
             imageData = imageProcess.resizeFromBuffer(buff, 250, 250, 90);
+            await Promise.resolve(imageData);
         }
         else {
             imageData = buff;

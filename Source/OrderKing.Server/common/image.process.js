@@ -1,9 +1,17 @@
 const sharp = require('sharp');
 
 exports.resizeFromBuffer = (buff, h, w, quality) => {
-    return sharp(buff).resize(w, h)
-        .quality(quality)
-        .toBuffer();
+    sharp(buff)
+        .jpeg()
+        .resize(w, h)
+        .toBuffer((err, buff, info) => {
+            if (err)
+                console.log(err);
+
+            if (buff) {
+                return buff;
+            }
+        });
 };
 
 exports.changeQualityFromBuffer = (buff, quality) => {
