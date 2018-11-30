@@ -9,7 +9,6 @@ const security = require('../services/service.security');
 exports.createCatagory = async (categoryobject) => {
     categoryResponse.model.statusmessage = status.common.failed;
     categoryResponse.model.responsecode = status.common.failedcode;
-    var buf = Buffer.from(categoryobject.image, 'base64');
 
     const pool = await poolPromise;
     const result = await pool.request()
@@ -18,10 +17,12 @@ exports.createCatagory = async (categoryobject) => {
         .input("Image", sql.VarBinary, buf)
         .query(catalogSqlCmd.createCategory);
 
-    if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
+    if (result.recordset.length > 0) {
         categoryResponse.model.statusmessage = status.common.suscess;
         categoryResponse.model.responsecode = status.common.suscesscode;
-        categoryResponse.model.category = categoryobject;
+        categoryResponse.model.category = {
+            id: security.encrypt(result.recordset[0].CategoryId), name: categoryobject.name
+        };
     }
 
     return categoryResponse;
@@ -31,12 +32,10 @@ exports.createCatagory = async (categoryobject) => {
 exports.updateCatagory = async (categoryobject) => {
     categoryResponse.model.statusmessage = status.common.failed;
     categoryResponse.model.responsecode = status.common.failedcode;
-    var buf = Buffer.from(categoryobject.image, 'base64');
 
     const pool = await poolPromise;
     const result = await pool.request()
         .input('StoreId', sql.BigInt, categoryobject.storeId)
-        .input("Image", sql.VarBinary, buf)
         .input('Name', sql.NVarChar, categoryobject.name)
         .input('Id', sql.BigInt, categoryobject.id)
         .query(catalogSqlCmd.updateCategory);
@@ -44,7 +43,30 @@ exports.updateCatagory = async (categoryobject) => {
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
         categoryResponse.model.statusmessage = status.common.suscess;
         categoryResponse.model.responsecode = status.common.suscesscode;
-        categoryResponse.model.category = categoryobject;
+        categoryResponse.model.category = {
+            id: security.encrypt(categoryobject.id),
+            name: categoryobject.name
+        };
+    }
+
+    return categoryResponse;
+};
+
+//update category image
+exports.updateCatagoryImage = async (categoryobject) => {
+    categoryResponse.model.statusmessage = status.common.failed;
+    categoryResponse.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('Id', sql.BigInt, categoryobject.id)
+        .input('Image', sql.VarBinary, categoryobject.image)
+        .input('StoreId', sql.BigInt, categoryobject.storeId)
+        .query(catalogSqlCmd.updateCategoryImage);
+
+    if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
+        categoryResponse.model.statusmessage = status.common.suscess;
+        categoryResponse.model.responsecode = status.common.suscesscode;
     }
 
     return categoryResponse;
@@ -110,14 +132,40 @@ exports.createProduct = async (productobject) => {
         .input("Price", sql.Int, productobject.price)
         .query(catalogSqlCmd.createProduct);
 
-    if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
+    if (result.recordset.length > 0) {
         productResponse.model.statusmessage = status.common.suscess;
         productResponse.model.responsecode = status.common.suscesscode;
-        productResponse.model.product = productobject;
+        productResponse.model.product = {
+            id: security.encrypt(result.recordset[0].ProductId),
+            name: productobject.name,
+            description: productobject.description,
+            price: productobject.price
+        };
     }
 
     return productResponse;
 };
+
+//update product image
+exports.updateProductImage = async (productobject) => {
+    categoryResponse.model.statusmessage = status.common.failed;
+    categoryResponse.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('Id', sql.BigInt, productobject.id)
+        .input('Image', sql.VarBinary, productobject.image)
+        .input('StoreId', sql.BigInt, productobject.storeId)
+        .query(catalogSqlCmd.updateProductImage);
+
+    if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
+        categoryResponse.model.statusmessage = status.common.suscess;
+        categoryResponse.model.responsecode = status.common.suscesscode;
+    }
+
+    return categoryResponse;
+};
+
 
 //update product
 exports.updateProduct = async (productobject) => {
@@ -128,7 +176,6 @@ exports.updateProduct = async (productobject) => {
     const result = await pool.request()
         .input('StoreId', sql.BigInt, productobject.storeId)
         .input('Name', sql.NVarChar, productobject.name)
-        .input('Image', sql.VarBinary, productobject.image)
         .input("Description", sql.NVarChar, productobject.description)
         .input("CategoryId", sql.BigInt, productobject.categoryId)
         .input("Price", sql.Int, productobject.price)
@@ -138,7 +185,12 @@ exports.updateProduct = async (productobject) => {
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
         productResponse.model.statusmessage = status.common.suscess;
         productResponse.model.responsecode = status.common.suscesscode;
-        productResponse.model.product = productobject;
+        productResponse.model.product = {
+            id: security.encrypt(security.encrypt(productobject.id)),
+            name: productobject.name,
+            description: productobject.description,
+            price: productobject.price
+        };
     }
 
     return productResponse;

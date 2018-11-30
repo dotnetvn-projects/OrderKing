@@ -1,6 +1,6 @@
 const sharp = require('sharp');
 
-exports.resizeFromBuffer = (buff, h, w, quality) => {
+exports.resize = (buff, h, w, callback) => {
     sharp(buff)
         .jpeg()
         .resize(w, h)
@@ -9,13 +9,35 @@ exports.resizeFromBuffer = (buff, h, w, quality) => {
                 console.log(err);
 
             if (buff) {
-                return buff;
+                callback(buff);
             }
         });
 };
 
-exports.changeQualityFromBuffer = (buff, quality) => {
-    return sharp(buff)
-        .quality(quality)
-        .toBuffer();
+exports.resizeAutoScaleWidth = (buff, h, callback) => {
+    sharp(buff)
+        .jpeg()
+        .resize({ height: h })
+        .toBuffer((err, buff, info) => {
+            if (err)
+                console.log(err);
+
+            if (buff) {
+                callback(buff);
+            }
+        });
+};
+
+exports.resizeAutoScaleHeight = (buff, w, callback) => {
+    sharp(buff)
+        .jpeg()
+        .resize({ width: w })
+        .toBuffer((err, buff, info) => {
+            if (err)
+                console.log(err);
+
+            if (buff) {
+                callback(buff);
+            }
+        });
 };

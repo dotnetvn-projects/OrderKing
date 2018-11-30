@@ -15,7 +15,14 @@ defineProperty('createCategory', `
 //update category
 defineProperty('updateCategory', `
     UPDATE Category
-    SET Name = @Name, Image = @Image
+    SET Name = @Name
+    WHERE Id = @Id AND StoreId = @StoreId
+`);
+
+//update category image
+defineProperty('updateCategoryImage', `
+    UPDATE Category
+    SET Image = @Image
     WHERE Id = @Id AND StoreId = @StoreId
 `);
 
@@ -34,14 +41,22 @@ defineProperty('getCategoryInStore',
 defineProperty('createProduct', `
     INSERT INTO Product(Name, Image, Description, StoreId, CategoryId, CreatedDate, Price, IsActived)
     VALUES(@Name, @Image, @Description, @StoreId, @CategoryId, GETDATE(), @Price, 1)
+    SELECT SCOPE_IDENTITY() AS ProductId
 `);
 
 //update product
 defineProperty('updateProduct', `
     UPDATE Product 
-    SET Name = @Name, Image = @Image, Description = @Description, 
+    SET Name = @Name, Description = @Description, 
         CategoryId = @CategoryId, Price = @Price)
     WHERE Id = @Id and StoreId = @StoreId
+`);
+
+//update product image
+defineProperty('updateProductImage', `
+    UPDATE Product
+    SET Image = @Image
+    WHERE Id = @Id AND StoreId = @StoreId
 `);
 
 //create product image

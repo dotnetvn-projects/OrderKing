@@ -6,15 +6,9 @@ const security = require('../../services/service.security');
 const common = require('../../common/common');
 const io = require('../../common/io');
 const imageProcess = require('../../common/image.process');
-
-//****when implement getting list of category or product,
-//do encrypting id before send respone message for client
-//use encrypt function of security has been declared above*****
-// example: var id = security.encrypt(recordset.id);
-
-//****for modifying functions as : update or delete category and product
-//    do decrypting id from client first*****
-// example: var categoryId = security.decrypt(res.body.Id);
+const resources = require('../../resources/resource.api.value');
+var multipart = require('connect-multiparty');
+var multipartMiddleware = multipart();
 
 //create new category
 catalogrouter.post('/create-category', async (req, res, next) => {
@@ -33,13 +27,8 @@ catalogrouter.post('/create-category', async (req, res, next) => {
                 image:null
             };
 
-            if (req.body.ImageDisplay === null || req.body.ImageDisplay === '' || req.body.ImageDisplay === undefined) {
-                category.image = io.readFileToBinary('./resources/images/no-image.png');
-            }
-            else {
-                var buff = Buffer.from(req.body.ImageDisplay, 'base64');
-                category.image = imageProcess.resizeFromBuffer(buff, 120, 120, 100);
-            }
+            category.image = io.readFileToBinary('./resources/images/no-image.png');
+            
             var result = await service.createCatagory(category);
 
             var message = common.createResponseMessage(result.model.category,
@@ -49,6 +38,37 @@ catalogrouter.post('/create-category', async (req, res, next) => {
             res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(message));
         }
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//update category image
+catalogrouter.post('/change-category-image', multipartMiddleware, async (req, res, next) => {
+    try {
+        var accessToken = req.body.null[0];
+        var categoryId = security.decrypt(req.body.null[1]);
+        var storeId = await service.getStoreIdByAccessToken(accessToken);
+
+        var buff = io.readFileToBinary(req.files.null.path);
+
+        imageProcess.resizeAutoScaleHeight(buff, resources.categorySize.W, async (imageData) => {
+            var result = await service.updateCatagoryImage({
+                image: imageData,
+                id: categoryId,
+                storeId: storeId
+            });
+
+            io.deleteFile(req.files.null.path);
+
+            var message = common.createResponseMessage(null,
+                result.model.responsecode,
+                result.model.statusmessage);
+
+            res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(message));
+        });
     }
     catch (err) {
         next(err);
@@ -71,24 +91,8 @@ catalogrouter.post('/update-category', async (req, res, next) => {
             var category = {
                 storeId: storeId,
                 name: req.body.Name,
-                image: null,
                 id: cateId
             };
-
-            if (req.body.ImageDisplay === null || req.body.ImageDisplay === '' || req.body.ImageDisplay === undefined) {
-                category.image = io.readFileToBinary('./resources/images/no-image.png');
-            }
-            else {
-                var categoryImage = await service.getCategoryImage(cateId);
-                var base64data = new Buffer(categoryImage.model.category, 'binary').toString('base64');
-                var buff = Buffer.from(req.body.ImageDisplay, 'base64');
-                if (base64data !== req.body.ImageDisplay) {
-                    category.image = imageProcess.resizeFromBuffer(buff, 120, 120, 90);
-                }
-                else {
-                    category.image = buff;
-                }
-            }
 
             var result = await service.updateCatagory(category);
 
@@ -175,15 +179,9 @@ catalogrouter.post('/create-product', async (req, res, next) => {
                 categoryId: security.decrypt(req.body.CategoryId),
                 price: req.body.Price,
                 image: null
-            };
+            };     
 
-            if (req.body.ImageDisplay === null || req.body.ImageDisplay === '' || req.body.ImageDisplay === undefined) {
-                product.image = io.readFileToBinary('./resources/images/default-product.png');
-            }
-            else {
-                var buff = Buffer.from(req.body.ImageDisplay, 'base64');
-                product.image = imageProcess.resizeFromBuffer(buff, 500, 500, 100);
-            }
+            product.image = io.readFileToBinary('./resources/images/default-product.png');            
 
             var result = await service.createProduct(product);
 
@@ -220,24 +218,9 @@ catalogrouter.post('/update-product', async (req, res, next) => {
                 description: req.body.Description,
                 categoryId: cateId,
                 price: req.body.Price,
-                id: productId,
-                image: null
+                id: productId
             };
 
-            if (req.body.ImageDisplay === null || req.body.ImageDisplay === '' || req.body.ImageDisplay === undefined) {
-                product.image = io.readFileToBinary('./resources/images/default-product.png');
-            }
-            else {
-                var productImage = await service.getProductImage(productId);
-                var base64data = new Buffer(productImage.model.product, 'binary').toString('base64');
-                var buff = Buffer.from(req.body.ImageDisplay, 'base64');
-                if (base64data !== req.body.ImageDisplay) {                
-                    product.image = imageProcess.resizeFromBuffer(buff, 500, 500, 90);
-                }
-                else {
-                    product.image = buff;
-                }
-            }
             var result = await service.updateProduct(product);
 
             var message = common.createResponseMessage(result.model.product,
@@ -253,6 +236,36 @@ catalogrouter.post('/update-product', async (req, res, next) => {
     }
 });
 
+//update product image
+catalogrouter.post('/change-product-image', multipartMiddleware, async (req, res, next) => {
+    try {
+        var accessToken = req.body.null[0];
+        var productId = security.decrypt(req.body.null[1]);
+        var storeId = await service.getStoreIdByAccessToken(accessToken);
+
+        var buff = io.readFileToBinary(req.files.null.path);
+
+        imageProcess.resizeAutoScaleHeight(buff, resources.productSize.W, async (imageData) => {
+            var result = await service.updateProductImage({
+                image: imageData,
+                id: productId,
+                storeId: storeId
+            });
+
+            io.deleteFile(req.files.null.path);
+
+            var message = common.createResponseMessage(null,
+                result.model.responsecode,
+                result.model.statusmessage);
+
+            res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(message));
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+});
 
 //deactive product
 catalogrouter.post('/delete-product', async (req, res, next) => {

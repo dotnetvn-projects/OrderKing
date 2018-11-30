@@ -7,6 +7,7 @@ const status = require('../../resources/resource.api.status');
 const format = require('string-format');
 const security = require('../../services/service.security');
 const io = require('../../common/io');
+const resources = require('../../resources/resource.api.value');
 const imageProcess = require('../../common/image.process');
 
 //url: /api/public/store
@@ -136,7 +137,7 @@ storerouter.post('/remove-member', async (req, res, next) => {
 //update logo
 storerouter.post('/update-logo', async (req, res) => {
     try {
-        var accessToken = req.body.AccessToken;
+        var accessToken = req.body.null;
         var isStoreOwner = await security.isStoreOwner(accessToken);
 
         if (isStoreOwner === false) {
@@ -149,30 +150,24 @@ storerouter.post('/update-logo', async (req, res) => {
                 common.sendBadRequest(res, 'Request data is invalid !');
             }
             else {
-                var storeLogo = await service.getLogo(storeId);
-                var base64data = new Buffer(storeLogo.model.storeinfo, 'binary').toString('base64');
-                var buff = Buffer.from(req.body.Logo, 'base64');
-                var imageData = null;
-                if (base64data !== req.body.Logo) {
-                    imageData = imageProcess.resizeFromBuffer(buff, 250, 250, 90);
-                }
-                else {
-                    imageData = buff;
-                }
+                var buff = io.readFileToBinary(req.files.null.path);
+                imageProcess.resizeAutoScaleHeight(buff, resources.storeLogoSize.W, async (imageData) => {
+                    var info = {
+                        logo: imageData,
+                        storeid: storeId
+                    };
 
-                var info = {
-                    logo: imageData,
-                    storeid: storeId
-                };
+                    var result = await service.updateLogo(info);
 
-                var result = await service.updateLogo(info);
+                    io.deleteFile(req.files.null.path);
 
-                var message = common.createResponseMessage(null,
-                    result.model.responsecode,
-                    result.model.statusmessage);
+                    var message = common.createResponseMessage(null,
+                        result.model.responsecode,
+                        result.model.statusmessage);
 
-                res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify(message));
+                    res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify(message));
+                });
             }
         }
     }
@@ -249,13 +244,7 @@ storerouter.post('/create-new', async (req, res, next) => {
             avatar: null
         };
 
-        if (req.body.Avatar === null || req.body.Avatar === '' || req.body.Avatar === undefined) {
-            accountInfo.avatar = io.readFileToBinary('./resources/images/no-avatar.png');
-        }
-        else {
-            var buff = new Buffer(req.body.Avatar, 'base64');
-            accountInfo.avatar = imageProcess.resizeFromBuffer(buff, 250, 250, 80);
-        }
+        accountInfo.avatar = io.readFileToBinary('./resources/images/no-avatar.png');
 
         var accountResult = await userService.createNewAccount(accountInfo);
         if (accountResult.model.userinfo > 0) {
@@ -269,13 +258,7 @@ storerouter.post('/create-new', async (req, res, next) => {
                 logo: null
             };
 
-            if (req.body.Logo === null || req.body.Logo === '' || req.body.Logo === undefined) {
-                storeInfo.logo = io.readFileToBinary('./resources/images/no-image.png');
-            }
-            else {
-                 buff = new Buffer(req.body.Logo, 'base64');
-                 storeInfo.logo = imageProcess.resizeFromBuffer(buff, 250, 250, 80);
-            }
+            storeInfo.logo = io.readFileToBinary('./resources/images/no-image.png');
 
             var storeResult = await service.createNewStore(storeInfo);
             if (storeResult.model.storeinfo > 0) {
