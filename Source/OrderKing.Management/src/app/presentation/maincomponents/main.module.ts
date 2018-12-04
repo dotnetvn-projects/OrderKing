@@ -4,7 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import { MasterPageComponent } from './masterpage/masterpage.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { MainRoutes } from '../routing/main.routing';
+import { MainRoutes } from '../../routing/main.routing';
 @NgModule({
   declarations: [
       MasterPageComponent,

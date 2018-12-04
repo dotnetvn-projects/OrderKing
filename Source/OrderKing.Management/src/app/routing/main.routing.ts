@@ -1,4 +1,4 @@
-import { DashboardComponent } from '../presentation/dashboard/dashboard.component';
+import { DashboardComponent } from '../presentation/maincomponents/dashboard/dashboard.component';
 
 export const MainRoutes = [
     { path: 'dashboard', component: DashboardComponent},
