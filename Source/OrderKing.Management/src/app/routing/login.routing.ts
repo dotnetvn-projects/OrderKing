@@ -1,5 +1,5 @@
-import { LoginComponent } from '../presentation/maincomponents/login/login.component';
+import { LoginComponent } from '../presentation/login/login.component';
 
 export const LoginRoutes = [
-    { path: 'dang-nhap', component: LoginComponent }
+    { path: '', component: LoginComponent }
 ];
