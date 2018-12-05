@@ -9,6 +9,8 @@ const resources = require('../../resources/resource.api.value');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
+var bodyParser = require('body-parser');
+
 //get user info
 userrouter.post('/get-info', async (req, res, next) => {
     try {
@@ -18,7 +20,7 @@ userrouter.post('/get-info', async (req, res, next) => {
             result.model.responsecode,
             result.model.statusmessage);
 
-        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin':'*' });
         res.end(JSON.stringify(message));
     }
     catch (err) {
