@@ -7,7 +7,7 @@
 @import url(assets/themes/dist/css/skins/_all-skins.min.css);
 @import "assets/themes/plugins/iCheck/square/blue.css";
 
-/*Loadnig*/
+/*Loading*/
 .boxLoading {
   width: 50px;
   height: 50px;
@@ -70,3 +70,11 @@
     transform: scale(1.2, 1);
   }
 }
+
+.login-background {
+  background-image: url("assets/images/bg.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: right center;
+}
+

@@ -11,7 +11,7 @@ export class LoginLayoutComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    document.body.className = 'hold-transition login-page skin-blue';
+    document.body.className = 'hold-transition login-page skin-blue login-background';
       $(() => {
           $('input').iCheck({
               checkboxClass: 'icheckbox_square-blue',
