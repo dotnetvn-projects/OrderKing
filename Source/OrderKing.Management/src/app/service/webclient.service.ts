@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Dictionary } from '../framework/objectextension/dictionary';
-import { ApiResult } from '../model/api.result.model';
+import { ApiResultModel } from '../model/api.result.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,13 +12,13 @@ export class WebClientService {
   constructor(private http: HttpClient) {}
 
   /**Result data which returned from calling http action */
-  public Result: ApiResult;
+  public Result: ApiResultModel;
 
   // build http parameters for call normal api
   private buildHttpParams(params: Dictionary<string, any>) {
-    const body = new HttpParams();
+    let body = new HttpParams();
     params.getKeys().forEach((key: any) => {
-      body.set(key, params.get(key));
+      body = body.set(key, params.get(key));
     });
 
     return body;
@@ -37,8 +37,21 @@ export class WebClientService {
             (response: any) => {
               res = response;
             },
-            error => {
-                throw error;
+            exception => {
+              res = exception.error;
+              if (exception.status === 404) {
+                res = { responsecode: 404, statusmessage: 'Page Not Found', responsedate: null, result: null };
+              }
+              if (exception.status === 503) {
+                res = { responsecode: 503, statusmessage: 'Service Unavailable', responsedate: null, result: null };
+              }
+              if (exception.status === 401) {
+                res = { responsecode: 401, statusmessage: 'UnAuthorized', responsedate: null, result: null };
+              }
+              if (exception.status === 400) {
+                res = { responsecode: 400, statusmessage: 'Bad Request', responsedate: null, result: null };
+              }
+              resolve(res);
             },
             () => {
                 resolve(res);
@@ -55,8 +68,8 @@ export class WebClientService {
             (response: any) => {
               res = response;
             },
-            error => {
-                throw error;
+            exception => {
+                throw exception;
             },
             () => {
                 resolve(res);
@@ -75,7 +88,7 @@ export class WebClientService {
     const data = this.buildHttpParams(body);
     this.http.post(url, data, httpOptions).subscribe(
       (res: any) => {
-        this.Result = new ApiResult();
+        this.Result = new ApiResultModel();
         this.Result.ResponseCode = res.responsecode;
         this.Result.ResponseCode = res.statusmessage;
         this.Result.ResponseDate = res.responsedate;
@@ -84,8 +97,8 @@ export class WebClientService {
           callback(this.Result);
         }
       },
-      error => {
-          throw error;
+      exception => {
+          throw exception;
       });
   }
 
@@ -94,17 +107,17 @@ export class WebClientService {
     const data = this.buildHttpParams(body);
     await this.createPostPromise(url, data, 'application/x-www-form-urlencoded').then(
       (res: any) => {
-        this.Result = new ApiResult();
+        this.Result = new ApiResultModel();
         this.Result.ResponseCode = res.responsecode;
-        this.Result.ResponseCode = res.statusmessage;
+        this.Result.Status = res.statusmessage;
         this.Result.ResponseDate = res.responsedate;
         this.Result.Result = res.result;
         if (callback != null) {
           callback(this.Result);
         }
       },
-        err => {
-            throw err;
+      exception => {
+            throw exception;
         }
     );
   }
@@ -113,17 +126,17 @@ export class WebClientService {
  async doGetAsync(url: string,  callback: any) {
   await this.createGetPromise(url).then(
     (res: any) => {
-      this.Result = new ApiResult();
+      this.Result = new ApiResultModel();
       this.Result.ResponseCode = res.responsecode;
-      this.Result.ResponseCode = res.statusmessage;
+      this.Result.Status = res.statusmessage;
       this.Result.ResponseDate = res.responsedate;
       this.Result.Result = res.result;
       if (callback != null) {
         callback(this.Result);
       }
     },
-      err => {
-          throw err;
+    exception => {
+          throw exception;
       }
     );
   }
@@ -132,17 +145,17 @@ export class WebClientService {
   doGet(url: string, callback: any) {
     this.http.get(url).subscribe(
       (res: any) => {
-        this.Result = new ApiResult();
+        this.Result = new ApiResultModel();
         this.Result.ResponseCode = res.responsecode;
-        this.Result.ResponseCode = res.statusmessage;
+        this.Result.Status = res.statusmessage;
         this.Result.ResponseDate = res.responsedate;
         this.Result.Result = res.result;
         if (callback != null) {
           callback(this.Result);
         }
       },
-      error => {
-          throw error;
+      exception => {
+          throw exception;
       });
   }
 }

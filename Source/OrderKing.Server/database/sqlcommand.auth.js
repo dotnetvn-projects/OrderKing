@@ -10,7 +10,7 @@ var defineProperty = function define(name, value) {
 
 //get user's hash key
 defineProperty('getHashKey',
-    'SELECT HashKey FROM Account WHERE AccountName = @AccountName');
+    'SELECT IsActived, HashKey FROM Account WHERE AccountName = @AccountName');
 
 //get user's hash key
 defineProperty('login',

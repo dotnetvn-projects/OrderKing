@@ -43,6 +43,7 @@
     <Compile Include="database\sqlcommand.store.js" />
     <Compile Include="database\sqlcommand.user.js" />
     <Compile Include="eventHandlers\event.handler.email.js" />
+    <Compile Include="middlewares\middelware.request.cros.js" />
     <Compile Include="middlewares\middleware.request.validate.js" />
     <Compile Include="models\auth\model.auth.js" />
     <Compile Include="models\category\model.category.js" />

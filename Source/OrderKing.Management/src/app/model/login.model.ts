@@ -1,5 +1,5 @@
-export class Login {
-  Account = '';
+export class LoginModel {
+  AccountName = '';
   Password = '';
   RemeberMe = true;
 }

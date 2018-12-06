@@ -13,9 +13,6 @@ export class CategoryService {
 
   // get category list
   getCategoryList() {
-    let apiData = this.http
-      .get('http://localhost:1337/api/public/')
-      .pipe(map((response: any) => response.json()));
 
 
   }

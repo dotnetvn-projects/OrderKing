@@ -20,7 +20,7 @@ userrouter.post('/get-info', async (req, res, next) => {
             result.model.responsecode,
             result.model.statusmessage);
 
-        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin':'*' });
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(message));
     }
     catch (err) {

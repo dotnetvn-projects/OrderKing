@@ -1,6 +1,7 @@
 'use strict';
 var express = require('express');
 var errorCatcher = require('./middlewares/middleware.error.catcher');
+var crossRequest = require('./middlewares/middelware.request.cros');
 var validateRequest = require('./middlewares/middleware.request.validate');
 var bodyParser = require('body-parser');
 
@@ -19,9 +20,9 @@ var userApi = require('./routes/api.public/route.api.user');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(crossRequest.setmiddleware);
 //in development mode, please comment out validateRequest middleware
 //app.use(validateRequest.setmiddleware);
-
 
 //route api
 app.use('/', homeApi);
