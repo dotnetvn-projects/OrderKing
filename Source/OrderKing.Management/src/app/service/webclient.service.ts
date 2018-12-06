@@ -69,6 +69,19 @@ export class WebClientService {
               res = response;
             },
             exception => {
+              res = exception.error;
+              if (exception.status === 404) {
+                res = { responsecode: 404, statusmessage: 'Page Not Found', responsedate: null, result: null };
+              }
+              if (exception.status === 503) {
+                res = { responsecode: 503, statusmessage: 'Service Unavailable', responsedate: null, result: null };
+              }
+              if (exception.status === 401) {
+                res = { responsecode: 401, statusmessage: 'UnAuthorized', responsedate: null, result: null };
+              }
+              if (exception.status === 400) {
+                res = { responsecode: 400, statusmessage: 'Bad Request', responsedate: null, result: null };
+              }
                 throw exception;
             },
             () => {
