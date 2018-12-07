@@ -1,4 +1,4 @@
-import { IDictionary } from '../interface/dictionary.interface';
+import { IDictionary } from '../interface/framework.dictionary.interface';
 
 export class Dictionary<K extends string, V> implements IDictionary<K, V> {
 

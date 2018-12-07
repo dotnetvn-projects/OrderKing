@@ -63,6 +63,7 @@
     <Compile Include="server.js" />
     <Compile Include="services\service.auth.js" />
     <Compile Include="services\service.catalog.js" />
+    <Compile Include="services\service.cronjob.js" />
     <Compile Include="services\service.order.js" />
     <Compile Include="services\service.report.js" />
     <Compile Include="services\service.security.js" />

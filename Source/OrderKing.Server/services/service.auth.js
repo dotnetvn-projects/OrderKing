@@ -74,3 +74,24 @@ exports.executeAuth = async function (accountName, password, ip, userAgent, refe
     }
     return reponse;
 };
+
+//check token is expired or not
+exports.IsExpiredToken = async function (accessToken) {
+    reponse.model.statusmessage = status.common.failed;
+    reponse.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    var result = await pool.request()
+        .input('AccessToken', sql.NVarChar, accessToken)
+        .query(authenSqlCmd.getTokenExpiration);
+
+    if (result.recordset.length > 0) {
+        var current = moment();
+        var expiredDate = moment(result.recordset[0].AccessTokenExpired);
+        if (current > expiredDate) {
+            sessionLoginHandler.fire('makeExpired', result.recordset[0].AccessToken);
+            return true;
+        }
+    }
+    return false;
+};

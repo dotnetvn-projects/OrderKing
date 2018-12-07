@@ -37,3 +37,9 @@ defineProperty('updateLastAccessTimeLoginSession', 'UPDATE LoginSession SET Last
 
 //update expired date
 defineProperty('updateExpiredDateLoginSession', 'UPDATE LoginSession SET AccessTokenExpired = GETDATE(), IsExpired = 1 WHERE AccessToken = @AccessToken');
+
+//get the expiration of token
+defineProperty('getTokenExpiration', 'SELECT AccessToken, AccessTokenExpired FROM LoginSession WHERE AccessToken = @AccessToken');
+
+//get all tokens are not expired
+defineProperty('getAllTokenNotExpired', 'SELECT AccessTokenExpired, AccessToken FROM LoginSession WHERE IsExpired = 0');

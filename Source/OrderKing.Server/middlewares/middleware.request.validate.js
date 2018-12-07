@@ -10,8 +10,8 @@ const sessionLoginHandler = require('../eventHandlers/event.handler.sessionlogin
 //filter request
 function isAcceptedRequest(req) {
     var isvalid = false;
-    var referrer = req.headers.referer;
-    var apikey = req.headers.apikey;
+    var referrer = req.headers['apikey'];
+    var apikey = req.headers['referer'];
 
     if (apikey === apiConfig.seller.apikey && referrer === apiConfig.seller.referrer
         || apikey === apiConfig.manager.apikey && referrer === apiConfig.manager.referrer
@@ -33,12 +33,18 @@ var validateRequest = async function (req, res, next) {
         }
         else {
             var valid = true;
-            var accessToken = req.body.AccessToken;
+            var accessToken = '';
+            if (req.method === 'POST') {
+                accessToken = req.body.AccessToken;
+            }
+            else {
+                accessToken = req.query.access_token;
+            }
             if (req.url.indexOf('auth-user') === -1 && req.url.indexOf('product-img') === -1
-                    && req.url.indexOf('cate-img') === -1) {
+                && req.url.indexOf('cate-img') === -1 && req.url.indexOf('auth-token-status') === -1) {
                 if (accessToken === undefined || accessToken === '') {
                     logHandler.fire('error', format('ip [{0}] {1} ', ip, 'has sent a request without accesstoken'));
-                    common.sendInvalidRequest(res);
+                    common.sendUnauthorizedRequest(res);
                     valid = false;
                 }
                 else {
@@ -52,7 +58,7 @@ var validateRequest = async function (req, res, next) {
 
                     if (result.recordset.length <=0 || tokenInfo.account !== accountName) {
                         logHandler.fire('error', format('ip [{0}] {1} ', ip, 'has sent the request with fake accesstoken'));
-                        common.sendBadRequest(res);
+                        common.sendUnauthorizedRequest(res);
                     }
                     else {
                         //check token expired
@@ -63,7 +69,7 @@ var validateRequest = async function (req, res, next) {
                             //make session login expired
                             sessionLoginHandler.fire('makeExpired', accessToken);
                             valid = false;
-                            common.sendTokenExpired(res);
+                            common.sendUnauthorizedRequest(res);
                         }
                         else {
                             sessionLoginHandler.fire('updateLastAccessTime', accessToken);

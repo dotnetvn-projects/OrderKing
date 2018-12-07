@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
       this.ErrorMessage = 'Tài khoản hoặc mật thông không được trống !';
       return;
     }
-    const result = await this.authService.Login(this.LoginInfo);
+    const result = await this.authService.login(this.LoginInfo);
     if (result === 'unauthorized') {
       this.ErrorMessage = 'Tài khoản đã bị khóa !';
     } else if (result === '') {
