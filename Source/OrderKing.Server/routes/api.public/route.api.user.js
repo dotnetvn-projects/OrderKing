@@ -9,8 +9,6 @@ const resources = require('../../resources/resource.api.value');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
-var bodyParser = require('body-parser');
-
 //get user info
 userrouter.post('/get-info', async (req, res, next) => {
     try {

@@ -76,7 +76,7 @@ exports.executeAuth = async function (accountName, password, ip, userAgent, refe
 };
 
 //check token is expired or not
-exports.IsExpiredToken = async function (accessToken) {
+exports.checkExpiredToken = async function (accessToken) {
     reponse.model.statusmessage = status.common.failed;
     reponse.model.responsecode = status.common.failedcode;
 
@@ -90,8 +90,11 @@ exports.IsExpiredToken = async function (accessToken) {
         var expiredDate = moment(result.recordset[0].AccessTokenExpired);
         if (current > expiredDate) {
             sessionLoginHandler.fire('makeExpired', result.recordset[0].AccessToken);
-            return true;
+        }
+        else {
+            reponse.model.statusmessage = status.common.suscess;
+            reponse.model.responsecode = status.common.suscesscode;
         }
     }
-    return false;
+    return reponse;
 };

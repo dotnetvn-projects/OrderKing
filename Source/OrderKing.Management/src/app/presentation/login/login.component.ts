@@ -3,6 +3,8 @@ import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { LoginModel } from '../../model/login.model';
 import { AuthService } from '../../service/auth.service';
+import { UserService } from 'src/app/service/user.service';
+import { AppSettings } from 'src/app/framework/framework.app.setting';
 
 @Component({
   selector: 'app-login',
@@ -15,13 +17,18 @@ export class LoginComponent implements OnInit {
   LoginInfo: LoginModel;
   ErrorMessage: string;
 
-  constructor(private titleService: Title, private router: Router, private authService: AuthService) {
+  constructor(private titleService: Title, private router: Router,
+                 private authService: AuthService, private userService: UserService) {
      this.LoginInfo = new LoginModel();
      this.ErrorMessage = '';
    }
 
-  ngOnInit() {
-    this.titleService.setTitle('Order King - Đăng nhập hệ thống');
+  async ngOnInit() {
+    if (sessionStorage.getItem(AppSettings.TOKEN_KEY) === null) {
+      this.titleService.setTitle('Order King - Đăng nhập hệ thống');
+    } else {
+         await this.router.navigate(['dashboard']);
+    }
   }
 
   async login() {
@@ -35,6 +42,7 @@ export class LoginComponent implements OnInit {
     } else if (result === '') {
       this.ErrorMessage = 'Tài khoản hoặc mật khẩu không đúng !';
     } else {
+      this.userService.getUserInfo(sessionStorage.getItem(AppSettings.TOKEN_KEY));
       this.router.navigate(['dashboard']);
     }
   }

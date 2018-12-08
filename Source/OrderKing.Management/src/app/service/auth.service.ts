@@ -37,11 +37,11 @@ export class AuthService {
   }
 
   // check token expiration
-  isTokenExpired(token: string) {
+  async isTokenExpired(token: string) {
     let result = false;
     const params = new Dictionary<string, any>();
     params.put('AccessToken' , token);
-    this.webClient.doPost(AppSettings.API_ENDPOINT + this.checkTokenUrl, params, (data: ApiResultModel) => {
+    await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.checkTokenUrl, params, (data: ApiResultModel) => {
       if (data.ResponseCode !== 200) {
           result = true;
       } else {

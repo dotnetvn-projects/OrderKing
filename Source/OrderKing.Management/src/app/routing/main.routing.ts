@@ -7,10 +7,10 @@ export const MainRoutes = [
         path: '',
         component: MainLayoutComponent,
         children: [
-            { path: 'dashboard', loadChildren: '../presentation/dashboard/dashboard.module#DashboardModule'},
-            { path: '', loadChildren: '../presentation/dashboard/dashboard.module#DashboardModule' },
-            { path: 'danh-muc', loadChildren: '../presentation/category/category.module#CategoryModule' },
-            { path: 'san-pham', loadChildren: '../presentation/product/product.module#ProductModule' }
+            { path: 'dashboard', loadChildren: 'src/app/presentation/dashboard/dashboard.module#DashboardModule'},
+            { path: '', loadChildren: 'src/app/presentation/dashboard/dashboard.module#DashboardModule' },
+            { path: 'danh-muc', loadChildren: 'src/app/presentation/category/category.module#CategoryModule' },
+            { path: 'san-pham', loadChildren: 'src/app/presentation/product/product.module#ProductModule' }
         ]
     },
     // login route
@@ -18,7 +18,7 @@ export const MainRoutes = [
         path: '',
         component: LoginLayoutComponent,
         children: [
-            { path: 'dang-nhap', loadChildren: '../presentation/login/login.module#LoginModule' }
+            { path: 'dang-nhap', loadChildren: 'src/app/presentation/login/login.module#LoginModule' }
         ]
     },
     // otherwise redirect to home

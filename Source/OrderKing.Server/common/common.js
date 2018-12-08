@@ -65,7 +65,7 @@ exports.sendTokenExpired = function sendTokenExpired(res) {
 };
 
 //create response message for client
-exports.createResponseMessage = (data,statusCode, statusMessage) => {
+exports.createResponseMessage = (data, statusCode, statusMessage) => {
     var message = response.model;
     message.responsecode = statusCode;
     message.statusmessage = statusMessage;

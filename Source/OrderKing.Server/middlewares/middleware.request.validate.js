@@ -10,12 +10,12 @@ const sessionLoginHandler = require('../eventHandlers/event.handler.sessionlogin
 //filter request
 function isAcceptedRequest(req) {
     var isvalid = false;
-    var referrer = req.headers['apikey'];
-    var apikey = req.headers['referer'];
+    var appname = req.headers.appname;
+    var apikey = req.headers.apikey;
 
-    if (apikey === apiConfig.seller.apikey && referrer === apiConfig.seller.referrer
-        || apikey === apiConfig.manager.apikey && referrer === apiConfig.manager.referrer
-        || apikey === apiConfig.system.apikey && referrer === apiConfig.system.referrer) {
+    if (apikey === apiConfig.seller.apikey && appname === apiConfig.seller.appname
+        || apikey === apiConfig.manager.apikey && appname === apiConfig.manager.appname
+        || apikey === apiConfig.system.apikey && appname === apiConfig.system.appname) {
         isvalid = true;
     }
     return isvalid;

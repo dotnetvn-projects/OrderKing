@@ -1,4 +1,3 @@
-//var extension = require('../common/extension');
 
 var defineProperty = function define(name, value) {
     Object.defineProperty(exports, name, {

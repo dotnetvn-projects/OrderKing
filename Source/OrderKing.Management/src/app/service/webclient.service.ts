@@ -53,13 +53,11 @@ export class WebClientService {
   private createApiResult(res: any) {
     this.Result = new ApiResultModel();
     this.Result.ResponseCode = res.responsecode;
-    this.Result.ResponseCode = res.statusmessage;
+    this.Result.Status = res.statusmessage;
     this.Result.ResponseDate = res.responsedate;
     this.Result.Result = res.result;
   }
 
-  //  headers = headers.set('referer', 'http://manage.orderking.com');
-   // headers = headers.set('apikey', '0daeb74c82c8f2287038959ce8697896');
   // create call http post promise
   private createPostPromise(url: string, formdata: object, contenttype: string): Promise<Observable<Response>> {
     return new Promise(resolve => {
@@ -105,7 +103,10 @@ export class WebClientService {
 
   /**call http post api without waiting */
   doPost(url: string, body: Dictionary<string, any>, callback: any) {
-    const httpOptions = {headers: AppSettings.createDefaultHeaders().append('Content-Type', 'application/x-www-form-urlencoded')};
+    let httpHeaders  = new HttpHeaders();
+    httpHeaders  = AppSettings.createDefaultHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const httpOptions = {headers: httpHeaders };
+
     const data = this.buildHttpParams(body);
     this.http.post(url, data, httpOptions).subscribe(
       (res: any) => {

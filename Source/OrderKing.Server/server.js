@@ -1,7 +1,7 @@
 'use strict';
 var express = require('express');
 var errorCatcher = require('./middlewares/middleware.error.catcher');
-var crossRequest = require('./middlewares/middelware.request.cros');
+var cors = require('cors');
 var validateRequest = require('./middlewares/middleware.request.validate');
 var cronJob = require('./services/service.cronjob');
 var bodyParser = require('body-parser');
@@ -20,8 +20,8 @@ var userApi = require('./routes/api.public/route.api.user');
 //apply default middleware for body message format
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
-app.use(crossRequest.setmiddleware);
 //in development mode, please comment out validateRequest middleware
 app.use(validateRequest.setmiddleware);
 

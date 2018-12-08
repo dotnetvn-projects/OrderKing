@@ -1,7 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { map } from 'rxjs/operators';
-import { Category } from '../model/category.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,11 +6,10 @@ import { Category } from '../model/category.model';
 export class CategoryService {
   categories: string[] = [];
 
-  constructor(private http: Http) {}
+  constructor() {}
 
   // get category list
   getCategoryList() {
-
 
   }
 }

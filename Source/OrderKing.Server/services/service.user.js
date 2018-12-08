@@ -26,7 +26,8 @@ exports.getUserInfoByAccessToken = async function (accessToken) {
                 phonenumber: result.recordset[0].PhoneNumber,
                 address: result.recordset[0].Address,
                 address2: result.recordset[0].Address2,
-                identitycard: result.recordset[0].IdentityCard
+                identitycard: result.recordset[0].IdentityCard,
+                createddate: result.recordset[0].CreatedDate
             };
     }
     return response;

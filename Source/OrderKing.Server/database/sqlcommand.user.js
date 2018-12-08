@@ -9,7 +9,7 @@ var defineProperty = function define(name, value) {
 defineProperty('getUserInfoByAccessToken',
                `SELECT ac.AccountName, profile.FullName, profile.Email,
                        profile.PhoneNumber, profile.Address, profile.Address2,
-                       profile.IdentityCard
+                       profile.IdentityCard, ac.CreatedDate
                        FROM Account ac
                        INNER JOIN UserProfile profile ON ac.Id = profile.AccountId
                        INNER JOIN LoginSession ss ON ac.Id = ss.AccountId

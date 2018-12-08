@@ -1,5 +1,5 @@
 import { ModelBase } from './base.model';
 
-export class Category extends ModelBase {
+export class CategoryModel extends ModelBase {
     CategoryName: string;
 }
