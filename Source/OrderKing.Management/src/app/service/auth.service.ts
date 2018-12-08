@@ -10,6 +10,7 @@ import { AppSettings } from '../framework/framework.app.setting';
 })
 export class AuthService {
   private loginUrl = 'auth/auth-user';
+  private logoutUrl = 'auth/remove-auth';
   private checkTokenUrl = 'auth/auth-token-status';
 
   constructor(private webClient: WebClientService ) {}
@@ -23,9 +24,9 @@ export class AuthService {
       await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.loginUrl, params, (data: ApiResultModel) => {
         if (data.ResponseCode === 200) {
            result = data.Result.accesstoken;
-           sessionStorage.setItem('order-king-token', result);
+           sessionStorage.setItem(AppSettings.TOKEN_KEY, result);
            if (loginInfo.RemeberMe) {
-              localStorage.setItem('order-king-auth', loginInfo.AccountName + ':' + loginInfo.Password);
+              localStorage.setItem(AppSettings.AUTH_KEY, loginInfo.AccountName + ':' + loginInfo.Password);
            }
         } else {
            if (data.ResponseCode === 401) {
@@ -36,11 +37,28 @@ export class AuthService {
       return result;
   }
 
+  async logout() {
+    let result = '';
+    const params = new Dictionary<string, any>();
+    params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
+    await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.logoutUrl, params, (data: ApiResultModel) => {
+      if (data.ResponseCode === 200) {
+          sessionStorage.removeItem(AppSettings.TOKEN_KEY);
+          localStorage.removeItem(AppSettings.AUTH_KEY);
+          sessionStorage.removeItem(AppSettings.MANAGE_USERINFO_KEY);
+          result = 'ok';
+      } else {
+            result = 'error';
+          }
+    });
+    return result;
+  }
+
   // check token expiration
-  async isTokenExpired(token: string) {
+  async isTokenExpired() {
     let result = false;
     const params = new Dictionary<string, any>();
-    params.put('AccessToken' , token);
+    params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
     await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.checkTokenUrl, params, (data: ApiResultModel) => {
       if (data.ResponseCode !== 200) {
           result = true;

@@ -19,9 +19,9 @@ export class UserService {
   constructor(private webClient: WebClientService ) {}
 
   // ** get user info by token from api */
-  getUserInfo(accesstoken: string) {
+  fetchUserInfo() {
     const params = new Dictionary<string, any>();
-    params.put('AccessToken' , accesstoken);
+    params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
     this.webClient.doPost(AppSettings.API_ENDPOINT + this.getUserInfoUrl, params, (data: ApiResultModel) => {
         if (data.ResponseCode === 200) {
             const info = new UserInfoModel();

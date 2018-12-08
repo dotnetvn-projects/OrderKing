@@ -42,8 +42,8 @@ export class LoginComponent implements OnInit {
     } else if (result === '') {
       this.ErrorMessage = 'Tài khoản hoặc mật khẩu không đúng !';
     } else {
-      this.userService.getUserInfo(sessionStorage.getItem(AppSettings.TOKEN_KEY));
-      this.router.navigate(['dashboard']);
+      this.userService.fetchUserInfo();
+      await this.router.navigate(['dashboard']);
     }
   }
 }

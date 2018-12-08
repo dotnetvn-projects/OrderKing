@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/service/auth.service';
 import { UserInfoModel } from 'src/app/model/userinfo.model';
 import { UserService } from 'src/app/service/user.service';
 import { BaseComponent } from 'src/app/framework/framework.base.component';
+import { AppSettings } from 'src/app/framework/framework.app.setting';
 
 @Component({
   selector: 'app-main-layout',
@@ -18,11 +19,11 @@ export class MainLayoutComponent extends BaseComponent {
   }
 
   async onInit() {
-    const token = sessionStorage.getItem('order-king-token');
+    const token = sessionStorage.getItem(AppSettings.TOKEN_KEY);
     if (token === undefined || token === null) {
      await this.router.navigate(['dang-nhap']);
     } else {
-        const isExpired = await this.authService.isTokenExpired(token);
+        const isExpired = await this.authService.isTokenExpired();
         if (isExpired) {
           await this.router.navigate(['dang-nhap']);
         } else {
@@ -32,4 +33,13 @@ export class MainLayoutComponent extends BaseComponent {
           }
         }
     }
+
+  async logout() {
+    const result = await this.authService.logout();
+    if (result === 'ok') {
+      await this.router.navigate(['dang-nhap']);
+    } else {
+      await this.router.navigate(['error']);
+    }
+  }
 }
