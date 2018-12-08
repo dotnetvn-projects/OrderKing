@@ -1,6 +1,7 @@
 var cronJob = require('cron').CronJob;
 const { poolPromise, sql } = require('../database/dbconnection');
 const moment = require('moment');
+const authenSqlCmd = require('../database/sqlcommand.auth');
 const sessionLoginHandler = require('../eventHandlers/event.handler.sessionlogin');
 
 //minute pattern: 0 */5 * * * *
