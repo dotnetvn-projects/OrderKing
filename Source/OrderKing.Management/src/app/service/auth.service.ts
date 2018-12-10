@@ -22,15 +22,15 @@ export class AuthService {
       params.put('AccountName' , loginInfo.AccountName);
       params.put('Password' , loginInfo.Password);
       await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.loginUrl, params, (data: ApiResultModel) => {
-        if (data.ResponseCode === 200) {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
            result = data.Result.accesstoken;
            sessionStorage.setItem(AppSettings.TOKEN_KEY, result);
            if (loginInfo.RemeberMe) {
               localStorage.setItem(AppSettings.AUTH_KEY, loginInfo.AccountName + ':' + loginInfo.Password);
            }
         } else {
-           if (data.ResponseCode === 401) {
-             result = 'unauthorized';
+           if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+             result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
            }
         }
       });
@@ -42,13 +42,13 @@ export class AuthService {
     const params = new Dictionary<string, any>();
     params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
     await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.logoutUrl, params, (data: ApiResultModel) => {
-      if (data.ResponseCode === 200) {
+      if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
           sessionStorage.removeItem(AppSettings.TOKEN_KEY);
           localStorage.removeItem(AppSettings.AUTH_KEY);
           sessionStorage.removeItem(AppSettings.MANAGE_USERINFO_KEY);
-          result = 'ok';
+          result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
       } else {
-            result = 'error';
+            result = AppSettings.RESPONSE_MESSAGE.ERROR;
           }
     });
     return result;
@@ -60,7 +60,7 @@ export class AuthService {
     const params = new Dictionary<string, any>();
     params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
     await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.checkTokenUrl, params, (data: ApiResultModel) => {
-      if (data.ResponseCode !== 200) {
+      if (data.ResponseCode !== AppSettings.RESPONSE_CODE.SUCCESS) {
           result = true;
       } else {
           const isExpired = data.Result.isexpired;

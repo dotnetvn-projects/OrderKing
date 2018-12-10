@@ -23,7 +23,7 @@ export class UserService {
     const params = new Dictionary<string, any>();
     params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
     this.webClient.doPost(AppSettings.API_ENDPOINT + this.getUserInfoUrl, params, (data: ApiResultModel) => {
-        if (data.ResponseCode === 200) {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
             const info = new UserInfoModel();
             info.AccountName = data.Result.accountname;
             info.FullName = data.Result.fullname;
@@ -60,6 +60,7 @@ export class UserService {
     return userInfo;
   }
 
+  // **set user info to cache */
   private setCacheUserInfo(userInfo: UserInfoModel) {
     sessionStorage.setItem(AppSettings.MANAGE_USERINFO_KEY, JSON.stringify(userInfo));
   }

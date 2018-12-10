@@ -27,16 +27,16 @@ export class MainLayoutComponent extends BaseComponent {
         if (isExpired) {
           await this.router.navigate(['dang-nhap']);
         } else {
-            this.userService.CurrentUserInfo.subscribe(userInfo => this.UserInfo = userInfo);
             window.dispatchEvent(new Event('resize'));
             document.body.className = 'hold-transition skin-blue sidebar-mini';
+            this.userService.CurrentUserInfo.subscribe(userInfo => this.UserInfo = userInfo);           
           }
         }
     }
 
   async logout() {
     const result = await this.authService.logout();
-    if (result === 'ok') {
+    if (result === AppSettings.RESPONSE_MESSAGE.ERROR) {
       await this.router.navigate(['dang-nhap']);
     } else {
       await this.router.navigate(['error']);

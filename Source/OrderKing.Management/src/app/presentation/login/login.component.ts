@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
 
   async login() {
     if (this.LoginInfo.AccountName.trim().length <= 1 || this.LoginInfo.Password.trim().length <= 1 ) {
-      this.ErrorMessage = 'Tài khoản hoặc mật thông không được trống !';
+      this.ErrorMessage = 'Tài khoản hoặc mật không được trống !';
       return;
     }
     const result = await this.authService.login(this.LoginInfo);

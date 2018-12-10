@@ -64,12 +64,11 @@ authrouter.post('/auth-user', async function (req, res, next) {
 //remove auth
 authrouter.post('/remove-auth', async function (req, res, next) {
     try {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
         var accessToken = req.body.AccessToken;
         var result = await service.removeAuth(accessToken);
 
         var message = common.createResponseMessage(
-            {accesstoken: accessToken, expireddate: expiredDate},
+            {accesstoken: accessToken, expireddate: result.model.expireddate},
             result.model.responsecode,
             result.model.statusmessage);
 
