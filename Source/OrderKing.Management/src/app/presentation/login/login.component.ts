@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
       return;
     }
     const result = await this.authService.login(this.LoginInfo);
-    if (result === 'unauthorized') {
+    if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
       this.ErrorMessage = 'Tài khoản đã bị khóa !';
     } else if (result === '') {
       this.ErrorMessage = 'Tài khoản hoặc mật khẩu không đúng !';

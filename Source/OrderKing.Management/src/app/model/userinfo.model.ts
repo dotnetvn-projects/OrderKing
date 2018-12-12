@@ -1,4 +1,5 @@
 export class UserInfoModel {
+    StoreName: '';
     AccountName: '';
     FullName: '';
     Email: '';

@@ -205,7 +205,8 @@ storerouter.post('/get-member-list', async (req, res) => {
                             phonenumber: value.PhoneNumber,
                             address: value.Address,
                             address2: value.Address2,
-                            identityCard: value.IdentityCard
+                            identityCard: value.IdentityCard,
+                            createddate: value.CreatedDate
                         });
                     });
                 }

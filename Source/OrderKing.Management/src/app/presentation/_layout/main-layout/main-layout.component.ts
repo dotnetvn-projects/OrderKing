@@ -23,14 +23,9 @@ export class MainLayoutComponent extends BaseComponent {
     if (token === undefined || token === null) {
      await this.router.navigate(['dang-nhap']);
     } else {
-        const isExpired = await this.authService.isTokenExpired();
-        if (isExpired) {
-          await this.router.navigate(['dang-nhap']);
-        } else {
-            window.dispatchEvent(new Event('resize'));
-            document.body.className = 'hold-transition skin-blue sidebar-mini';
-            this.userService.CurrentUserInfo.subscribe(userInfo => this.UserInfo = userInfo);           
-          }
+          window.dispatchEvent(new Event('resize'));
+          document.body.className = 'hold-transition skin-blue sidebar-mini';
+          this.userService.CurrentUserInfo.subscribe(userInfo => this.UserInfo = userInfo);
         }
     }
 
