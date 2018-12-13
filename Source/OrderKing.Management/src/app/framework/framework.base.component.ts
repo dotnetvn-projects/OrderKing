@@ -3,20 +3,25 @@ import { UserService } from '../service/user.service';
 import { UserInfoModel } from '../model/userinfo.model';
 
 export class BaseComponent implements OnInit {
-    userService: UserService;
-    UserInfo: UserInfoModel;
+  userService: UserService;
+  UserInfo: UserInfoModel;
 
-    constructor(userService: UserService) {
-      this.userService = userService;
-      this.UserInfo = new UserInfoModel();
-    }
+  constructor(userService: UserService) {
+    this.userService = userService;
+    this.UserInfo = new UserInfoModel();
+  }
 
-    ngOnInit() {
-        this.onInit();
-        this.userService.displayUserInfo();
-      }
+  ngOnInit() {
+    this.onInit();
+    this.userService.displayUserInfo();
+  }
 
-    onInit() {
-        // code
-    }
+  onInit() {
+    // code
+  }
+
+  // reload page
+  reload() {
+    window.location.reload(true);
+  }
 }

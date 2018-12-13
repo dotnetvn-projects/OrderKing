@@ -120,19 +120,35 @@ exports.getStoreIdByAccessToken = async (accessToken) => {
 };
 
 //get member in store
-exports.getMemberInStore = async (storeId) => {
+exports.getMemberInStore = async (storeId, currentAccountId) => {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
 
     const pool = await poolPromise;
     const result = await pool.request()
         .input('StoreId', sql.BigInt, storeId)
+        .input('AccountId', sql.BigInt, currentAccountId)
         .query(storeSqlCmd.getMemberInStore);
 
     if (result.recordset.length > 0) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
-        response.model.storeinfo = result.recordset;
+        var members = [];
+        result.recordset.forEach(function (value) {
+            members.push({
+                memberid: security.encrypt(value.MemberId),
+                storename: value.StoreName,
+                accountname: value.AccountName,
+                fullname: value.FullName,
+                email: value.Email,
+                phonenumber: value.PhoneNumber,
+                address: value.Address,
+                address2: value.Address2,
+                identityCard: value.IdentityCard,
+                createddate: moment(value.CreatedDate).format('DD/MM/YYYY')
+            });
+        });
+        response.model.storeinfo = members;
     }
     return response;
 };

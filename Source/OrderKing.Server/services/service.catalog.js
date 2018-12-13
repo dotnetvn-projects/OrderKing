@@ -105,9 +105,9 @@ exports.getCategoryInStore = async (storeId) => {
         var categories = [];
         result.recordset.forEach(function (value) {
             categories.push({
-                categoryId: security.encrypt(value.Id),
-                categoryName: value.Name,
-                createdDate: value.CreatedDate
+                categoryid: security.encrypt(value.Id),
+                categoryname: value.Name,
+                createddate: value.CreatedDate
             });
         });
 

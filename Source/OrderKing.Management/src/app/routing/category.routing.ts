@@ -4,6 +4,6 @@ import { UpdateCategoryComponent } from '../presentation/category/update/categor
 
 export const CategoryRoutes = [
     { path: '', component: CategoryComponent },
-    { path: 'them-moi', component: CreateCategoryComponent },
+    { path: 'tao-moi', component: CreateCategoryComponent },
     { path: 'chinh-sua/:id', component: UpdateCategoryComponent }
 ];

@@ -5,6 +5,7 @@ import { LoginModel } from '../../model/login.model';
 import { AuthService } from '../../service/auth.service';
 import { UserService } from 'src/app/service/user.service';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
+declare var $;
 
 @Component({
   selector: 'app-login',
@@ -43,7 +44,9 @@ export class LoginComponent implements OnInit {
       this.ErrorMessage = 'Tài khoản hoặc mật khẩu không đúng !';
     } else {
       this.userService.fetchUserInfo();
-      await this.router.navigate(['dashboard']);
+      $(() => {
+        window.location.href = '/dashboard';
+      });
     }
   }
 }

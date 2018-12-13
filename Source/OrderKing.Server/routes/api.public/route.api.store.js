@@ -9,6 +9,7 @@ const security = require('../../services/service.security');
 const io = require('../../common/io');
 const resources = require('../../resources/resource.api.value');
 const imageProcess = require('../../common/image.process');
+const moment = require('moment');
 
 //url: /api/public/store
 //get store info
@@ -66,16 +67,31 @@ storerouter.post('/add-member', async (req, res, next) => {
             common.sendUnauthorizedRequest(res);
         }
         else {
-            var storeId = await service.getStoreIdByAccessToken(accessToken);
-            var account = await userService.getAccountByAccountName(req.body.AccountName);
-
+            var storeId = await service.getStoreIdByAccessToken(accessToken);        
             if (storeId === -1 || account === null) {
                 common.sendBadRequest(res, 'Request data is invalid !');
             }
             else {
+
+                var accountInfo = {
+                    accountname: req.body.AccountName,
+                    password: req.body.Password,
+                    fullname: req.body.FullName,
+                    email: req.body.Email,
+                    phonenumber: req.body.PhoneNumber,
+                    address: req.body.Address,
+                    address2: req.body.Address2,
+                    identitycard: req.body.IdentityCard,
+                    avatar: null
+                };
+
+                accountInfo.avatar = io.readFileToBinary('./resources/images/no-avatar.png');
+
+                var accountResult = await userService.createNewAccount(accountInfo);
+
                 var info = {
-                    memberid: account.Id,
-                    storeid: storeId
+                    storeid: storeId,
+                    memberid: accountResult.model.userinfo
                 };
 
                 var result = await service.addNewMember(info);
@@ -127,6 +143,77 @@ storerouter.post('/remove-member', async (req, res, next) => {
                 res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify(message));
             }
+        }
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//edit member info from store
+storerouter.post('/edit-member-info', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var isStoreOwner = await security.isStoreOwner(accessToken);
+
+        if (isStoreOwner === false) {
+            common.sendUnauthorizedRequest(res);
+        }
+        else {
+            var memberId = security.decrypt(req.body.MemberId);
+           
+            var userInfo = {
+                fullname: req.body.FullName,
+                email: req.body.Email,
+                phonenumber: req.body.PhoneNumber,
+                address: req.body.Address,
+                address2: req.body.Address2,
+                identitycard: req.body.IdentityCard
+            };
+
+            var result = await userService.updateUserInfo(userInfo, memberId);
+
+            var message = common.createResponseMessage(result.model.userinfo,
+                result.model.responsecode,
+                result.model.statusmessage);
+
+            res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(message));
+        }
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//edit member avatar from store
+storerouter.post('/edit-member-avatar', async (req, res, next) => {
+    try {
+        var accessToken = req.body.null[0];
+        var isStoreOwner = await security.isStoreOwner(accessToken);
+
+        if (isStoreOwner === false) {
+            common.sendUnauthorizedRequest(res);
+        }
+        else {
+            var memberId = security.decrypt(req.body.null[1]);
+            var buff = io.readFileToBinary(req.files.null.path);
+
+            imageProcess.resizeAutoScaleHeight(buff, resources.avatarSize.W, async (imageData) => {
+                var result = await userService.updateAvartar({
+                    avatar: imageData,
+                    accountid: memberId
+                });
+
+                io.deleteFile(req.files.null.path);
+
+                var message = common.createResponseMessage(null,
+                    result.model.responsecode,
+                    result.model.statusmessage);
+
+                res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(message));
+            });
         }
     }
     catch (err) {
@@ -192,26 +279,9 @@ storerouter.post('/get-member-list', async (req, res) => {
                 common.sendBadRequest(res, 'Request data is invalid !');
             }
             else {
-
-                var result = await service.getMemberInStore(storeId);
-                var members = [];
-                if (result.model.storeinfo.length > 0) {
-                    result.model.storeinfo.forEach(function (value) {
-                        members.push({
-                            storename: value.StoreName,
-                            accountname: value.AccountName,
-                            fullname: value.FullName,
-                            email: value.Email,
-                            phonenumber: value.PhoneNumber,
-                            address: value.Address,
-                            address2: value.Address2,
-                            identityCard: value.IdentityCard,
-                            createddate: value.CreatedDate
-                        });
-                    });
-                }
-
-                var message = common.createResponseMessage(members,
+                var currentAccountId = userService.getAccountIdByAccessToken(accessToken);
+                var result = await service.getMemberInStore(storeId, currentAccountId);
+                var message = common.createResponseMessage(result.model.storeinfo,
                     result.model.responsecode,
                     result.model.statusmessage);
 

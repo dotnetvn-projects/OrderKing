@@ -12,6 +12,7 @@ import { Converter } from '../framework/framework.converter';
 })
 export class UserService {
   private getUserInfoUrl = 'user/get-info';
+  private checkUserExistUrl = 'user/check-exist-user';
 
   private userInfoSource = new BehaviorSubject<UserInfoModel>(new UserInfoModel());
   CurrentUserInfo = this.userInfoSource.asObservable();
@@ -59,6 +60,19 @@ export class UserService {
       userInfo = new UserInfoModel();
     }
     return userInfo;
+  }
+
+  // **check the existence of user */
+  async isExist(accountName) {
+    let result = false;
+    const params = new Dictionary<string, any>();
+    params.put('AccountName' , accountName);
+    await this.webClient.doPost(AppSettings.API_ENDPOINT + this.checkUserExistUrl, params, (data: ApiResultModel) => {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+          result = data.Result === 'true';
+        }
+    });
+    return result;
   }
 
   // **set user info to cache */

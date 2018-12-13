@@ -140,7 +140,7 @@ export class WebClientService {
     );
   }
 
- /**call http get and wait it finishes*/
+ /** call http get and wait it finishes*/
  async doGetAsync(url: string,  callback: any) {
   await this.createGetPromise(url).then(
     (res: any) => {

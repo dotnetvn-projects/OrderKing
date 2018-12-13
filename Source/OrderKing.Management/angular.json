@@ -27,7 +27,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/assets/themes/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css"
             ],
             "scripts": [
               "src/assets/themes/bower_components/jquery/dist/jquery.min.js",
@@ -41,7 +42,8 @@
               "src/assets/themes/plugins/jvectormap/jquery-jvectormap-world-mill-en.js",
               "src/assets/themes/bower_components/jquery-slimscroll/jquery.slimscroll.min.js",
               "src/assets/themes/bower_components/chart.js/Chart.js",
-              "src/assets/themes/bower_components/datatables.net/js/jquery.dataTables.min.js"
+              "src/assets/themes/bower_components/datatables.net/js/jquery.dataTables.min.js",
+              "src/assets/themes/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"
             ]
           },
           "configurations": {

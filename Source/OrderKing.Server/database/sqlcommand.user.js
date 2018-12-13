@@ -71,3 +71,8 @@ defineProperty('lockMember', `
 defineProperty('getAvatar', `
     SELECT [Avatar] FROM UserProfile WHERE AccountId = @AccountId
 `);
+
+//check user has already exist in database
+defineProperty('CheckExistAccount', `
+    SELECT Id FROM Account WHERE UPPER(AccountName) = @AccountName
+`);

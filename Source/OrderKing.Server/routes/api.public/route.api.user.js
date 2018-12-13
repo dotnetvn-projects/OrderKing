@@ -9,6 +9,23 @@ const resources = require('../../resources/resource.api.value');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
+//check the existence of user in database
+userrouter.post('/check-exist-account', async (req, res, next) => {
+    try {
+        var acountName = req.body.AccountName;
+        var result = await service.CheckExist(acountName);
+        var message = common.createResponseMessage(result,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
 //get user info
 userrouter.post('/get-info', async (req, res, next) => {
     try {
