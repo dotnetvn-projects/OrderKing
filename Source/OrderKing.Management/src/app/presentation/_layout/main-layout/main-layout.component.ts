@@ -31,7 +31,7 @@ export class MainLayoutComponent extends BaseComponent {
 
   async logout() {
     const result = await this.authService.logout();
-    if (result === AppSettings.RESPONSE_MESSAGE.ERROR) {
+    if (result === AppSettings.RESPONSE_MESSAGE.SUCCESS) {
       await this.router.navigate(['dang-nhap']);
     } else {
       await this.router.navigate(['error']);

@@ -279,7 +279,7 @@ storerouter.post('/get-member-list', async (req, res) => {
                 common.sendBadRequest(res, 'Request data is invalid !');
             }
             else {
-                var currentAccountId = userService.getAccountIdByAccessToken(accessToken);
+                var currentAccountId = await userService.getAccountIdByAccessToken(accessToken);
                 var result = await service.getMemberInStore(storeId, currentAccountId);
                 var message = common.createResponseMessage(result.model.storeinfo,
                     result.model.responsecode,
