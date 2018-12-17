@@ -1,0 +1,72 @@
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#settings" data-toggle="tab">Thông tin nhân viên</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="active tab-pane" id="settings">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="inputAccount" class="col-sm-2 control-label">Tài khoản đăng nhập</label>
+
+                    <div class="col-sm-5">
+                        <input type="text" [(ngModel)]="StaffInfo.AccountName" [ngModelOptions]="{standalone: true}" class="form-control" id="inputAccount" placeholder="Tài khoản đăng nhập hệ thống">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPass" class="col-sm-2 control-label">Mật khẩu</label>
+
+                    <div class="col-sm-5">
+                        <input type="password" [(ngModel)]="StaffInfo.Password" [ngModelOptions]="{standalone: true}" class="form-control" id="inputPass" placeholder="Mật khẩu">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-2 control-label">Họ tên nhân viên</label>
+
+                    <div class="col-sm-5">
+                        <input type="text" [(ngModel)]="StaffInfo.FullName" [ngModelOptions]="{standalone: true}" class="form-control" id="inputName" placeholder="Họ và tên nhân viên">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+
+                    <div class="col-sm-5">
+                        <input type="email" class="form-control" [(ngModel)]="StaffInfo.Email" [ngModelOptions]="{standalone: true}" id="inputEmail" placeholder="Email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPhone" class="col-sm-2 control-label">Điện thoại</label>
+
+                    <div class="col-sm-5">
+                        <input type="text" [(ngModel)]="StaffInfo.PhoneNumber" [ngModelOptions]="{standalone: true}" class="form-control" id="inputPhone" placeholder="Số điện thoại liên lạc">
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputAddress1" class="col-sm-2 control-label">Địa chỉ thường trú</label>
+
+                  <div class="col-sm-5">
+                      <input type="text" [(ngModel)]="StaffInfo.Address" [ngModelOptions]="{standalone: true}" class="form-control" id="inputAddress1" placeholder="Địa chỉ thường trú">
+                  </div>
+              </div>
+              <div class="form-group">
+                <label for="inputAddress2" class="col-sm-2 control-label">Địa chỉ tạm trú</label>
+
+                <div class="col-sm-5">
+                    <input type="text" [(ngModel)]="StaffInfo.Address2" [ngModelOptions]="{standalone: true}" class="form-control" id="inputAddress2" placeholder="Địa chỉ tạm trú">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputIdNum" class="col-sm-2 control-label">Số CMND</label>
+
+                <div class="col-sm-5">
+                    <input [(ngModel)]="StaffInfo.IdentityCard" [ngModelOptions]="{standalone: true}" class="form-control" id="inputIdNum" placeholder="Số chứng minh nhân dân">
+                </div>
+              </div>
+              <div class="form-group">
+                  <div class="col-sm-offset-2 col-sm-10">
+                      <button (click)="createNew()" class="btn btn-danger">Tạo mới</button>
+                  </div>
+              </div>
+            </form>
+        </div>
+    </div>
+</div>

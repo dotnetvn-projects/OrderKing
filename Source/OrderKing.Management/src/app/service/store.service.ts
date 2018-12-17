@@ -29,6 +29,7 @@ export class StoreService {
         if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
           data.Result.forEach(e => {
             const staffInfo = new UserInfoModel();
+            staffInfo.UserId = e.memberid;
             staffInfo.StoreName = e.storename;
             staffInfo.AccountName = e.accountname;
             staffInfo.FullName = e.fullname;
@@ -71,7 +72,7 @@ export class StoreService {
 
   // remove member from store
   async addStaff(staff: UserInfoModel) {
-    let result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
+    let result = AppSettings.RESPONSE_MESSAGE.ERROR;
 
     const params = new Dictionary<string, any>();
     params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
@@ -85,8 +86,8 @@ export class StoreService {
     params.put('IdentityCard' , staff.IdentityCard);
 
     await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.createStaffUrl, params, (data: ApiResultModel) => {
-        if (data.ResponseCode !== AppSettings.RESPONSE_CODE.SUCCESS) {
-          result = AppSettings.RESPONSE_MESSAGE.ERROR;
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+          result = data.Result.staffid;
         }
     });
 

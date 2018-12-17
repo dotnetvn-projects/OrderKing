@@ -1,4 +1,5 @@
 export class UserInfoModel {
+    UserId: '';
     StoreName: '';
     AccountName: '';
     Password: '';

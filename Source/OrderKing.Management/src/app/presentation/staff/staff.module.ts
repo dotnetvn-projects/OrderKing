@@ -3,13 +3,13 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import {  StaffComponent  } from './index/staff.component';
-import { CreateStaffComponent } from './create/staff.create.component';
+import { StaffActionComponent } from './action/staff.action.component';
 import { StaffRoutes } from '../../routing/staff.routing';
 
 @NgModule({
   declarations: [
     StaffComponent,
-    CreateStaffComponent
+    StaffActionComponent
   ],
   imports: [
     RouterModule.forChild(StaffRoutes),

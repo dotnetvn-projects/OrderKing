@@ -18,8 +18,7 @@ export class LoginComponent implements OnInit {
   LoginInfo: LoginModel;
   ErrorMessage: string;
 
-  constructor(private titleService: Title, private router: Router,
-                 private authService: AuthService, private userService: UserService) {
+  constructor(private titleService: Title, private router: Router, private authService: AuthService, private userService: UserService) {
      this.LoginInfo = new LoginModel();
      this.ErrorMessage = '';
    }

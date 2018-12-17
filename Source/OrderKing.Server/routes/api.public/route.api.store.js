@@ -68,7 +68,7 @@ storerouter.post('/add-member', async (req, res, next) => {
         }
         else {
             var storeId = await service.getStoreIdByAccessToken(accessToken);        
-            if (storeId === -1 || account === null) {
+            if (storeId === -1 ) {
                 common.sendBadRequest(res, 'Request data is invalid !');
             }
             else {
@@ -97,7 +97,7 @@ storerouter.post('/add-member', async (req, res, next) => {
                 var result = await service.addNewMember(info);
 
                 var message = common.createResponseMessage(
-                    format('{0} has been added to store successfully!', account.AccountName),
+                    { staffid: security.encrypt(info.memberid.toString()) },
                     result.model.responsecode,
                     result.model.statusmessage);
 
