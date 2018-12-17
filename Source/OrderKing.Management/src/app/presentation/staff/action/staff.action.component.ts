@@ -6,6 +6,7 @@ import { Title } from '@angular/platform-browser';
 import { UserService } from 'src/app/service/user.service';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/service/auth.service';
 
 
 declare var $;
@@ -18,25 +19,37 @@ declare var $;
 export class StaffActionComponent extends BaseComponent {
   StaffInfo: UserInfoModel;
   ErrorMessage: string;
+  private staffId: string;
 
   constructor(private titleService: Title, private activatedRoute: ActivatedRoute, private router: Router,
-     private storeService: StoreService, userService: UserService) {
+     private storeService: StoreService, private authService: AuthService, userService: UserService) {
     super(userService);
     this.StaffInfo = new UserInfoModel();
   }
 
   onInit() {
-    const t = this.activatedRoute.snapshot.params.get('id');
-    this.titleService.setTitle('Order King - Tạo mới nhân viên');
+    this.staffId = this.activatedRoute.snapshot.params.get('id');
+    if (this.staffId !== null) {
+      this.titleService.setTitle('Order King - Chỉnh sửa thông tin nhân viên');
+    } else {
+      this.titleService.setTitle('Order King - Tạo mới nhân viên');
+    }
   }
 
+  async execute() {
+    if(this.staffId === null) {
+      await this.createNew();
+    }
+  }
+  
   // ** Create new staff */
   async createNew() {
      const result = await this.storeService.addStaff(this.StaffInfo);
      if (result !== AppSettings.RESPONSE_MESSAGE.ERROR) {
-      this.router.navigate(['nhan-vien/chinh-sua', {id: result}]);
-     } else {
-       alert('â');
+       this.router.navigate(['nhan-vien/chinh-sua', result]);
+     } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
+      this.authService.clearLoginSession();
+      await this.gotoLogin(this.router);
      }
   }
 }

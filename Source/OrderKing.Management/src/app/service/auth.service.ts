@@ -43,15 +43,20 @@ export class AuthService {
     params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
     await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.logoutUrl, params, (data: ApiResultModel) => {
       if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
-          sessionStorage.removeItem(AppSettings.TOKEN_KEY);
-          localStorage.removeItem(AppSettings.AUTH_KEY);
-          sessionStorage.removeItem(AppSettings.MANAGE_USERINFO_KEY);
+          this.clearLoginSession();
           result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
       } else {
             result = AppSettings.RESPONSE_MESSAGE.ERROR;
           }
     });
     return result;
+  }
+
+  // ** clear current login session */
+  clearLoginSession() {
+    sessionStorage.removeItem(AppSettings.TOKEN_KEY);
+    localStorage.removeItem(AppSettings.AUTH_KEY);
+    sessionStorage.removeItem(AppSettings.MANAGE_USERINFO_KEY);
   }
 
   // check token expiration

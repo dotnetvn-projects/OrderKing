@@ -1,1 +1,1 @@
-// checkauth
+// checkauth, share common data

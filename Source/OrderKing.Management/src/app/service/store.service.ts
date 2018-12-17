@@ -88,6 +88,8 @@ export class StoreService {
     await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.createStaffUrl, params, (data: ApiResultModel) => {
         if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
           result = data.Result.staffid;
+        } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+          result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
         }
     });
 
