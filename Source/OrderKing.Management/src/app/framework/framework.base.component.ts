@@ -24,4 +24,16 @@ export class BaseComponent implements OnInit {
   reload() {
     window.location.reload(true);
   }
+
+  gotoLogin(router) {
+    router.navigate(['dang-nhap']);
+  }
+
+  getParam(name: string, activatedRoute) {
+    try {
+      return activatedRoute.snapshot.params.get(name);
+    } catch (ex) {
+      return null;
+    }
+  }
 }

@@ -28,7 +28,7 @@ export class StaffActionComponent extends BaseComponent {
   }
 
   onInit() {
-    this.staffId = this.activatedRoute.snapshot.params.get('id');
+    this.staffId = this.getParam('id', this.activatedRoute);
     if (this.staffId !== null) {
       this.titleService.setTitle('Order King - Chỉnh sửa thông tin nhân viên');
     } else {
@@ -37,11 +37,11 @@ export class StaffActionComponent extends BaseComponent {
   }
 
   async execute() {
-    if(this.staffId === null) {
+    if (this.staffId === null) {
       await this.createNew();
     }
   }
-  
+
   // ** Create new staff */
   async createNew() {
      const result = await this.storeService.addStaff(this.StaffInfo);
