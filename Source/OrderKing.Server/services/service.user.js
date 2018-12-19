@@ -53,6 +53,34 @@ exports.getUserInfoByAccessToken = async function (accessToken) {
     return response;
 };
 
+//get user info uses id
+exports.getUserInfoById = async function (accountId) {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('AccountId', sql.BigInt, accountId)
+        .query(userSqlCmd.getUserInfoById);
+
+    if (result.recordset.length > 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        response.model.userinfo =
+            {
+                accountname: result.recordset[0].AccountName,
+                fullname: result.recordset[0].FullName,
+                email: result.recordset[0].Email,
+                phonenumber: result.recordset[0].PhoneNumber,
+                address: result.recordset[0].Address,
+                address2: result.recordset[0].Address2,
+                identitycard: result.recordset[0].IdentityCard,
+                createddate: moment(result.recordset[0].CreatedDate).format('DD/MM/YYYY')
+            };
+    }
+    return response;
+};
+
 //update user info
 exports.updateUserInfo = async function (userobject, accounId) {
     response.model.statusmessage = status.common.failed;

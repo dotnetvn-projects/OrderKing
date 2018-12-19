@@ -19,6 +19,7 @@ declare var $;
 export class StaffActionComponent extends BaseComponent {
   StaffInfo: UserInfoModel;
   ErrorMessage: string;
+  ButtonContent: string;
   private staffId: string;
 
   constructor(private titleService: Title, private activatedRoute: ActivatedRoute, private router: Router,
@@ -29,16 +30,31 @@ export class StaffActionComponent extends BaseComponent {
 
   onInit() {
     this.staffId = this.getParam('id', this.activatedRoute);
-    if (this.staffId !== null) {
+    if (this.staffId !== null && this.staffId !== undefined) {
       this.titleService.setTitle('Order King - Chỉnh sửa thông tin nhân viên');
+      this.getStaffInfo();
+      this.ButtonContent = 'Chỉnh sửa';
     } else {
       this.titleService.setTitle('Order King - Tạo mới nhân viên');
+      this.ButtonContent = 'Tạo mới';
     }
   }
 
   async execute() {
-    if (this.staffId === null) {
+    if (this.staffId === null || this.staffId === undefined) {
       await this.createNew();
+    }
+  }
+
+  private async getStaffInfo() {
+    const iresult = await this.storeService.getStaffInfoById(this.staffId);
+    if (iresult.result === AppSettings.RESPONSE_MESSAGE.ERROR) {
+      this.router.navigate(['']); // TODO display not found page
+    } else if (iresult.result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
+     this.authService.clearLoginSession();
+     await this.gotoLogin(this.router);
+    } else {
+      this.StaffInfo = iresult.staffInfo;
     }
   }
 

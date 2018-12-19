@@ -15,6 +15,15 @@ defineProperty('getUserInfoByAccessToken',
                        INNER JOIN LoginSession ss ON ac.Id = ss.AccountId
                        WHERE ss.AccessToken = @AccessToken AND ac.IsActived = 1`);
 
+//get user info by id
+defineProperty('getUserInfoById',
+    `SELECT ac.AccountName, profile.FullName, profile.Email,
+                       profile.PhoneNumber, profile.Address, profile.Address2,
+                       profile.IdentityCard, ac.CreatedDate
+                       FROM Account ac
+                       INNER JOIN UserProfile profile ON ac.Id = profile.AccountId
+                       WHERE ac.Id = @AccountId AND ac.IsActived = 1`);
+
 //get account by account id
 defineProperty('getAccountByAccountId',
     `SELECT ac.* FROM Account ac WHERE ac.Id = @AccountId AND ac.IsActived = 1`);

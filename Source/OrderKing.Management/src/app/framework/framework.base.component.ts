@@ -31,7 +31,7 @@ export class BaseComponent implements OnInit {
 
   getParam(name: string, activatedRoute) {
     try {
-      return activatedRoute.snapshot.params.get(name);
+      return activatedRoute.snapshot.params[name];
     } catch (ex) {
       return null;
     }

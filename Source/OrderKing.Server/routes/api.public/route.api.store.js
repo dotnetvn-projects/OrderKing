@@ -57,6 +57,23 @@ storerouter.post('/edit-info', async (req, res, next) => {
     }
 });
 
+//get user info
+storerouter.post('/get-member-info', async (req, res, next) => {
+    try {
+        var memberId = security.decrypt(req.body.MemberId);
+        var result = await userService.getUserInfoById(parseInt(memberId));
+        var message = common.createResponseMessage(result.model.userinfo,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
 //add new member to store
 storerouter.post('/add-member', async (req, res, next) => {
     try {

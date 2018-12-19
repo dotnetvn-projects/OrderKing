@@ -13,6 +13,7 @@ export class StoreService {
   private getStaffListUrl = 'store/get-member-list';
   private removeStaffUrl = 'store/remove-member';
   private createStaffUrl = 'store/add-member';
+  private getStaffInfoUrl = 'store/get-member-info';
 
   private staffListSource = new BehaviorSubject<Array<UserInfoModel>>(new Array<UserInfoModel>());
   StaffList = this.staffListSource.asObservable();
@@ -94,5 +95,35 @@ export class StoreService {
     });
 
     return result;
+  }
+
+  // get staff info by id
+  async getStaffInfoById(id: string) {
+    const info = {result: AppSettings.RESPONSE_MESSAGE.ERROR, staffInfo: null};
+
+    const params = new Dictionary<string, any>();
+    params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
+    params.put('MemberId' , id);
+
+    await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.getStaffInfoUrl, params, (data: ApiResultModel) => {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+           if (data.Result !== null) {
+            info.result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
+            info.staffInfo = new UserInfoModel();
+            info.staffInfo.AccountName = data.Result.accountname;
+            info.staffInfo.FullName = data.Result.fullname;
+            info.staffInfo.Email = data.Result.email;
+            info.staffInfo.PhoneNumber = data.Result.phonenumber;
+            info.staffInfo.Address = data.Result.address;
+            info.staffInfo.Address2 = data.Result.address2;
+            info.staffInfo.IdentityCard = data.Result.identitycard;
+            info.staffInfo.JoinDate = data.Result.createddate;
+           }
+        } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+          info.result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+        }
+    });
+
+    return info;
   }
 }
