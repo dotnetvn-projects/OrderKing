@@ -4,12 +4,17 @@
     </ul>
     <div class="tab-content">
         <div class="active tab-pane" id="settings">
-            <form class="form-horizontal">
+            <form (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" class="form-horizontal" novalidate>
                 <div class="form-group">
                     <label for="inputAccount" class="col-sm-2 control-label">Tài khoản đăng nhập</label>
 
                     <div class="col-sm-5">
-                        <input type="text" [(ngModel)]="StaffInfo.AccountName" [ngModelOptions]="{standalone: true}" class="form-control" id="inputAccount" placeholder="Tài khoản đăng nhập hệ thống">
+                        <input type="text" [(ngModel)]="StaffInfo.AccountName" name="accountName" #accountName="ngModel"
+                                [ngClass]="{ 'is-invalid': f.submitted && accountName.invalid }" required
+                                 class="form-control" id="inputAccount" placeholder="Tài khoản đăng nhập hệ thống">
+                        <div *ngIf="f.submitted && accountName.invalid" class="invalid-feedback">
+                          <div *ngIf="accountName?.errors.required">First Name is required</div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -63,7 +68,7 @@
               </div>
               <div class="form-group">
                   <div class="col-sm-offset-2 col-sm-10">
-                      <button (click)="execute()" class="btn btn-danger">{{ButtonContent}}</button>
+                      <button class="btn btn-danger">{{ButtonContent}}</button>
                   </div>
               </div>
             </form>

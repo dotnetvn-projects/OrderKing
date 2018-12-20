@@ -19,14 +19,9 @@ export class MainLayoutComponent extends BaseComponent {
   }
 
   async onInit() {
-    const token = sessionStorage.getItem(AppSettings.TOKEN_KEY);
-    if (token === undefined || token === null) {
-     await this.router.navigate(['dang-nhap']);
-    } else {
-          window.dispatchEvent(new Event('resize'));
-          document.body.className = 'hold-transition skin-blue sidebar-mini';
-          this.userService.CurrentUserInfo.subscribe(userInfo => this.UserInfo = userInfo);
-        }
+      window.dispatchEvent(new Event('resize'));
+      document.body.className = 'hold-transition skin-blue sidebar-mini';
+      this.userService.CurrentUserInfo.subscribe(userInfo => this.UserInfo = userInfo);
     }
 
   async logout() {

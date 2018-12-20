@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthGuard } from './framework/framework.auth.guard';
 import { AppComponent } from './app.component';
 import { LoginLayoutComponent } from './presentation/_layout/login-layout/login-layout.component';
 import { MainLayoutComponent } from './presentation/_layout/main-layout/main-layout.component';
@@ -21,7 +22,7 @@ import { MainRoutes } from './routing/main.routing';
     BrowserModule, FormsModule, HttpClientModule
   ],
   providers: [
-    Title
+    Title, AuthGuard
   ],
   bootstrap: [AppComponent]
 })

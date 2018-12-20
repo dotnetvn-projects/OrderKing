@@ -7,6 +7,7 @@ import { UserService } from 'src/app/service/user.service';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
+import { FormGroup } from '@angular/forms';
 
 
 declare var $;
@@ -40,7 +41,7 @@ export class StaffActionComponent extends BaseComponent {
     }
   }
 
-  async execute() {
+  async onSubmit() {
     if (this.staffId === null || this.staffId === undefined) {
       await this.createNew();
     }
