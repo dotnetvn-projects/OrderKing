@@ -27,8 +27,8 @@ export class StaffComponent extends BaseComponent {
   }
 
   // remove member
-  async removeStaff(staff) {
-    const result = await this.storeService.removeStaff(staff.MemberId);
+  async removeStaff(staffId) {
+    const result = await this.storeService.removeStaff(staffId);
     if (result === AppSettings.RESPONSE_MESSAGE.SUCCESS) {
       this.fetchUserList();
     } else {

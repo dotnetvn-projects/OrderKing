@@ -54,7 +54,7 @@ defineProperty('updateLogo',
 defineProperty('getMemberInStore', `
     SELECT Account.Id AS MemberId, Store.StoreName, Account.AccountName, UserProfile.FullName,
            UserProfile.Email, UserProfile.PhoneNumber, UserProfile.[Address],
-	       UserProfile.[Address2], UserProfile.IdentityCard, Account.CreatedDate
+	       UserProfile.[Address2], UserProfile.IdentityCard, Account.CreatedDate, Account.IsActived
          FROM Store INNER JOIN StoreMember ON Store.Id = StoreMember.StoreId
          INNER JOIN Account ON StoreMember.AccountId = Account.Id
 	     INNER JOIN UserProfile ON Account.Id = UserProfile.AccountId

@@ -1,0 +1,12 @@
+<h1>
+  Dashboard
+  <small>{{TitleString}}</small>
+</h1>
+<ol class="breadcrumb">
+  <li><a [routerLink]="['/dashboard']"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+  <li *ngFor="let breadcrumb of RootPath">
+    <a [routerLink]="breadcrumb.Url" >
+      <i></i> {{breadcrumb.Name}}</a>
+    </li>
+  <li class="active">{{ActivePath}}</li>
+</ol>

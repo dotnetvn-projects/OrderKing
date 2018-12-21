@@ -180,6 +180,7 @@ storerouter.post('/edit-member-info', async (req, res, next) => {
             var memberId = security.decrypt(req.body.MemberId);
            
             var userInfo = {
+                memberid: '',
                 fullname: req.body.FullName,
                 email: req.body.Email,
                 phonenumber: req.body.PhoneNumber,
@@ -190,9 +191,10 @@ storerouter.post('/edit-member-info', async (req, res, next) => {
 
             var result = await userService.updateUserInfo(userInfo, memberId);
 
-            var message = common.createResponseMessage(result.model.userinfo,
-                result.model.responsecode,
-                result.model.statusmessage);
+            var message = common.createResponseMessage(
+             { staffid: security.encrypt(memberid.toString()) },
+             result.model.responsecode,
+             result.model.statusmessage);
 
             res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(message));

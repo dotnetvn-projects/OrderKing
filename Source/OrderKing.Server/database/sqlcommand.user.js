@@ -19,10 +19,10 @@ defineProperty('getUserInfoByAccessToken',
 defineProperty('getUserInfoById',
     `SELECT ac.AccountName, profile.FullName, profile.Email,
                        profile.PhoneNumber, profile.Address, profile.Address2,
-                       profile.IdentityCard, ac.CreatedDate
+                       profile.IdentityCard, ac.CreatedDate, ac.IsActived
                        FROM Account ac
                        INNER JOIN UserProfile profile ON ac.Id = profile.AccountId
-                       WHERE ac.Id = @AccountId AND ac.IsActived = 1`);
+                       WHERE ac.Id = @AccountId`);
 
 //get account by account id
 defineProperty('getAccountByAccountId',

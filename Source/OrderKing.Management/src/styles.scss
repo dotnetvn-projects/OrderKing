@@ -82,3 +82,11 @@ table.dataTable tbody td {
   vertical-align: middle;
 }
 
+input.ng-invalid.ng-touched, input.ng-invalid.is-invalid
+{
+   border-color: red;
+}
+
+div.invalid-feedback {
+  color: red;
+}

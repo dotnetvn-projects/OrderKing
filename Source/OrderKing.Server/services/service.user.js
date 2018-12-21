@@ -75,6 +75,7 @@ exports.getUserInfoById = async function (accountId) {
                 address: result.recordset[0].Address,
                 address2: result.recordset[0].Address2,
                 identitycard: result.recordset[0].IdentityCard,
+                isactived: result.recordset[0].IsActived,
                 createddate: moment(result.recordset[0].CreatedDate).format('DD/MM/YYYY')
             };
     }

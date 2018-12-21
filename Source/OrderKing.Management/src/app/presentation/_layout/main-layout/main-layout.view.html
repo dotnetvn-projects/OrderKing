@@ -110,9 +110,9 @@
             <!-- Sidebar Menu -->
             <ul class="sidebar-menu" data-widget="tree">
                 <li class="header">QUẢN LÝ CỬA HÀNG</li>
-                <!-- Optionally, you can add icons to the links -->
-                <li class="active"><a [routerLink]="['/danh-muc']"><i class="glyphicon glyphicon-book"></i> <span>Quản lý danh mục</span></a></li>
-                <li><a [routerLink]="['/san-pham']"><i class="fa  fa-tasks"></i> <span>Quản lý sản phẩm</span></a></li>
+                <li routerLinkActive="active"><a [routerLink]="['']"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+                <li routerLinkActive="active" ><a [routerLink]="['/danh-muc']"><i class="glyphicon glyphicon-book"></i> <span>Quản lý danh mục</span></a></li>
+                <li routerLinkActive="active" ><a [routerLink]="['/san-pham']"><i class="fa  fa-tasks"></i> <span>Quản lý sản phẩm</span></a></li>
                 <li class="treeview">
                     <a href="#"><i class="fa fa-university"></i> <span>Cửa hàng</span>
                         <span class="pull-right-container">
@@ -120,8 +120,9 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a [routerLink]="['/nhan-vien']"><i class="fa fa-users"></i> Quản lý nhân viên</a></li>
-                        <li><a href="#"><i class="fa fa-home"></i> Thông tin cửa hàng</a></li>
+                        <li routerLinkActive="active"><a [routerLink]="['/nhan-vien']"><i class="fa fa-users"></i> Quản lý nhân viên</a></li>
+                        <li routerLinkActive="active"><a href="#"><i class="fa fa-home"></i> Thông tin cửa hàng</a></li>
+                        <li routerLinkActive="active"><a href="#"><i class="fa fa-newspaper-o"></i> Quản lý đơn hàng</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -145,23 +146,7 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>
-                Dashboard
-                <small>Order King</small>
-              </h1>
-              <ol class="breadcrumb">
-                <li><a [routerLink]="['dashboard']" ><i class="fa fa-dashboard"></i> Dashboard</a></li>
-                <li class="active">Here</li>
-              </ol>
-        </section>
-
-        <!-- Main content -->
-        <section class="content container-fluid">
-            <router-outlet></router-outlet>
-        </section>
-        <!-- /.content -->
+        <router-outlet></router-outlet>
     </div>
     <!-- /.content-wrapper -->
 
@@ -177,4 +162,3 @@
 
 </div>
 <!-- ./wrapper -->
-

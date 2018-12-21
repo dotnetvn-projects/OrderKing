@@ -77,4 +77,10 @@ export class AuthService {
     return result;
   }
 
+  isLogined () {
+    const token = sessionStorage.getItem(AppSettings.TOKEN_KEY);
+    if (token === undefined || token === null) {
+      return false;
+    } else { return true; }
+  }
 }

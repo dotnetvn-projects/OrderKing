@@ -11,4 +11,5 @@ export class UserInfoModel {
     IdentityCard: '';
     JoinDate: string;
     CreatedDate: Date;
+    IsActived: boolean;
 }

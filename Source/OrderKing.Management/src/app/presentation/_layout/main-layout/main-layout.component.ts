@@ -5,7 +5,7 @@ import { UserInfoModel } from 'src/app/model/userinfo.model';
 import { UserService } from 'src/app/service/user.service';
 import { BaseComponent } from 'src/app/framework/framework.base.component';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
-
+declare var $;
 @Component({
   selector: 'app-main-layout',
   templateUrl: './main-layout.view.html',
@@ -21,6 +21,10 @@ export class MainLayoutComponent extends BaseComponent {
   async onInit() {
       window.dispatchEvent(new Event('resize'));
       document.body.className = 'hold-transition skin-blue sidebar-mini';
+      $(document).ready(() => {
+        const trees: any = $('[data-widget="tree"]');
+        trees.tree();
+      });
       this.userService.CurrentUserInfo.subscribe(userInfo => this.UserInfo = userInfo);
     }
 

@@ -145,6 +145,7 @@ exports.getMemberInStore = async (storeId, currentAccountId) => {
                 address: value.Address,
                 address2: value.Address2,
                 identityCard: value.IdentityCard,
+                isactived: value.IsActived,
                 createddate: moment(value.CreatedDate).format('DD/MM/YYYY')
             });
         });

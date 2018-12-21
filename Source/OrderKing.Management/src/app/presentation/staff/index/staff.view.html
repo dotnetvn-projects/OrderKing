@@ -1,55 +1,66 @@
-<div class="row">
-  <div class="col-xs-12">
-    <div class="box">
-      <div class="box-header">
-        <h3 class="box-title"><i class="fa fa-list"></i> Danh sách nhân viên</h3>
-        <div class="pull-right">
-            <a title="Tạo mới" [routerLink]="['/nhan-vien/tao-moi']" class="btn btn-default btn-sm"><i class="fa fa-plus-circle"></i> Tạo mới</a>&nbsp;&nbsp;
-            <a title="Tải lại" (click)="reload()" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i> Tải lại</a>
+<section class="content-header">
+      <app-bread-crumb [Title]="'Danh sách nhân viên'" [Active]="'Nhân viên'"></app-bread-crumb>
+</section>
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title"><i class="fa fa-list"></i> Danh sách nhân viên</h3>
+              <div class="pull-right">
+                  <a title="Tạo mới" [routerLink]="['/nhan-vien/tao-moi']" class="btn btn-default btn-sm"><i class="fa fa-plus-circle"></i> Tạo mới</a>&nbsp;&nbsp;
+                  <a title="Tải lại" (click)="reload()" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i> Tải lại</a>&nbsp;&nbsp;
+                  <a title="Xuất excel" class="btn btn-default btn-sm"><i class="fa fa-file-excel-o"></i> Xuất excel</a>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="table-staff" class="table table-bordered table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center" width="20px">#</th>
+                    <th>Họ và tên</th>
+                    <th width="110px">Điện thoại</th>
+                    <th width="130px">Email</th>
+                    <th width="70px">Ngày tạo</th>
+                    <th width="120px">Trạng thái</th>
+                    <th width="120px" class="text-center">Công cụ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let staff of StaffList; let i = index">
+                    <td class="text-center">{{ i + 1 }}</td>
+                    <td>{{ staff.FullName }}</td>
+                    <td>{{ staff.PhoneNumber }}</td>
+                    <td>{{ staff.Email }}</td>
+                    <td class="text-right">{{ staff.JoinDate }}</td>
+                    <td class="text-right"><span *ngIf = "staff.IsActived;then activeStatus else blockStatus"></span></td>
+                    <td class="text-center">
+                        <a [routerLink]="['/nhan-vien/chinh-sua', staff.UserId]" title="Chỉnh sửa" class="btn bg-yellow btn-default btn-sm"><i class="fa fa-edit"></i> Sửa</a>&nbsp;&nbsp;
+                        <a title="Xóa" (click)="removeStaff(staff.UserId)" class="btn bg-red btn-default btn-sm"><i class="fa fa-remove"> Xóa</i></a>
+                    </td>
+                    <ng-template #activeStatus><i class="fa fa-check-circle text-green"></i> Đang hoạt động</ng-template>
+                    <ng-template #blockStatus><i class="fa fa-lock text-red"></i> Bị khóa</ng-template>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th class="text-center">#</th>
+                    <th>Họ và tên</th>
+                    <th>Điện thoại</th>
+                    <th>Email</th>
+                    <th>Ngày tạo</th>
+                    <th class="text-center">Công cụ</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
         </div>
+        <!-- /.col -->
       </div>
-      <!-- /.box-header -->
-      <div class="box-body">
-        <table id="table-staff" class="table table-bordered table-striped table-hover">
-          <thead>
-            <tr>
-              <th class="text-center" width="20px">#</th>
-              <th>Họ và tên</th>
-              <th>Điện thoại</th>
-              <th>Email</th>
-              <th>Ngày tạo</th>
-              <th class="text-center">Công cụ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let staff of StaffList; let i = index">
-              <td class="text-center">{{ i + 1 }}</td>
-              <td>{{ staff.FullName }}</td>
-              <td>{{ staff.PhoneNumber }}</td>
-              <td>{{ staff.Email }}</td>
-              <td>{{ staff.JoinDate }}</td>
-              <td class="text-center">
-                  <a title="Chỉnh sửa" class="btn bg-yellow btn-default btn-sm"><i class="fa fa-edit"></i> Sửa</a>&nbsp;&nbsp;
-                  <a title="Xóa" (click)="removeStaff(staff)" class="btn bg-red btn-default btn-sm"><i class="fa fa-remove"> Xóa</i></a>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <th class="text-center">#</th>
-              <th>Họ và tên</th>
-              <th>Điện thoại</th>
-              <th>Email</th>
-              <th>Ngày tạo</th>
-              <th class="text-center">Công cụ</th>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-      <!-- /.box-body -->
-    </div>
-    <!-- /.box -->
-  </div>
-  <!-- /.col -->
-</div>
-<!-- /.row -->
+      <!-- /.row -->
+
+</section>

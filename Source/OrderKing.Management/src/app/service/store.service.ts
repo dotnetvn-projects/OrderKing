@@ -13,6 +13,7 @@ export class StoreService {
   private getStaffListUrl = 'store/get-member-list';
   private removeStaffUrl = 'store/remove-member';
   private createStaffUrl = 'store/add-member';
+  private editStaffUrl = 'store/edit-member-info';
   private getStaffInfoUrl = 'store/get-member-info';
 
   private staffListSource = new BehaviorSubject<Array<UserInfoModel>>(new Array<UserInfoModel>());
@@ -40,6 +41,7 @@ export class StoreService {
             staffInfo.Address2 = e.address2;
             staffInfo.IdentityCard = e.identitycard;
             staffInfo.JoinDate = e.createddate;
+            staffInfo.IsActived = e.isactived;
 
             if (staffInfo.FullName === null || staffInfo.FullName === '') {
               staffInfo.FullName = staffInfo.AccountName;
@@ -71,7 +73,7 @@ export class StoreService {
     return result;
   }
 
-  // remove member from store
+  // add new staff to store
   async addStaff(staff: UserInfoModel) {
     let result = AppSettings.RESPONSE_MESSAGE.ERROR;
 
@@ -97,6 +99,31 @@ export class StoreService {
     return result;
   }
 
+   // edit staff from store
+   async editStaff(staff: UserInfoModel) {
+    let result = AppSettings.RESPONSE_MESSAGE.ERROR;
+
+    const params = new Dictionary<string, any>();
+    params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
+    params.put('MemberId' , staff.UserId);
+    params.put('FullName' , staff.FullName);
+    params.put('Email' , staff.Email);
+    params.put('PhoneNumber' , staff.PhoneNumber);
+    params.put('Address' , staff.Address);
+    params.put('Address2' , staff.Address2);
+    params.put('IdentityCard' , staff.IdentityCard);
+
+    await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.editStaffUrl, params, (data: ApiResultModel) => {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+          result = data.Result.staffid;
+        } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+          result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+        }
+    });
+
+    return result;
+  }
+
   // get staff info by id
   async getStaffInfoById(id: string) {
     const info = {result: AppSettings.RESPONSE_MESSAGE.ERROR, staffInfo: null};
@@ -112,11 +139,19 @@ export class StoreService {
             info.staffInfo = new UserInfoModel();
             info.staffInfo.AccountName = data.Result.accountname;
             info.staffInfo.FullName = data.Result.fullname;
-            info.staffInfo.Email = data.Result.email;
+            if (data.Result.email !== 'null') {
+             info.staffInfo.Email = data.Result.email;
+            }
             info.staffInfo.PhoneNumber = data.Result.phonenumber;
+            if (data.Result.address !== 'null') {
             info.staffInfo.Address = data.Result.address;
+            }
+            if (data.Result.address2 !== 'null') {
             info.staffInfo.Address2 = data.Result.address2;
+            }
+            if (data.Result.identitycard !== 'null') {
             info.staffInfo.IdentityCard = data.Result.identitycard;
+            }
             info.staffInfo.JoinDate = data.Result.createddate;
            }
         } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {

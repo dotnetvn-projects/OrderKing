@@ -7,7 +7,6 @@ import { UserService } from 'src/app/service/user.service';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
-import { FormGroup } from '@angular/forms';
 
 
 declare var $;
@@ -22,14 +21,18 @@ export class StaffActionComponent extends BaseComponent {
   ErrorMessage: string;
   ButtonContent: string;
   private staffId: string;
+  AvatarUrl: string;
 
   constructor(private titleService: Title, private activatedRoute: ActivatedRoute, private router: Router,
      private storeService: StoreService, private authService: AuthService, userService: UserService) {
     super(userService);
     this.StaffInfo = new UserInfoModel();
+    const currentDate = new Date();
+    this.StaffInfo.JoinDate = currentDate.getDate() + '/' + currentDate.getMonth() + '/' + currentDate.getFullYear();
   }
 
   onInit() {
+    this.AvatarUrl = '../../../../assets/images/no-avatar.png';
     this.staffId = this.getParam('id', this.activatedRoute);
     if (this.staffId !== null && this.staffId !== undefined) {
       this.titleService.setTitle('Order King - Chỉnh sửa thông tin nhân viên');
@@ -44,6 +47,8 @@ export class StaffActionComponent extends BaseComponent {
   async onSubmit() {
     if (this.staffId === null || this.staffId === undefined) {
       await this.createNew();
+    } else {
+      await this.edit();
     }
   }
 
@@ -69,4 +74,25 @@ export class StaffActionComponent extends BaseComponent {
       await this.gotoLogin(this.router);
      }
   }
+
+    // ** edit staff */
+    async edit() {
+      const result = await this.storeService.editStaff(this.StaffInfo);
+      if (result !== AppSettings.RESPONSE_MESSAGE.ERROR) {
+        this.router.navigate(['nhan-vien/chinh-sua', result]);
+      } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
+       this.authService.clearLoginSession();
+       await this.gotoLogin(this.router);
+      }
+   }
+
+    onAvatarChanged(imageInput: any) {
+    const file: File = imageInput.files[0];
+    const reader = new FileReader();
+    reader.onload = (event: any) => { // called once readAsDataURL is completed
+      this.AvatarUrl = event.target.result;
+    };
+    reader.readAsDataURL(file);
+
+   }
 }
