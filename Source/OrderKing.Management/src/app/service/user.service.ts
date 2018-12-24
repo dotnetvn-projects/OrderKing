@@ -13,6 +13,7 @@ import { Converter } from '../framework/framework.converter';
 export class UserService {
   private getUserInfoUrl = 'user/get-info';
   private checkUserExistUrl = 'user/check-exist-user';
+  private avatarUrl = 'user/avatar?';
 
   private userInfoSource = new BehaviorSubject<UserInfoModel>(new UserInfoModel());
   CurrentUserInfo = this.userInfoSource.asObservable();
@@ -73,6 +74,10 @@ export class UserService {
         }
     });
     return result;
+  }
+
+  getAvatarUrlByStaffId(staffId: string) {
+    return AppSettings.API_ENDPOINT + this.avatarUrl + 'member=' + staffId;
   }
 
   // **set user info to cache */

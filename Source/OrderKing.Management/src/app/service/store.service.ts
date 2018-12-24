@@ -15,6 +15,7 @@ export class StoreService {
   private createStaffUrl = 'store/add-member';
   private editStaffUrl = 'store/edit-member-info';
   private getStaffInfoUrl = 'store/get-member-info';
+  private editStaffAvatarUrl = 'store/edit-member-avatar';
 
   private staffListSource = new BehaviorSubject<Array<UserInfoModel>>(new Array<UserInfoModel>());
   StaffList = this.staffListSource.asObservable();
@@ -116,6 +117,25 @@ export class StoreService {
     await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.editStaffUrl, params, (data: ApiResultModel) => {
         if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
           result = data.Result.staffid;
+        } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+          result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+        }
+    });
+
+    return result;
+  }
+
+  async updateStaffAvatar(fileData: any, staffId: string) {
+    let result = AppSettings.RESPONSE_MESSAGE.ERROR;
+
+    const params = new Dictionary<string, any>();
+    params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
+    params.put('MemberId' , staffId);
+    params.put('Avatar' , fileData);
+
+    await this.webClient.doPostFileDataAsync(AppSettings.API_ENDPOINT + this.editStaffAvatarUrl, params, (data: ApiResultModel) => {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+          result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
         } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
           result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
         }

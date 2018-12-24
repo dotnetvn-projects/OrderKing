@@ -136,7 +136,7 @@ exports.getMemberInStore = async (storeId, currentAccountId) => {
         var members = [];
         result.recordset.forEach(function (value) {
             members.push({
-                memberid: security.encrypt(value.MemberId),
+                memberid: security.encrypt(value.MemberId + '_'+ security.serverKey()),
                 storename: value.StoreName,
                 accountname: value.AccountName,
                 fullname: value.FullName,

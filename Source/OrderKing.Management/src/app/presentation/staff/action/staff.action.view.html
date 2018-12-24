@@ -14,9 +14,10 @@
 
                         <div class="col-sm-5">
                             <input type="text" [(ngModel)]="StaffInfo.AccountName" name="accountName" #accountName="ngModel"
-                                    [ngClass]="{ 'is-invalid': f.submitted && accountName.invalid }" required class="form-control" id="inputAccount" placeholder="Tài khoản đăng nhập hệ thống">
+                                    [ngClass]="{ 'is-invalid': f.submitted && accountName.invalid }" required minlength="6" class="form-control" id="inputAccount" placeholder="Tài khoản đăng nhập hệ thống">
                             <div *ngIf="f.submitted && accountName.invalid" class="invalid-feedback">
                               <div *ngIf="accountName?.errors.required"><i class="fa fa-warning text-red"></i> Tài khoản đăng nhập không được rỗng !</div>
+                              <div *ngIf="accountName?.errors.minlength">Tài khoản phải ít nhất 6 ký tự</div>
                             </div>
                         </div>
                     </div>
@@ -25,9 +26,10 @@
 
                         <div class="col-sm-5">
                             <input type="password" [(ngModel)]="StaffInfo.Password" name="password" #password ="ngModel"
-                                  [ngClass]="{ 'is-invalid': f.submitted && password.invalid }" required class="form-control" id="inputPass" placeholder="Mật khẩu">
+                                  [ngClass]="{ 'is-invalid': f.submitted && password.invalid }" required minlength="6" class="form-control" id="inputPass" placeholder="Mật khẩu">
                             <div *ngIf="f.submitted && password.invalid" class="invalid-feedback">
                               <div *ngIf="password?.errors.required"><i class="fa fa-warning text-red"></i> Mật khẩu không được rỗng !</div>
+                              <div *ngIf="password?.errors.minlength">Mật khẩu phải ít nhất 6 ký tự</div>
                             </div>
                         </div>
                     </div>
@@ -47,9 +49,10 @@
 
                         <div class="col-sm-5">
                             <input type="email" class="form-control" [(ngModel)]="StaffInfo.Email" name="email" #email ="ngModel"
-                                  [ngClass]="{ 'is-invalid': f.submitted && email.invalid }" required id="inputEmail" placeholder="Email">
+                                  [ngClass]="{ 'is-invalid': f.submitted && email.invalid }" required email id="inputEmail" placeholder="Email">
                             <div *ngIf="f.submitted && email.invalid" class="invalid-feedback">
                               <div *ngIf="email?.errors.required"><i class="fa fa-warning text-red"></i> Email không được rỗng !</div>
+                              <div *ngIf="email?.errors.email">Email không đúng định dạng</div>
                             </div>
                         </div>
                     </div>

@@ -25,3 +25,7 @@ exports.decrypt = function (data) {
     dec += decipher.final('utf8');
     return dec;
 };
+
+exports.serverKey = function () {
+    return apiConfig.server.serverkey;
+};

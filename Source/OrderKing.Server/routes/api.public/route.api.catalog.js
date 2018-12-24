@@ -47,11 +47,12 @@ catalogrouter.post('/create-category', async (req, res, next) => {
 //update category image
 catalogrouter.post('/change-category-image', multipartMiddleware, async (req, res, next) => {
     try {
-        var accessToken = req.body.null[0];
-        var categoryId = security.decrypt(req.body.null[1]);
+        var accessToken = req.body.AccessToken;
+        var categoryId = security.decrypt(req.body.Id).split('_')[0];
+
         var storeId = await service.getStoreIdByAccessToken(accessToken);
 
-        var buff = io.readFileToBinary(req.files.null.path);
+        var buff = io.readFileToBinary(req.files.CateImage.path);
 
         imageProcess.resizeAutoScaleHeight(buff, resources.categorySize.W, async (imageData) => {
             var result = await service.updateCatagoryImage({
@@ -60,7 +61,7 @@ catalogrouter.post('/change-category-image', multipartMiddleware, async (req, re
                 storeId: storeId
             });
 
-            io.deleteFile(req.files.null.path);
+            io.deleteFile(req.files.CateImage.path);
 
             var message = common.createResponseMessage(null,
                 result.model.responsecode,
@@ -86,7 +87,7 @@ catalogrouter.post('/update-category', async (req, res, next) => {
         }
         else {
             var storeId = await storeService.getStoreIdByAccessToken(accessToken);
-            var cateId = await security.decrypt(req.body.Id);
+            var cateId = await security.decrypt(req.body.Id).split('_')[0];
 
             var category = {
                 storeId: storeId,
@@ -120,7 +121,7 @@ catalogrouter.post('/delete-category', async (req, res, next) => {
         }
         else {
             var storeId = await storeService.getStoreIdByAccessToken(accessToken);
-            var cateId = await security.decrypt(req.body.Id);
+            var cateId = await security.decrypt(req.body.Id).split('_')[0];
 
             var category = {
                 storeId: storeId,
@@ -176,7 +177,7 @@ catalogrouter.post('/create-product', async (req, res, next) => {
                 storeId: storeId,
                 name: req.body.Name,
                 description: req.body.Description,
-                categoryId: security.decrypt(req.body.CategoryId),
+                categoryId: security.decrypt(req.body.CategoryId).split('_')[0],
                 price: req.body.Price,
                 image: null
             };     
@@ -209,8 +210,8 @@ catalogrouter.post('/update-product', async (req, res, next) => {
         }
         else {
             var storeId = await storeService.getStoreIdByAccessToken(accessToken);
-            var productId = await security.decrypt(req.body.Id);
-            var cateId = await security.decrypt(req.body.CategoryId);
+            var productId =  security.decrypt(req.body.Id).split('_')[0];
+            var cateId =  security.decrypt(req.body.CategoryId).split('_')[0];
 
             var product = {
                 storeId: storeId,
@@ -239,11 +240,11 @@ catalogrouter.post('/update-product', async (req, res, next) => {
 //update product image
 catalogrouter.post('/change-product-image', multipartMiddleware, async (req, res, next) => {
     try {
-        var accessToken = req.body.null[0];
-        var productId = security.decrypt(req.body.null[1]);
+        var accessToken = req.body.AccessToken;
+        var productId = security.decrypt(req.body.Id).split('_')[0];
         var storeId = await service.getStoreIdByAccessToken(accessToken);
 
-        var buff = io.readFileToBinary(req.files.null.path);
+        var buff = io.readFileToBinary(req.files.ProductImage.path);
 
         imageProcess.resizeAutoScaleHeight(buff, resources.productSize.W, async (imageData) => {
             var result = await service.updateProductImage({
@@ -252,7 +253,7 @@ catalogrouter.post('/change-product-image', multipartMiddleware, async (req, res
                 storeId: storeId
             });
 
-            io.deleteFile(req.files.null.path);
+            io.deleteFile(req.files.ProductImage.path);
 
             var message = common.createResponseMessage(null,
                 result.model.responsecode,
@@ -278,7 +279,7 @@ catalogrouter.post('/delete-product', async (req, res, next) => {
         }
         else {
             var storeId = await storeService.getStoreIdByAccessToken(accessToken);
-            var productId = await security.decrypt(req.body.Id);
+            var productId = security.decrypt(req.body.Id).split('_')[0];
 
             var product = {
                 storeId: storeId,
@@ -325,7 +326,7 @@ catalogrouter.post('/product-list-by-cate', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
         var storeId = await storeService.getStoreIdByAccessToken(accessToken);
-        var cateId = await security.decrypt(req.body.CategoryId);
+        var cateId = security.decrypt(req.body.CategoryId).split('_')[0];
 
         var product = {
             storeId: storeId,
@@ -349,7 +350,7 @@ catalogrouter.post('/product-list-by-cate', async (req, res, next) => {
 //get product image
 catalogrouter.post('/product-img', async (req, res, next) => {
     try {
-        var productId = security.decrypt(req.query.pid);
+        var productId = security.decrypt(req.query.pid).split('_')[0];
 
         var result = await service.getProductImage(productId);
         var img = new Buffer(result.model.product);
@@ -368,7 +369,7 @@ catalogrouter.post('/product-img', async (req, res, next) => {
 //get category image
 catalogrouter.post('/cate-img', async (req, res, next) => {
     try {
-        var categoryId = security.decrypt(req.query.cid);
+        var categoryId = security.decrypt(req.query.cid).split('_')[0];
 
         var result = await service.getCategoryImage(categoryId);
         var img = new Buffer(result.model.category);

@@ -6,6 +6,7 @@ const common = require('../../common/common');
 const imageProcess = require('../../common/image.process');
 const io = require('../../common/io');
 const resources = require('../../resources/resource.api.value');
+const security = require('../../services/service.security');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
@@ -74,10 +75,10 @@ userrouter.post('/edit-info', async (req, res, next) => {
 //update avatar
 userrouter.post('/change-avatar', multipartMiddleware, async function (req, res, next) {
     try {
-        var accessToken = req.body.null;
+        var accessToken = req.body.AccessToken;
         var accountId = await service.getAccountIdByAccessToken(accessToken);
 
-        var buff = io.readFileToBinary(req.files.null.path);
+        var buff = io.readFileToBinary(req.files.Avatar.path);
 
         imageProcess.resizeAutoScaleHeight(buff, resources.avatarSize.W, async (imageData) => {
             var result = await service.updateAvartar({
@@ -85,7 +86,7 @@ userrouter.post('/change-avatar', multipartMiddleware, async function (req, res,
                 accountid: accountId
             });
 
-            io.deleteFile(req.files.null.path);
+            io.deleteFile(req.files.Avatar.path);
 
             var message = common.createResponseMessage(null,
                 result.model.responsecode,
@@ -127,10 +128,17 @@ userrouter.post('/change-pass', async function (req, res, next) {
 //get avatar
 userrouter.get('/avatar', async function (req, res, next) {
     try {
+        var accountId = -1;
         var accessToken = req.query.access_token;
 
-        var accountId = await service.getAccountIdByAccessToken(accessToken);
-
+        if (accessToken === undefined) {
+            var memberid = security.decrypt(req.query.member).split('_')[0];
+            var account = await service.getAccountByAccountId(memberid);
+            accountId = account.Id;
+        }
+        else {
+            accountId = await service.getAccountIdByAccessToken(accessToken);
+        }
         var result = await service.getAvatar(accountId);
         var img = new Buffer(result.model.userinfo);
 

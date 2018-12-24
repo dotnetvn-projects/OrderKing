@@ -21,7 +21,8 @@ exports.createCatagory = async (categoryobject) => {
         categoryResponse.model.statusmessage = status.common.suscess;
         categoryResponse.model.responsecode = status.common.suscesscode;
         categoryResponse.model.category = {
-            id: security.encrypt(result.recordset[0].CategoryId), name: categoryobject.name
+            id: security.encrypt(result.recordset[0].CategoryId + '_' + security.serverKey()),
+            name: categoryobject.name
         };
     }
 
@@ -44,7 +45,7 @@ exports.updateCatagory = async (categoryobject) => {
         categoryResponse.model.statusmessage = status.common.suscess;
         categoryResponse.model.responsecode = status.common.suscesscode;
         categoryResponse.model.category = {
-            id: security.encrypt(categoryobject.id),
+            id: security.encrypt(categoryobject.id + '_' + security.serverKey()),
             name: categoryobject.name
         };
     }
@@ -105,7 +106,7 @@ exports.getCategoryInStore = async (storeId) => {
         var categories = [];
         result.recordset.forEach(function (value) {
             categories.push({
-                categoryid: security.encrypt(value.Id),
+                categoryid: security.encrypt(value.Id + '_' + security.serverKey()),
                 categoryname: value.Name,
                 createddate: value.CreatedDate
             });
@@ -136,7 +137,7 @@ exports.createProduct = async (productobject) => {
         productResponse.model.statusmessage = status.common.suscess;
         productResponse.model.responsecode = status.common.suscesscode;
         productResponse.model.product = {
-            id: security.encrypt(result.recordset[0].ProductId),
+            id: security.encrypt(result.recordset[0].ProductId + '_' + security.serverKey()),
             name: productobject.name,
             description: productobject.description,
             price: productobject.price
@@ -186,7 +187,7 @@ exports.updateProduct = async (productobject) => {
         productResponse.model.statusmessage = status.common.suscess;
         productResponse.model.responsecode = status.common.suscesscode;
         productResponse.model.product = {
-            id: security.encrypt(security.encrypt(productobject.id)),
+            id: security.encrypt(security.encrypt(productobject.id + '_' + security.serverKey())),
             name: productobject.name,
             description: productobject.description,
             price: productobject.price
@@ -231,7 +232,7 @@ exports.getProductsInStore = async (storeId) => {
         result.recordset.forEach(function (value) {
             products.push({
                 categoryName: value.CategoryName,
-                id: security.encrypt(value.Id),
+                id: security.encrypt(value.Id + '_' + security.serverKey()),
                 name: value.Name,
                 createdDate: value.CreatedDate,
                 description: value.Description,
@@ -262,7 +263,7 @@ exports.getProductsInStoreByCate = async (productobject) => {
         result.recordset.forEach(function (value) {
             products.push({
                 categoryName: value.CategoryName,
-                id: security.encrypt(value.Id),
+                id: security.encrypt(value.Id + '_' + security.serverKey()),
                 name: value.Name,
                 createdDate: value.CreatedDate,
                 description: value.Description,

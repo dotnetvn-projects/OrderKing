@@ -25,6 +25,15 @@ export class WebClientService {
     return body;
   }
 
+  // build http form data
+  private buildFormData(params: Dictionary<string, any>) {
+    const data = new FormData();
+    params.getKeys().forEach((key: any) => {
+      data.append(key, params.get(key));
+    });
+    return data;
+  }
+
   // handle exception
   private handleException (exception: any) {
     let res = exception.error;
@@ -59,10 +68,14 @@ export class WebClientService {
   }
 
   // create call http post promise
-  private createPostPromise(url: string, formdata: object, contenttype: string): Promise<Observable<Response>> {
+  private createPostPromise(url: string, formdata: object, contenttype: string, allowFormData = false): Promise<Observable<Response>> {
     return new Promise(resolve => {
       let httpHeaders  = new HttpHeaders();
-      httpHeaders  = AppSettings.createDefaultHeaders().set('Content-Type', contenttype);
+      if (allowFormData) {
+        httpHeaders  = AppSettings.createDefaultHeaders().set('enctype', 'multipart/form-data');
+      } else {
+        httpHeaders  = AppSettings.createDefaultHeaders().set('Content-Type', contenttype);
+      }
       const httpOptions = {headers: httpHeaders };
 
       let res: any;
@@ -139,6 +152,36 @@ export class WebClientService {
         }
     );
   }
+
+  async doPostFileDataAsync(url: string, body: Dictionary<string, any>, callback: any) {
+    const data = this.buildFormData(body);
+    await this.createPostPromise(url, data, '', true).then(
+      (res: any) => {
+        this.createApiResult(res);
+        if (callback != null) {
+          callback(this.Result);
+        }
+      },
+      exception => {
+            throw exception;
+        }
+    );
+  }
+
+testUpload(file: any, url: string) {
+  const formData: FormData = new FormData();
+    formData.append('pic', file);
+    formData.append('test', 'ddd');
+    let httpHeaders  = new HttpHeaders();
+    httpHeaders = httpHeaders.set('enctype', 'multipart/form-data');
+    const options = { headers: httpHeaders };
+    this.http.post(url, formData, options)
+        .subscribe(
+            data => console.log('success'),
+            error => console.log(error)
+        );
+}
+
 
  /** call http get and wait it finishes*/
  async doGetAsync(url: string,  callback: any) {

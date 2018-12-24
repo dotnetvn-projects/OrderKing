@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 //in development mode, please comment out validateRequest middleware
-app.use(validateRequest.setmiddleware);
+//app.use(validateRequest.setmiddleware);
 
 //route api
 app.use('/', homeApi);

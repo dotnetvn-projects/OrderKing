@@ -22,6 +22,7 @@ export class StaffActionComponent extends BaseComponent {
   ButtonContent: string;
   private staffId: string;
   AvatarUrl: string;
+  private avatarData: any;
 
   constructor(private titleService: Title, private activatedRoute: ActivatedRoute, private router: Router,
      private storeService: StoreService, private authService: AuthService, userService: UserService) {
@@ -48,6 +49,7 @@ export class StaffActionComponent extends BaseComponent {
     if (this.staffId === null || this.staffId === undefined) {
       await this.createNew();
     } else {
+      this.StaffInfo.UserId = this.staffId;
       await this.edit();
     }
   }
@@ -61,6 +63,8 @@ export class StaffActionComponent extends BaseComponent {
      await this.gotoLogin(this.router);
     } else {
       this.StaffInfo = iresult.staffInfo;
+      this.StaffInfo.Password = '******';
+      this.AvatarUrl = this.userService.getAvatarUrlByStaffId(this.staffId);
     }
   }
 
@@ -68,10 +72,13 @@ export class StaffActionComponent extends BaseComponent {
   async createNew() {
      const result = await this.storeService.addStaff(this.StaffInfo);
      if (result !== AppSettings.RESPONSE_MESSAGE.ERROR) {
+       if (this.avatarData !== null) {
+        await this.storeService.updateStaffAvatar(this.avatarData, result);
+       }
        this.router.navigate(['nhan-vien/chinh-sua', result]);
      } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
-      this.authService.clearLoginSession();
-      await this.gotoLogin(this.router);
+       this.authService.clearLoginSession();
+       await this.gotoLogin(this.router);
      }
   }
 
@@ -79,6 +86,9 @@ export class StaffActionComponent extends BaseComponent {
     async edit() {
       const result = await this.storeService.editStaff(this.StaffInfo);
       if (result !== AppSettings.RESPONSE_MESSAGE.ERROR) {
+        if (this.avatarData !== null) {
+          await this.storeService.updateStaffAvatar(this.avatarData, result);
+         }
         this.router.navigate(['nhan-vien/chinh-sua', result]);
       } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
        this.authService.clearLoginSession();
@@ -91,8 +101,8 @@ export class StaffActionComponent extends BaseComponent {
     const reader = new FileReader();
     reader.onload = (event: any) => { // called once readAsDataURL is completed
       this.AvatarUrl = event.target.result;
+      this.avatarData = file;
     };
     reader.readAsDataURL(file);
-
    }
 }

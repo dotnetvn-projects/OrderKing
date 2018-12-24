@@ -10,6 +10,8 @@ const io = require('../../common/io');
 const resources = require('../../resources/resource.api.value');
 const imageProcess = require('../../common/image.process');
 const moment = require('moment');
+var multipart = require('connect-multiparty');
+var multipartMiddleware = multipart();
 
 //url: /api/public/store
 //get store info
@@ -60,8 +62,10 @@ storerouter.post('/edit-info', async (req, res, next) => {
 //get user info
 storerouter.post('/get-member-info', async (req, res, next) => {
     try {
-        var memberId = security.decrypt(req.body.MemberId);
+        var memberId = security.decrypt(req.body.MemberId).split('_')[0];
+
         var result = await userService.getUserInfoById(parseInt(memberId));
+
         var message = common.createResponseMessage(result.model.userinfo,
             result.model.responsecode,
             result.model.statusmessage);
@@ -114,7 +118,7 @@ storerouter.post('/add-member', async (req, res, next) => {
                 var result = await service.addNewMember(info);
 
                 var message = common.createResponseMessage(
-                    { staffid: security.encrypt(info.memberid.toString()) },
+                    { staffid: security.encrypt(info.memberid.toString()+ '_' + security.serverKey()) },
                     result.model.responsecode,
                     result.model.statusmessage);
 
@@ -177,7 +181,7 @@ storerouter.post('/edit-member-info', async (req, res, next) => {
             common.sendUnauthorizedRequest(res);
         }
         else {
-            var memberId = security.decrypt(req.body.MemberId);
+            var memberId = security.decrypt(req.body.MemberId).split('_')[0];
            
             var userInfo = {
                 memberid: '',
@@ -192,7 +196,7 @@ storerouter.post('/edit-member-info', async (req, res, next) => {
             var result = await userService.updateUserInfo(userInfo, memberId);
 
             var message = common.createResponseMessage(
-             { staffid: security.encrypt(memberid.toString()) },
+                { staffid: security.encrypt(memberId.toString() + '_' + security.serverKey())},
              result.model.responsecode,
              result.model.statusmessage);
 
@@ -206,17 +210,17 @@ storerouter.post('/edit-member-info', async (req, res, next) => {
 });
 
 //edit member avatar from store
-storerouter.post('/edit-member-avatar', async (req, res, next) => {
+storerouter.post('/edit-member-avatar', multipartMiddleware, async (req, res, next) => {
     try {
-        var accessToken = req.body.null[0];
+        var accessToken = req.body.AccessToken;
         var isStoreOwner = await security.isStoreOwner(accessToken);
 
         if (isStoreOwner === false) {
             common.sendUnauthorizedRequest(res);
         }
         else {
-            var memberId = security.decrypt(req.body.null[1]);
-            var buff = io.readFileToBinary(req.files.null.path);
+            var memberId = security.decrypt(req.body.MemberId).split('_')[0];
+            var buff = io.readFileToBinary(req.files.Avatar.path);
 
             imageProcess.resizeAutoScaleHeight(buff, resources.avatarSize.W, async (imageData) => {
                 var result = await userService.updateAvartar({
@@ -224,7 +228,7 @@ storerouter.post('/edit-member-avatar', async (req, res, next) => {
                     accountid: memberId
                 });
 
-                io.deleteFile(req.files.null.path);
+                io.deleteFile(req.files.Avatar.path);
 
                 var message = common.createResponseMessage(null,
                     result.model.responsecode,
@@ -241,9 +245,9 @@ storerouter.post('/edit-member-avatar', async (req, res, next) => {
 });
 
 //update logo
-storerouter.post('/update-logo', async (req, res) => {
+storerouter.post('/update-logo', multipartMiddleware, async (req, res) => {
     try {
-        var accessToken = req.body.null;
+        var accessToken = req.body.AccessToken;
         var isStoreOwner = await security.isStoreOwner(accessToken);
 
         if (isStoreOwner === false) {
@@ -256,7 +260,7 @@ storerouter.post('/update-logo', async (req, res) => {
                 common.sendBadRequest(res, 'Request data is invalid !');
             }
             else {
-                var buff = io.readFileToBinary(req.files.null.path);
+                var buff = io.readFileToBinary(req.files.StoreLogo.path);
                 imageProcess.resizeAutoScaleHeight(buff, resources.storeLogoSize.W, async (imageData) => {
                     var info = {
                         logo: imageData,
@@ -265,7 +269,7 @@ storerouter.post('/update-logo', async (req, res) => {
 
                     var result = await service.updateLogo(info);
 
-                    io.deleteFile(req.files.null.path);
+                    io.deleteFile(req.files.StoreLogo.path);
 
                     var message = common.createResponseMessage(null,
                         result.model.responsecode,
