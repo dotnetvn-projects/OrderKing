@@ -13,4 +13,4 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
     RouterModule
   ]
 })
-export class UiComponentModule { }
+export class UiComponentModule {}

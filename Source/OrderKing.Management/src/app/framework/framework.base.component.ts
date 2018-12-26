@@ -13,6 +13,7 @@ export class BaseComponent implements OnInit {
 
   ngOnInit() {
     this.onInit();
+    this.applyJs();
     this.userService.displayUserInfo();
   }
 
@@ -35,5 +36,9 @@ export class BaseComponent implements OnInit {
     } catch (ex) {
       return null;
     }
+  }
+
+  applyJs() {
+    // code
   }
 }

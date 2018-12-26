@@ -232,14 +232,14 @@ exports.createNewAccount = async (info) => {
     return response;
 };
 
-//get account by account id
-exports.lockAccount = async (account) => {
+//lock member
+exports.lockAccount = async (accountId) => {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
 
     const pool = await poolPromise;
     const result = await pool.request()
-        .input("AccountName", sql.NVarChar, account)
+        .input("AccountId", sql.BigInt, accountId)
         .query(userSqlCmd.lockMember);
 
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
@@ -248,6 +248,24 @@ exports.lockAccount = async (account) => {
     }
     return response;
 };
+
+//unlock member
+exports.unLockAccount = async (accountId) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input("AccountId", sql.BigInt, accountId)
+        .query(userSqlCmd.unLockMember);
+
+    if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+    }
+    return response;
+};
+
 
 //get avatar
 exports.getAvatar = async (accountId) => {

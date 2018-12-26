@@ -12,4 +12,9 @@ export class UserInfoModel {
     JoinDate: string;
     CreatedDate: Date;
     IsActived: boolean;
+    Avatar: string;
+
+    constructor() {
+      this.IsActived = true;
+    }
 }

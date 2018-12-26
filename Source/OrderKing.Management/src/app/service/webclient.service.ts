@@ -168,20 +168,6 @@ export class WebClientService {
     );
   }
 
-testUpload(file: any, url: string) {
-  const formData: FormData = new FormData();
-    formData.append('pic', file);
-    formData.append('test', 'ddd');
-    let httpHeaders  = new HttpHeaders();
-    httpHeaders = httpHeaders.set('enctype', 'multipart/form-data');
-    const options = { headers: httpHeaders };
-    this.http.post(url, formData, options)
-        .subscribe(
-            data => console.log('success'),
-            error => console.log(error)
-        );
-}
-
 
  /** call http get and wait it finishes*/
  async doGetAsync(url: string,  callback: any) {

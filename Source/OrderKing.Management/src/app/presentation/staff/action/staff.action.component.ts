@@ -20,8 +20,9 @@ export class StaffActionComponent extends BaseComponent {
   StaffInfo: UserInfoModel;
   ErrorMessage: string;
   ButtonContent: string;
-  private staffId: string;
   AvatarUrl: string;
+  IsEdit: boolean;
+  private staffId: string;
   private avatarData: any;
 
   constructor(private titleService: Title, private activatedRoute: ActivatedRoute, private router: Router,
@@ -32,16 +33,34 @@ export class StaffActionComponent extends BaseComponent {
     this.StaffInfo.JoinDate = currentDate.getDate() + '/' + currentDate.getMonth() + '/' + currentDate.getFullYear();
   }
 
+  applyJs () {
+    $(() => {
+      $('input[type="radio"].minimal').iCheck({
+        radioClass   : 'iradio_minimal-green'
+      });
+      $('input').on('ifChecked', function(event) {
+         $(event.target.parentElement.parentElement).trigger('click');
+      });
+    });
+  }
+
+  setradio(e) {
+  alert(e);
+}
+
   onInit() {
     this.AvatarUrl = '../../../../assets/images/no-avatar.png';
     this.staffId = this.getParam('id', this.activatedRoute);
+
     if (this.staffId !== null && this.staffId !== undefined) {
       this.titleService.setTitle('Order King - Chỉnh sửa thông tin nhân viên');
       this.getStaffInfo();
       this.ButtonContent = 'Chỉnh sửa';
+      this.IsEdit = true;
     } else {
       this.titleService.setTitle('Order King - Tạo mới nhân viên');
       this.ButtonContent = 'Tạo mới';
+      this.IsEdit = false;
     }
   }
 
@@ -57,7 +76,7 @@ export class StaffActionComponent extends BaseComponent {
   private async getStaffInfo() {
     const iresult = await this.storeService.getStaffInfoById(this.staffId);
     if (iresult.result === AppSettings.RESPONSE_MESSAGE.ERROR) {
-      this.router.navigate(['']); // TODO display not found page
+      this.router.navigate(['/page-not-found']); // TODO display not found page
     } else if (iresult.result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
      this.authService.clearLoginSession();
      await this.gotoLogin(this.router);
@@ -86,13 +105,18 @@ export class StaffActionComponent extends BaseComponent {
     async edit() {
       const result = await this.storeService.editStaff(this.StaffInfo);
       if (result !== AppSettings.RESPONSE_MESSAGE.ERROR) {
-        if (this.avatarData !== null) {
+        if (this.avatarData !== null && this.avatarData !== undefined) {
           await this.storeService.updateStaffAvatar(this.avatarData, result);
-         }
+        }
+        if (this.StaffInfo.IsActived === false) {
+          await this.storeService.lockStaff(result);
+        } else {
+          await this.storeService.unLockStaff(result);
+        }
         this.router.navigate(['nhan-vien/chinh-sua', result]);
       } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
-       this.authService.clearLoginSession();
-       await this.gotoLogin(this.router);
+        this.authService.clearLoginSession();
+        await this.gotoLogin(this.router);
       }
    }
 

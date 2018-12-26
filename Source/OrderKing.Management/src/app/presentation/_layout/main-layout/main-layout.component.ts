@@ -20,10 +20,11 @@ export class MainLayoutComponent extends BaseComponent {
 
   async onInit() {
       window.dispatchEvent(new Event('resize'));
-      document.body.className = 'hold-transition skin-blue sidebar-mini';
+      document.body.className = 'hold-transition skin-blue sidebar-mini fixed';
       $(document).ready(() => {
         const trees: any = $('[data-widget="tree"]');
         trees.tree();
+
       });
       this.userService.CurrentUserInfo.subscribe(userInfo => this.UserInfo = userInfo);
     }

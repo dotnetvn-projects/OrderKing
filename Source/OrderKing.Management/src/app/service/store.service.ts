@@ -5,6 +5,7 @@ import { WebClientService } from './webclient.service';
 import { Dictionary } from '../framework/objectextension/framework.dictionary';
 import { ApiResultModel } from '../model/api.result.model';
 import { AppSettings } from '../framework/framework.app.setting';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +17,13 @@ export class StoreService {
   private editStaffUrl = 'store/edit-member-info';
   private getStaffInfoUrl = 'store/get-member-info';
   private editStaffAvatarUrl = 'store/edit-member-avatar';
+  private lockStaffUrl = 'store/lock-member';
+  private unLockStaffUrl = 'store/unlock-member';
 
   private staffListSource = new BehaviorSubject<Array<UserInfoModel>>(new Array<UserInfoModel>());
   StaffList = this.staffListSource.asObservable();
 
-  constructor(private webClient: WebClientService ) {}
+  constructor(private webClient: WebClientService, private userService: UserService ) {}
 
    // ** get staffs list of current store */
    fetchStaffList(updateUI) {
@@ -43,7 +46,7 @@ export class StoreService {
             staffInfo.IdentityCard = e.identitycard;
             staffInfo.JoinDate = e.createddate;
             staffInfo.IsActived = e.isactived;
-
+            staffInfo.Avatar = this.userService.getAvatarUrlByStaffId(staffInfo.UserId);
             if (staffInfo.FullName === null || staffInfo.FullName === '') {
               staffInfo.FullName = staffInfo.AccountName;
             }
@@ -125,6 +128,7 @@ export class StoreService {
     return result;
   }
 
+  // update avatar
   async updateStaffAvatar(fileData: any, staffId: string) {
     let result = AppSettings.RESPONSE_MESSAGE.ERROR;
 
@@ -134,6 +138,44 @@ export class StoreService {
     params.put('Avatar' , fileData);
 
     await this.webClient.doPostFileDataAsync(AppSettings.API_ENDPOINT + this.editStaffAvatarUrl, params, (data: ApiResultModel) => {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+          result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
+        } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+          result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+        }
+    });
+
+    return result;
+  }
+
+  // lock staff
+  async lockStaff(staffId: string) {
+    let result = AppSettings.RESPONSE_MESSAGE.ERROR;
+
+    const params = new Dictionary<string, any>();
+    params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
+    params.put('MemberId' , staffId);
+
+    await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.lockStaffUrl, params, (data: ApiResultModel) => {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+          result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
+        } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+          result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+        }
+    });
+
+    return result;
+  }
+
+    // unlock staff
+  async unLockStaff(staffId: string) {
+    let result = AppSettings.RESPONSE_MESSAGE.ERROR;
+
+    const params = new Dictionary<string, any>();
+    params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
+    params.put('MemberId' , staffId);
+
+    await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.unLockStaffUrl, params, (data: ApiResultModel) => {
         if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
           result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
         } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
@@ -173,6 +215,7 @@ export class StoreService {
             info.staffInfo.IdentityCard = data.Result.identitycard;
             }
             info.staffInfo.JoinDate = data.Result.createddate;
+            info.staffInfo.IsActived = data.Result.isactived;
            }
         } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
           info.result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;

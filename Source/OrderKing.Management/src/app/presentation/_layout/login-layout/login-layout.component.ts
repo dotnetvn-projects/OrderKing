@@ -13,7 +13,7 @@ export class LoginLayoutComponent implements OnInit {
   ngOnInit() {
     document.body.className = 'hold-transition login-page skin-blue login-background';
       $(() => {
-          $('input').iCheck({
+          $('.icheck input').iCheck({
               checkboxClass: 'icheckbox_square-blue',
               radioClass: 'iradio_square-blue',
               increaseArea: '20%' /* optional */

@@ -15,42 +15,47 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="table-staff" class="table table-bordered table-striped table-hover">
+              <table id="table-staff" class="table table-bordered table-striped table-hover responsive display nowrap">
                 <thead>
                   <tr>
                     <th class="text-center" width="20px">#</th>
-                    <th>Họ và tên</th>
-                    <th width="110px">Điện thoại</th>
-                    <th width="130px">Email</th>
-                    <th width="70px">Ngày tạo</th>
-                    <th width="120px">Trạng thái</th>
-                    <th width="120px" class="text-center">Công cụ</th>
+                    <th class="text-center">Họ và tên</th>
+                    <th width="105px" class="text-center">Ảnh</th>
+                    <th class="text-center">Điện thoại</th>
+                    <th class="text-center">Email</th>
+                    <th class="text-center">Ngày tạo</th>
+                    <th class="text-center">Trạng thái</th>
+                    <th  class="text-center">Thao tác</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let staff of StaffList; let i = index">
-                    <td class="text-center">{{ i + 1 }}</td>
+                    <td class="text-center"><span class="badge bg-blue">{{ i + 1 }}</span></td>
                     <td>{{ staff.FullName }}</td>
+                    <td class="text-center"><img class="avatar" [src]="staff.Avatar" alt="User Avatar"></td>
                     <td>{{ staff.PhoneNumber }}</td>
                     <td>{{ staff.Email }}</td>
                     <td class="text-right">{{ staff.JoinDate }}</td>
-                    <td class="text-right"><span *ngIf = "staff.IsActived;then activeStatus else blockStatus"></span></td>
-                    <td class="text-center">
-                        <a [routerLink]="['/nhan-vien/chinh-sua', staff.UserId]" title="Chỉnh sửa" class="btn bg-yellow btn-default btn-sm"><i class="fa fa-edit"></i> Sửa</a>&nbsp;&nbsp;
-                        <a title="Xóa" (click)="removeStaff(staff.UserId)" class="btn bg-red btn-default btn-sm"><i class="fa fa-remove"> Xóa</i></a>
+                    <td class="text-center"><span *ngIf = "staff.IsActived;then activeStatus else blockStatus"></span>
+                      <ng-template #activeStatus><i class="fa fa-check-circle text-green"></i> Đang hoạt động</ng-template>
+                      <ng-template #blockStatus><i class="fa fa-lock text-red"></i> Bị khóa</ng-template>
                     </td>
-                    <ng-template #activeStatus><i class="fa fa-check-circle text-green"></i> Đang hoạt động</ng-template>
-                    <ng-template #blockStatus><i class="fa fa-lock text-red"></i> Bị khóa</ng-template>
+                    <td class="text-center tools">
+                        <a [routerLink]="['/nhan-vien/chinh-sua', staff.UserId]" title="Chỉnh sửa" class="btn bg-yellow btn-default btn-sm"><i class="fa fa-edit"></i> Sửa</a>
+                        <a title="Xóa" (click)="removeStaff(staff.UserId)" class="btn bg-red btn-default btn-sm"><i class="fa fa-remove"> Xóa </i></a>
+                    </td>
                   </tr>
                 </tbody>
                 <tfoot>
                   <tr>
-                    <th class="text-center">#</th>
-                    <th>Họ và tên</th>
-                    <th>Điện thoại</th>
-                    <th>Email</th>
-                    <th>Ngày tạo</th>
-                    <th class="text-center">Công cụ</th>
+                    <th width="20px" class="text-center">#</th>
+                    <th class="text-center">Họ và tên</th>
+                    <th width="105px"class="text-center">Ảnh</th>
+                    <th class="text-center">Điện thoại</th>
+                    <th class="text-center">Email</th>
+                    <th class="text-center">Ngày tạo</th>
+                    <th class="text-center">Trạng thái</th>
+                    <th class="text-center">Thao tác</th>
                   </tr>
                 </tfoot>
               </table>

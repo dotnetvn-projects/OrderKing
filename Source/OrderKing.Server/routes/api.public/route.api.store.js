@@ -382,9 +382,34 @@ storerouter.post('/lock-member', async (req, res, next) => {
             common.sendUnauthorizedRequest(res);
         }
         else {
-            var account = req.body.AccountName;
-            var result = await userService.lockAccount(account);
-            var message = common.createResponseMessage(format('{0} has been locked !', account),
+            var accountId = security.decrypt(req.body.MemberId).split('_')[0];
+            var result = await userService.lockAccount(accountId);
+            var message = common.createResponseMessage('Account has been locked !',
+                result.model.responsecode, result.model.statusmessage);
+
+            res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(message));
+        }
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+
+//unlock a member instore
+storerouter.post('/unlock-member', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var isStoreOwner = await security.isStoreOwner(accessToken);
+
+        if (isStoreOwner === false) {
+            common.sendUnauthorizedRequest(res);
+        }
+        else {
+            var accountId = security.decrypt(req.body.MemberId).split('_')[0];
+            var result = await userService.unLockAccount(accountId);
+            var message = common.createResponseMessage('Account has been unlocked !',
                 result.model.responsecode, result.model.statusmessage);
 
             res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });

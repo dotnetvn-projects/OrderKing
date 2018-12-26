@@ -17,9 +17,9 @@
       </div>
       <div class="row">
         <div class="col-xs-8">
-          <div class="checkbox icheck">
+          <div (click)="onCheckboxchange()" class="checkbox icheck">
             <label>
-              <input [(ngModel)]="LoginInfo.RemeberMe" [ngModelOptions]="{standalone: true}" type="checkbox"> Ghi nhớ tài khoản
+              <input  [(ngModel)]="LoginInfo.RemeberMe" [ngModelOptions]="{standalone: true}" type="checkbox"> Ghi nhớ tài khoản
             </label>
           </div>
         </div>

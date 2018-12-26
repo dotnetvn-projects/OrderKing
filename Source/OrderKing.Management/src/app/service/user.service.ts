@@ -77,7 +77,7 @@ export class UserService {
   }
 
   getAvatarUrlByStaffId(staffId: string) {
-    return AppSettings.API_ENDPOINT + this.avatarUrl + 'member=' + staffId;
+    return AppSettings.API_ENDPOINT + this.avatarUrl + 'member=' + staffId + '&random=' + Math.random();
   }
 
   // **set user info to cache */

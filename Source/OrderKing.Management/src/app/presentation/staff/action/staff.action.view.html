@@ -88,6 +88,20 @@
                         <input [(ngModel)]="StaffInfo.IdentityCard" [ngModelOptions]="{standalone: true}" class="form-control" id="inputIdNum" placeholder="Số chứng minh nhân dân">
                     </div>
                   </div>
+                  <div *ngIf="IsEdit" class="form-group">
+                      <label for="inputIdNum" class="col-sm-2 control-label">Trạng thái</label>
+
+                      <div class="col-sm-5 staff-status">
+                        <label>
+                          <input type="radio" name="status" class="minimal" [value]="true" [(ngModel)]="StaffInfo.IsActived">
+                          Kích hoạt
+                        </label>
+                        <label>
+                          <input type="radio" name="status"  class="minimal"  [value]="false" [(ngModel)]="StaffInfo.IsActived">
+                          Khóa
+                        </label>
+                      </div>
+                  </div>
                   <div class="form-group">
                       <label for="inputPass" class="col-sm-2 control-label">Ảnh đại diện</label>
                       <div class="col-sm-5">

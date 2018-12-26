@@ -73,7 +73,12 @@ defineProperty('deleteAccount', `
 
 //lock member
 defineProperty('lockMember', `
-    UPDATE Account SET IsActived = 0 WHERE AccountName = @AccountName
+    UPDATE Account SET IsActived = 0 WHERE Id = @AccountId
+`);
+
+//unlock member
+defineProperty('unLockMember', `
+    UPDATE Account SET IsActived = 1 WHERE Id = @AccountId
 `);
 
 //get avatar

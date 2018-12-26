@@ -23,8 +23,24 @@ export class LoginComponent implements OnInit {
      this.ErrorMessage = '';
    }
 
+   // because the layout is being used is not angular theme, so need to apply jquery
+  applyJs() {
+    $(() => {
+      $('.icheck input').on('ifToggled', function (event) {
+        $(this).val(event.target.checked);
+        $('.icheck').trigger('click');
+      });
+    });
+  }
+
+  onCheckboxchange() {
+     const isRemember = $('.icheck input').val();
+     this.LoginInfo.RemeberMe = (isRemember === 'true');
+   }
+
   async ngOnInit() {
     if (sessionStorage.getItem(AppSettings.TOKEN_KEY) === null) {
+      this.applyJs();
       this.titleService.setTitle('Order King - Đăng nhập hệ thống');
     } else {
          await this.router.navigate(['dashboard']);
