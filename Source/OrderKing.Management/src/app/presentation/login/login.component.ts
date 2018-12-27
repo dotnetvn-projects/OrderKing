@@ -23,7 +23,6 @@ export class LoginComponent implements OnInit {
      this.ErrorMessage = '';
    }
 
-   // because the layout is being used is not angular theme, so need to apply jquery
   applyJs() {
     $(() => {
       $('.icheck input').on('ifToggled', function (event) {
@@ -43,7 +42,7 @@ export class LoginComponent implements OnInit {
       this.applyJs();
       this.titleService.setTitle('Order King - Đăng nhập hệ thống');
     } else {
-         await this.router.navigate(['dashboard']);
+      this.router.navigate(['dashboard']);
     }
   }
 
@@ -59,9 +58,7 @@ export class LoginComponent implements OnInit {
       this.ErrorMessage = 'Tài khoản hoặc mật khẩu không đúng !';
     } else {
       this.userService.fetchUserInfo();
-      $(() => {
-        window.location.href = '/dashboard';
-      });
+      this.router.navigate(['dashboard']);
     }
   }
 }

@@ -92,14 +92,18 @@
                       <label for="inputIdNum" class="col-sm-2 control-label">Trạng thái</label>
 
                       <div class="col-sm-5 staff-status">
-                        <label>
-                          <input type="radio" name="status" class="minimal" [value]="true" [(ngModel)]="StaffInfo.IsActived">
-                          Kích hoạt
-                        </label>
-                        <label>
-                          <input type="radio" name="status"  class="minimal"  [value]="false" [(ngModel)]="StaffInfo.IsActived">
-                          Khóa
-                        </label>
+                        <div class="staff-actived" (click)="onRadioButtonchange(true)">
+                          <label>
+                            <input type="radio" id="staffactived" name="status" class="minimal" [(ngModel)]= "StaffInfo.IsActived" >
+                            Kích hoạt
+                          </label>
+                        </div>
+                        <div class="staff-deactived" (click)="onRadioButtonchange(false)">
+                          <label>
+                            <input type="radio" id="staffdeactived" name="status" class="minimal" [(ngModel)]= "StaffInfo.IsActived" >
+                            Khóa
+                          </label>
+                        </div>
                       </div>
                   </div>
                   <div class="form-group">
@@ -107,7 +111,7 @@
                       <div class="col-sm-5">
                           <div class="box box-primary">
                               <div class="box-body box-profile">
-                                <img class="profile-user-img img-responsive img-circle img-avatar" [src]="AvatarUrl">
+                                <img class="profile-user-img img-responsive img-avatar" [src]="AvatarUrl">
                                 <div class="upload-avatar-button">
 
                                     <label for="image-upload" class="custom-file-upload">

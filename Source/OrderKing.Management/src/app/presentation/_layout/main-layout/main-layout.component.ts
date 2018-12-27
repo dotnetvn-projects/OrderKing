@@ -24,7 +24,6 @@ export class MainLayoutComponent extends BaseComponent {
       $(document).ready(() => {
         const trees: any = $('[data-widget="tree"]');
         trees.tree();
-
       });
       this.userService.CurrentUserInfo.subscribe(userInfo => this.UserInfo = userInfo);
     }

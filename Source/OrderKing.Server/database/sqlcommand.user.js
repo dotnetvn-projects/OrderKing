@@ -26,7 +26,7 @@ defineProperty('getUserInfoById',
 
 //get account by account id
 defineProperty('getAccountByAccountId',
-    `SELECT ac.* FROM Account ac WHERE ac.Id = @AccountId AND ac.IsActived = 1`);
+    `SELECT ac.* FROM Account ac WHERE ac.Id = @AccountId`);
 
 //get account by account name
 defineProperty('getAccountByAccountName',

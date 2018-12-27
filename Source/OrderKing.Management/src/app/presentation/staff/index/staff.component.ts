@@ -40,9 +40,7 @@ export class StaffComponent extends BaseComponent {
   private fetchUserList() {
     this.storeService.fetchStaffList(() => {
       $(() => {
-        $('#table-staff').DataTable({
-          responsive: true
-        });
+        $('.dt-table').DataTable();
       });
     });
   }

@@ -7,10 +7,10 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
   declarations: [
     BreadcrumbComponent
   ],
-  exports: [BreadcrumbComponent],
   imports: [
     CommonModule,
     RouterModule
-  ]
+  ],
+  exports: [BreadcrumbComponent]
 })
 export class UiComponentModule {}

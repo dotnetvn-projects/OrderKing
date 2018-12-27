@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { StoreService } from 'src/app/service/store.service';
 import { UserInfoModel } from 'src/app/model/userinfo.model';
 import { BaseComponent } from 'src/app/framework/framework.base.component';
@@ -9,6 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
 
 
+
 declare var $;
 
 @Component({
@@ -17,7 +18,7 @@ declare var $;
   styleUrls: ['./staff.action.style.scss']
 })
 export class StaffActionComponent extends BaseComponent {
-  StaffInfo: UserInfoModel;
+  StaffInfo: UserInfoModel = new UserInfoModel();
   ErrorMessage: string;
   ButtonContent: string;
   AvatarUrl: string;
@@ -28,7 +29,6 @@ export class StaffActionComponent extends BaseComponent {
   constructor(private titleService: Title, private activatedRoute: ActivatedRoute, private router: Router,
      private storeService: StoreService, private authService: AuthService, userService: UserService) {
     super(userService);
-    this.StaffInfo = new UserInfoModel();
     const currentDate = new Date();
     this.StaffInfo.JoinDate = currentDate.getDate() + '/' + currentDate.getMonth() + '/' + currentDate.getFullYear();
   }
@@ -37,16 +37,20 @@ export class StaffActionComponent extends BaseComponent {
     $(() => {
       $('input[type="radio"].minimal').iCheck({
         radioClass   : 'iradio_minimal-green'
-      });
-      $('input').on('ifChecked', function(event) {
-         $(event.target.parentElement.parentElement).trigger('click');
+      }).on('ifChecked', function (event) {
+        $(this).val(event.target.value);
+        if (event.target.id === 'staffactived') {
+          $('.staff-actived').trigger('click');
+        } else {
+          $('.staff-deactived').trigger('click');
+        }
       });
     });
   }
 
-  setradio(e) {
-  alert(e);
-}
+  onRadioButtonchange(isactived: boolean) {
+     this.StaffInfo.IsActived = isactived;
+  }
 
   onInit() {
     this.AvatarUrl = '../../../../assets/images/no-avatar.png';
@@ -78,10 +82,15 @@ export class StaffActionComponent extends BaseComponent {
     if (iresult.result === AppSettings.RESPONSE_MESSAGE.ERROR) {
       this.router.navigate(['/page-not-found']); // TODO display not found page
     } else if (iresult.result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
-     this.authService.clearLoginSession();
-     await this.gotoLogin(this.router);
+          this.authService.clearLoginSession();
+          await this.gotoLogin(this.router);
     } else {
       this.StaffInfo = iresult.staffInfo;
+      if (this.StaffInfo.IsActived) {
+        $('.staff-actived div').addClass('checked');
+      } else {
+        $('.staff-deactived div').addClass('checked');
+      }
       this.StaffInfo.Password = '******';
       this.AvatarUrl = this.userService.getAvatarUrlByStaffId(this.staffId);
     }

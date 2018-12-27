@@ -15,7 +15,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="table-staff" class="table table-bordered table-striped table-hover responsive display nowrap">
+              <table id="table-staff" appDatatable class="dt-table table table-bordered table-striped table-hover responsive display nowrap">
                 <thead>
                   <tr>
                     <th class="text-center" width="20px">#</th>
@@ -25,7 +25,7 @@
                     <th class="text-center">Email</th>
                     <th class="text-center">Ngày tạo</th>
                     <th class="text-center">Trạng thái</th>
-                    <th  class="text-center">Thao tác</th>
+                    <th width="120px" class="text-center">Thao tác</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -34,7 +34,7 @@
                     <td>{{ staff.FullName }}</td>
                     <td class="text-center"><img class="avatar" [src]="staff.Avatar" alt="User Avatar"></td>
                     <td>{{ staff.PhoneNumber }}</td>
-                    <td>{{ staff.Email }}</td>
+                    <td><a href="mailto:{{staff.Email}}">{{ staff.Email }}</a></td>
                     <td class="text-right">{{ staff.JoinDate }}</td>
                     <td class="text-center"><span *ngIf = "staff.IsActived;then activeStatus else blockStatus"></span>
                       <ng-template #activeStatus><i class="fa fa-check-circle text-green"></i> Đang hoạt động</ng-template>
@@ -55,7 +55,7 @@
                     <th class="text-center">Email</th>
                     <th class="text-center">Ngày tạo</th>
                     <th class="text-center">Trạng thái</th>
-                    <th class="text-center">Thao tác</th>
+                    <th width="120px" class="text-center">Thao tác</th>
                   </tr>
                 </tfoot>
               </table>
