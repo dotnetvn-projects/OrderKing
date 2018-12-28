@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/framework/framework.base.component';
-import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-category',
@@ -10,8 +9,8 @@ import { UserService } from 'src/app/service/user.service';
 })
 export class CategoryComponent extends BaseComponent {
 
-  constructor(private titleService: Title, userService: UserService ) {
-    super(userService);
+  constructor(private titleService: Title, injector: Injector ) {
+    super(injector);
  }
 
  onInit() {

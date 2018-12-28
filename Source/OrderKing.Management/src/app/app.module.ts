@@ -7,7 +7,7 @@ import { AuthGuard } from './framework/framework.auth.guard';
 import { AppComponent } from './app.component';
 import { LoginLayoutComponent } from './presentation/_layout/login-layout/login-layout.component';
 import { MainLayoutComponent } from './presentation/_layout/main-layout/main-layout.component';
-import { LoginModule } from './presentation/login/login.module';
+import { LoginModule } from './presentation/main/login/login.module';
 import { MainRoutes } from './routing/main.routing';
 
 @NgModule({

@@ -52,7 +52,6 @@ export class StoreService {
             }
             resultData.push(staffInfo);
            });
-
            this.staffListSource.next(resultData);
            if (updateUI !== null) {
              updateUI();
@@ -66,7 +65,6 @@ export class StoreService {
     let result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
 
     const params = new Dictionary<string, any>();
-    params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
     params.put('MemberId' , staffId);
     await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.removeStaffUrl, params, (data: ApiResultModel) => {
         if (data.ResponseCode !== AppSettings.RESPONSE_CODE.SUCCESS) {

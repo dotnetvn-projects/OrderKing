@@ -1,6 +1,6 @@
-import { CategoryComponent } from '../presentation/category/index/category.component';
-import { CreateCategoryComponent } from '../presentation/category/create/category.create.component';
-import { UpdateCategoryComponent } from '../presentation/category/update/category.update.component';
+import { CategoryComponent } from '../presentation/main/category/index/category.component';
+import { CreateCategoryComponent } from '../presentation/main/category/create/category.create.component';
+import { UpdateCategoryComponent } from '../presentation/main/category/update/category.update.component';
 import { AuthGuard } from '../framework/framework.auth.guard';
 
 export const CategoryRoutes = [

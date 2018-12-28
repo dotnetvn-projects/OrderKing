@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import {  CategoryComponent } from './index/category.component';
 import {  CreateCategoryComponent } from './create/category.create.component';
 import {  UpdateCategoryComponent } from './update/category.update.component';
-import { CategoryRoutes } from '../../routing/category.routing';
+import { CategoryRoutes } from '../../../routing/category.routing';
 @NgModule({
   declarations: [
     CategoryComponent,

@@ -5,6 +5,11 @@
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#settings" data-toggle="tab">Thông tin nhân viên</a></li>
+            <li *ngIf="IsEdit === true" class="pull-right">
+              <a title="Tiếp tục tạo mới" [routerLink]="['/nhan-vien/tao-moi']" class="btn btn-default btn-sm">
+                <i class="fa fa-plus-circle text-green"></i> Tiếp tục tạo mới
+              </a>
+            </li>
         </ul>
         <div class="tab-content">
             <div class="active tab-pane" id="settings">

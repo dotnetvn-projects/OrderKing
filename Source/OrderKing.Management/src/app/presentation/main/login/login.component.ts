@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { LoginModel } from '../../model/login.model';
-import { AuthService } from '../../service/auth.service';
+import { LoginModel } from '../../../model/login.model';
+import { AuthService } from '../../../service/auth.service';
 import { UserService } from 'src/app/service/user.service';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
 declare var $;

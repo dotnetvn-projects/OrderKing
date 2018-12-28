@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
-import { DashboardRoutes } from '../../routing/dashboard.routing';
+import { DashboardRoutes } from '../../../routing/dashboard.routing';
 
 @NgModule({
   declarations: [

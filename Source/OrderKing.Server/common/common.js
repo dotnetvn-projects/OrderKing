@@ -16,6 +16,10 @@ exports.parseTokenInfo = function (accessToken) {
     return result;
 };
 
+exports.isNumber = function (num) {
+    return /^-{0,1}\d+$/.test(num); 
+};
+
 //send invalid request
 exports.sendInvalidRequest = function sendInvalidRequest(res) {
     res.status(status.invalidRequest.code);

@@ -1,5 +1,5 @@
-import { StaffComponent } from '../presentation/staff/index/staff.component';
-import { StaffActionComponent } from '../presentation/staff/action/staff.action.component';
+import { StaffComponent } from '../presentation/main/staff/index/staff.component';
+import { StaffActionComponent } from '../presentation/main/staff/action/staff.action.component';
 import { AuthGuard } from '../framework/framework.auth.guard';
 
 export const StaffRoutes = [

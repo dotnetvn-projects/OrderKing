@@ -1,13 +1,14 @@
-import { OnInit } from '@angular/core';
+import { OnInit, Injector } from '@angular/core';
 import { UserService } from '../service/user.service';
 import { UserInfoModel } from '../model/userinfo.model';
+declare var $;
 
 export class BaseComponent implements OnInit {
   userService: UserService;
   UserInfo: UserInfoModel;
 
-  constructor(userService: UserService) {
-    this.userService = userService;
+  constructor(private inject: Injector) {
+    this.userService = this.inject.get(UserService);
     this.UserInfo = new UserInfoModel();
   }
 
@@ -40,5 +41,17 @@ export class BaseComponent implements OnInit {
 
   applyJs() {
     // code
+  }
+
+  applyDataTable(name) {
+    $(() => {
+      $('.' + name).dataTable();
+    });
+  }
+
+  destroyDataTable(name) {
+    $(() => {
+      $('.' + name).dataTable().fnDestroy();
+    });
   }
 }

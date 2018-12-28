@@ -77,10 +77,27 @@ export class AuthService {
     return result;
   }
 
-  isLogined () {
+  async isLogined() {
     const token = sessionStorage.getItem(AppSettings.TOKEN_KEY);
     if (token === undefined || token === null) {
+      const getFromRemember = localStorage.getItem(AppSettings.AUTH_KEY);
+      if (getFromRemember !== null && getFromRemember !== undefined) {
+        const data = getFromRemember.split(':');
+        const account = data[0];
+        const password = data[1];
+        const loginInfo = new LoginModel();
+        loginInfo.AccountName = account;
+        loginInfo.Password = password;
+        const loginResult = await this.login(loginInfo);
+        if (loginResult !== AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
+          sessionStorage.setItem(AppSettings.TOKEN_KEY, loginResult);
+          return true;
+        }
+        return false;
+      }
       return false;
-    } else { return true; }
+    } else {
+      return true;
+    }
   }
 }

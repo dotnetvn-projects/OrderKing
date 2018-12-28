@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { StoreService } from 'src/app/service/store.service';
 import { UserInfoModel } from 'src/app/model/userinfo.model';
 import { BaseComponent } from 'src/app/framework/framework.base.component';
 import { Title } from '@angular/platform-browser';
-import { UserService } from 'src/app/service/user.service';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
+import { DialogService } from 'src/app/service/dialog.service';
 
 declare var $;
 
@@ -16,32 +16,37 @@ declare var $;
 export class StaffComponent extends BaseComponent {
   StaffList: UserInfoModel[];
 
-  constructor(private titleService: Title, private storeService: StoreService, userService: UserService) {
-    super(userService);
+  constructor(private titleService: Title, private storeService: StoreService, injector: Injector,
+    private dialogService: DialogService) {
+    super(injector);
   }
 
   onInit() {
     this.titleService.setTitle('Order King - danh sách nhân viên');
     this.storeService.StaffList.subscribe(staffList => this.StaffList = staffList);
-    this.fetchUserList();
+    this.fetchUserList(() => {
+     this.applyDataTable('dt-table');
+    });
   }
 
   // remove member
   async removeStaff(staffId) {
-    const result = await this.storeService.removeStaff(staffId);
-    if (result === AppSettings.RESPONSE_MESSAGE.SUCCESS) {
-      this.fetchUserList();
-    } else {
-      alert('Lỗi');
-    }
+    this.dialogService.showError('Phiên làm việc đã kết thúc, vui lòng đăng nhập');
+    // const result = await this.storeService.removeStaff(staffId);
+    // if (result === AppSettings.RESPONSE_MESSAGE.SUCCESS) {
+    //   this.destroyDataTable('dt-table');
+    //   this.fetchUserList(() => {
+    //   this.applyDataTable('dt-table');
+    //   });
+    // } else {
+    //   alert('Lỗi');
+    // }
   }
 
   // load member list and apply datatable js
-  private fetchUserList() {
+  private fetchUserList(updateUI) {
     this.storeService.fetchStaffList(() => {
-      $(() => {
-        $('.dt-table').DataTable();
-      });
+        updateUI();
     });
   }
 }

@@ -59,6 +59,7 @@ defineProperty('getMemberInStore', `
          INNER JOIN Account ON StoreMember.AccountId = Account.Id
 	     INNER JOIN UserProfile ON Account.Id = UserProfile.AccountId
          WHERE Store.Id = @StoreId AND Account.Id <> @AccountId
+         ORDER BY Account.IsActived DESC, Account.CreatedDate DESC
 `);
 
 //create new store

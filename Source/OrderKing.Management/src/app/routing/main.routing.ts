@@ -1,6 +1,6 @@
 import { LoginLayoutComponent } from '../presentation/_layout/login-layout/login-layout.component';
 import { MainLayoutComponent } from '../presentation/_layout/main-layout/main-layout.component';
-import { LoginComponent } from '../presentation/login/login.component';
+import { LoginComponent } from '../presentation/main/login/login.component';
 import { AuthGuard } from '../framework/framework.auth.guard';
 
 export const MainRoutes = [
@@ -9,11 +9,11 @@ export const MainRoutes = [
         path: '',
         component: MainLayoutComponent,
         children: [
-            { path: 'dashboard', loadChildren: 'src/app/presentation/dashboard/dashboard.module#DashboardModule'},
-            { path: '', loadChildren: 'src/app/presentation/dashboard/dashboard.module#DashboardModule' },
-            { path: 'danh-muc', loadChildren: 'src/app/presentation/category/category.module#CategoryModule' },
-            { path: 'san-pham', loadChildren: 'src/app/presentation/product/product.module#ProductModule' },
-            { path: 'nhan-vien', loadChildren: 'src/app/presentation/staff/staff.module#StaffModule' }
+            { path: 'dashboard', loadChildren: 'src/app/presentation/main/dashboard/dashboard.module#DashboardModule'},
+            { path: '', loadChildren: 'src/app/presentation/main/dashboard/dashboard.module#DashboardModule' },
+            { path: 'danh-muc', loadChildren: 'src/app/presentation/main/category/category.module#CategoryModule' },
+            { path: 'san-pham', loadChildren: 'src/app/presentation/main/product/product.module#ProductModule' },
+            { path: 'nhan-vien', loadChildren: 'src/app/presentation/main/staff/staff.module#StaffModule' }
         ],
         canActivate: [AuthGuard]
     },

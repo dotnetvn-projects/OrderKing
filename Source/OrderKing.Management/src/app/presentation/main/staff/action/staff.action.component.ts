@@ -1,9 +1,8 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { StoreService } from 'src/app/service/store.service';
 import { UserInfoModel } from 'src/app/model/userinfo.model';
 import { BaseComponent } from 'src/app/framework/framework.base.component';
 import { Title } from '@angular/platform-browser';
-import { UserService } from 'src/app/service/user.service';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
@@ -27,8 +26,8 @@ export class StaffActionComponent extends BaseComponent {
   private avatarData: any;
 
   constructor(private titleService: Title, private activatedRoute: ActivatedRoute, private router: Router,
-     private storeService: StoreService, private authService: AuthService, userService: UserService) {
-    super(userService);
+     private storeService: StoreService, private authService: AuthService, injector: Injector) {
+    super(injector);
     const currentDate = new Date();
     this.StaffInfo.JoinDate = currentDate.getDate() + '/' + currentDate.getMonth() + '/' + currentDate.getFullYear();
   }
@@ -100,7 +99,7 @@ export class StaffActionComponent extends BaseComponent {
   async createNew() {
      const result = await this.storeService.addStaff(this.StaffInfo);
      if (result !== AppSettings.RESPONSE_MESSAGE.ERROR) {
-       if (this.avatarData !== null) {
+      if (this.avatarData !== null && this.avatarData !== undefined) {
         await this.storeService.updateStaffAvatar(this.avatarData, result);
        }
        this.router.navigate(['nhan-vien/chinh-sua', result]);

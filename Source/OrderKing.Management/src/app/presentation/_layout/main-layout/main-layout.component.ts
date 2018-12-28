@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
 import { UserInfoModel } from 'src/app/model/userinfo.model';
-import { UserService } from 'src/app/service/user.service';
 import { BaseComponent } from 'src/app/framework/framework.base.component';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
 declare var $;
@@ -13,8 +12,8 @@ declare var $;
 })
 export class MainLayoutComponent extends BaseComponent {
 
-  constructor( private router: Router, private authService: AuthService, userService: UserService) {
-    super(userService);
+  constructor( private router: Router, private authService: AuthService, injector: Injector) {
+    super(injector);
     this.UserInfo = new UserInfoModel();
   }
 

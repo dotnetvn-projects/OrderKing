@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Injector } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/framework/framework.base.component';
 import { UserService } from 'src/app/service/user.service';
@@ -11,8 +11,8 @@ import { UserService } from 'src/app/service/user.service';
 
 export class DashboardComponent extends BaseComponent {
 
-  constructor(private titleService: Title, userService: UserService ) {
-     super(userService);
+  constructor(private titleService: Title, injecttor: Injector ) {
+     super(injecttor);
   }
 
   onInit() {

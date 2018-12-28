@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import {  StaffComponent  } from './index/staff.component';
 import { StaffActionComponent } from './action/staff.action.component';
-import { UiComponentModule } from '../_uicomponents/uicomponent.module';
-import { StaffRoutes } from '../../routing/staff.routing';
-import { DirectiveModule } from '../_directives/directive.module';
+import { UiComponentModule } from '../../_uicomponents/uicomponent.module';
+import { StaffRoutes } from '../../../routing/staff.routing';
+import { DirectiveModule } from '../../_directives/directive.module';
 
 
 @NgModule({

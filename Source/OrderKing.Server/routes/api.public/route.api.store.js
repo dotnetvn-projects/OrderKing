@@ -143,21 +143,21 @@ storerouter.post('/remove-member', async (req, res, next) => {
         }
         else {
             var storeId = await service.getStoreIdByAccessToken(accessToken);
-            var account = await userService.getAccountByAccountName(req.body.AccountName);
+            var accountId = security.decrypt(req.body.MemberId).split('_')[0];
 
-            if (storeId === -1 || account === null) {
+            if (storeId === -1 || !common.isNumber(accountId)) {
                 common.sendBadRequest(res, 'Request data is invalid !');
             }
             else {
                 var info = {
-                    memberid: account.Id,
+                    memberid: accountId,
                     storeid: storeId
                 };
 
                 var result = await service.removeMember(info);
 
                 var message = common.createResponseMessage(
-                    format('{0} has been removed from store successfully!', account.AccountName),
+                   'Account has been removed from store successfully!',
                     result.model.responsecode,
                     result.model.statusmessage);
 
