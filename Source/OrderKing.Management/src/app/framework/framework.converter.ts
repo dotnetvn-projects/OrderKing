@@ -35,4 +35,9 @@ export class Converter {
         data =  monthString + ' ' + yearString;
         return data;
     }
+
+    public static ConvertCurrentDateToString(): string {
+        const currentDate = new Date();
+        return currentDate.getDate() + '/' + currentDate.getMonth() + '/' + currentDate.getFullYear();
+    }
 }

@@ -12,7 +12,7 @@ declare var $;
 })
 export class MainLayoutComponent extends BaseComponent {
 
-  constructor( private router: Router, private authService: AuthService, injector: Injector) {
+  constructor( private router: Router, injector: Injector) {
     super(injector);
     this.UserInfo = new UserInfoModel();
   }

@@ -4,6 +4,7 @@ const catalogSqlCmd = require('../database/sqlcommand.catalog');
 const status = require('../resources/resource.api.status');
 const { poolPromise, sql } = require('../database/dbconnection');
 const security = require('../services/service.security');
+const moment = require('moment');
 
 //create new category
 exports.createCatagory = async (categoryobject) => {
@@ -103,12 +104,14 @@ exports.getCategoryInStore = async (storeId) => {
         .query(catalogSqlCmd.getCategoryInStore);
 
     if (result.recordset.length > 0) {
+        categoryResponse.model.statusmessage = status.common.suscess;
+        categoryResponse.model.responsecode = status.common.suscesscode;
         var categories = [];
         result.recordset.forEach(function (value) {
             categories.push({
                 categoryid: security.encrypt(value.Id + '_' + security.serverKey()),
                 categoryname: value.Name,
-                createddate: value.CreatedDate
+                createddate: moment(value.CreatedDate).format('DD/MM/YYYY')
             });
         });
 

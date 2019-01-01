@@ -18,7 +18,7 @@
                         <label for="inputAccount" class="col-sm-2 control-label">Tài khoản đăng nhập</label>
 
                         <div class="col-sm-5">
-                            <input type="text" [(ngModel)]="StaffInfo.AccountName" name="accountName" #accountName="ngModel"
+                            <input [attr.disabled]="IsEdit? '': null" type="text" [(ngModel)]="StaffInfo.AccountName" name="accountName" #accountName="ngModel"
                                     [ngClass]="{ 'is-invalid': f.submitted && accountName.invalid }" required minlength="6" class="form-control" id="inputAccount" placeholder="Tài khoản đăng nhập hệ thống">
                             <div *ngIf="f.submitted && accountName.invalid" class="invalid-feedback">
                               <div *ngIf="accountName?.errors.required"><i class="fa fa-warning text-red"></i> Tài khoản đăng nhập không được rỗng !</div>
@@ -30,7 +30,7 @@
                         <label for="inputPass" class="col-sm-2 control-label">Mật khẩu</label>
 
                         <div class="col-sm-5">
-                            <input type="password" [(ngModel)]="StaffInfo.Password" name="password" #password ="ngModel"
+                            <input [attr.disabled]="IsEdit? '': null" type="password" [(ngModel)]="StaffInfo.Password" name="password" #password ="ngModel"
                                   [ngClass]="{ 'is-invalid': f.submitted && password.invalid }" required minlength="6" class="form-control" id="inputPass" placeholder="Mật khẩu">
                             <div *ngIf="f.submitted && password.invalid" class="invalid-feedback">
                               <div *ngIf="password?.errors.required"><i class="fa fa-warning text-red"></i> Mật khẩu không được rỗng !</div>
@@ -66,7 +66,8 @@
 
                         <div class="col-sm-5">
                             <input type="text" [(ngModel)]="StaffInfo.PhoneNumber" name="phoneNumber" #phoneNumber ="ngModel"
-                                  [ngClass]="{ 'is-invalid': f.submitted && phoneNumber.invalid }" required  class="form-control" id="inputPhone" placeholder="Số điện thoại liên lạc">
+                                  [ngClass]="{ 'is-invalid': f.submitted && phoneNumber.invalid }" required  class="form-control" id="inputPhone"
+                                  placeholder="Số điện thoại liên lạc">
                             <div *ngIf="f.submitted && phoneNumber.invalid" class="invalid-feedback">
                               <div *ngIf="phoneNumber?.errors.required"><i class="fa fa-warning text-red"></i> Số điện thoại không được rỗng !</div>
                             </div>

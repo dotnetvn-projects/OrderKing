@@ -40,9 +40,11 @@ var validateRequest = async function (req, res, next) {
             else {
                 accessToken = req.query.access_token;
             }
-            if (req.url.indexOf('auth-user') === -1 && req.url.indexOf('product-img') === -1
-                && req.url.indexOf('cate-img') === -1 && req.url.indexOf('auth-token-status') === -1
-                && req.url.indexOf('edit-member-avatar') === -1) {
+            if (req.url.indexOf('auth-user') === -1
+                && req.url.indexOf('auth-manager') === -1
+                && req.url.indexOf('product-img') === -1
+                && req.url.indexOf('cate-img') === -1
+                && req.url.indexOf('auth-token-status') === -1) {
                 if (accessToken === undefined || accessToken === '') {
                     logHandler.fire('error', format('ip [{0}] {1} ', ip, 'has sent a request without accesstoken'));
                     common.sendUnauthorizedRequest(res);

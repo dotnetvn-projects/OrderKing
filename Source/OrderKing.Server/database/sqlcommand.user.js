@@ -86,7 +86,17 @@ defineProperty('getAvatar', `
     SELECT [Avatar] FROM UserProfile WHERE AccountId = @AccountId
 `);
 
-//check user has already exist in database
+//check whether account has already exist in database
 defineProperty('CheckExistAccount', `
     SELECT Id FROM Account WHERE UPPER(AccountName) = @AccountName
+`);
+
+//check whether email has already exist in database
+defineProperty('CheckExistEmail', `
+    SELECT Id FROM UserProfile WHERE UPPER(Email) = @Email
+`);
+
+//check whether phone has already exist in database
+defineProperty('CheckExistPhone', `
+    SELECT Id FROM UserProfile WHERE UPPER(PhoneNumber) = @PhoneNumber
 `);

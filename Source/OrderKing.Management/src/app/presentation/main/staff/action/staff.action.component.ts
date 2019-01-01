@@ -6,8 +6,8 @@ import { Title } from '@angular/platform-browser';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
-
-
+import { Converter } from 'src/app/framework/framework.converter';
+import { DialogService } from 'src/app/service/dialog.service';
 
 declare var $;
 
@@ -26,47 +26,30 @@ export class StaffActionComponent extends BaseComponent {
   private avatarData: any;
 
   constructor(private titleService: Title, private activatedRoute: ActivatedRoute, private router: Router,
-     private storeService: StoreService, private authService: AuthService, injector: Injector) {
+     private storeService: StoreService, injector: Injector,
+     private dialogService: DialogService) {
     super(injector);
-    const currentDate = new Date();
-    this.StaffInfo.JoinDate = currentDate.getDate() + '/' + currentDate.getMonth() + '/' + currentDate.getFullYear();
-  }
-
-  applyJs () {
-    $(() => {
-      $('input[type="radio"].minimal').iCheck({
-        radioClass   : 'iradio_minimal-green'
-      }).on('ifChecked', function (event) {
-        $(this).val(event.target.value);
-        if (event.target.id === 'staffactived') {
-          $('.staff-actived').trigger('click');
-        } else {
-          $('.staff-deactived').trigger('click');
-        }
-      });
-    });
-  }
-
-  onRadioButtonchange(isactived: boolean) {
-     this.StaffInfo.IsActived = isactived;
+    this.StaffInfo.JoinDate = Converter.ConvertCurrentDateToString();
   }
 
   onInit() {
-    this.AvatarUrl = '../../../../assets/images/no-avatar.png';
+    this.AvatarUrl = AppSettings.APP_DEFAULT_IMAGE.DEFAULT_AVATAR;
+    // get id from url
     this.staffId = this.getParam('id', this.activatedRoute);
 
     if (this.staffId !== null && this.staffId !== undefined) {
-      this.titleService.setTitle('Order King - Chỉnh sửa thông tin nhân viên');
+      this.titleService.setTitle(AppSettings.APP_TITLE_MESSAGE.STAFF_UPDATE);
       this.getStaffInfo();
-      this.ButtonContent = 'Chỉnh sửa';
+      this.ButtonContent = AppSettings.APP_CONTROL_CONTENT.UPDATE;
       this.IsEdit = true;
     } else {
-      this.titleService.setTitle('Order King - Tạo mới nhân viên');
-      this.ButtonContent = 'Tạo mới';
+      this.titleService.setTitle(AppSettings.APP_TITLE_MESSAGE.STAFF_CREATE);
+      this.ButtonContent =  AppSettings.APP_CONTROL_CONTENT.CREATE;
       this.IsEdit = false;
     }
   }
 
+  //** Form submit event */
   async onSubmit() {
     if (this.staffId === null || this.staffId === undefined) {
       await this.createNew();
@@ -76,13 +59,14 @@ export class StaffActionComponent extends BaseComponent {
     }
   }
 
+  //** Load staff info */
   private async getStaffInfo() {
     const iresult = await this.storeService.getStaffInfoById(this.staffId);
     if (iresult.result === AppSettings.RESPONSE_MESSAGE.ERROR) {
       this.router.navigate(['/page-not-found']); // TODO display not found page
     } else if (iresult.result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
-          this.authService.clearLoginSession();
-          await this.gotoLogin(this.router);
+        this.authService.clearLoginSession();
+        await this.gotoLogin(this.router);
     } else {
       this.StaffInfo = iresult.staffInfo;
       if (this.StaffInfo.IsActived) {
@@ -100,12 +84,20 @@ export class StaffActionComponent extends BaseComponent {
      const result = await this.storeService.addStaff(this.StaffInfo);
      if (result !== AppSettings.RESPONSE_MESSAGE.ERROR) {
       if (this.avatarData !== null && this.avatarData !== undefined) {
-        await this.storeService.updateStaffAvatar(this.avatarData, result);
+          await this.storeService.updateStaffAvatar(this.avatarData, result);
        }
-       this.router.navigate(['nhan-vien/chinh-sua', result]);
+        this.dialogService.showSuccess(AppSettings.APP_SUCCESS_MESSAGE.CREATE_STAFF, 
+          () => {
+            this.router.navigate(['nhan-vien/chinh-sua', result]);
+          });
      } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
-       this.authService.clearLoginSession();
-       await this.gotoLogin(this.router);
+        this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.SESSION_TIMEOUT,
+          () => {
+            this.authService.clearLoginSession();
+            this.gotoLogin(this.router);
+          });
+     } else {
+        this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.BUSY);
      }
   }
 
@@ -114,20 +106,29 @@ export class StaffActionComponent extends BaseComponent {
       const result = await this.storeService.editStaff(this.StaffInfo);
       if (result !== AppSettings.RESPONSE_MESSAGE.ERROR) {
         if (this.avatarData !== null && this.avatarData !== undefined) {
-          await this.storeService.updateStaffAvatar(this.avatarData, result);
+            await this.storeService.updateStaffAvatar(this.avatarData, result);
         }
         if (this.StaffInfo.IsActived === false) {
-          await this.storeService.lockStaff(result);
+            await this.storeService.lockStaff(result);
         } else {
-          await this.storeService.unLockStaff(result);
+            await this.storeService.unLockStaff(result);
         }
-        this.router.navigate(['nhan-vien/chinh-sua', result]);
+        this.dialogService.showSuccess(AppSettings.APP_SUCCESS_MESSAGE.UPDATE_STAFF, 
+          () => {
+            this.router.navigate(['nhan-vien/chinh-sua', result]);
+          });    
       } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
-        this.authService.clearLoginSession();
-        await this.gotoLogin(this.router);
+          this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.SESSION_TIMEOUT, () => {
+            this.authService.clearLoginSession();
+            this.gotoLogin(this.router);
+          });
+      } else {
+          this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.BUSY);
       }
    }
 
+// **********************UI Updating***********************
+   //** Handle upload avatar on view */
     onAvatarChanged(imageInput: any) {
     const file: File = imageInput.files[0];
     const reader = new FileReader();
@@ -137,4 +138,26 @@ export class StaffActionComponent extends BaseComponent {
     };
     reader.readAsDataURL(file);
    }
+
+  // App event and jquery for custom radio button
+  applyJs () {
+    $(() => {
+      $('input[type="radio"].minimal').iCheck({
+        radioClass   : 'iradio_minimal-green'
+      }).on('ifChecked', function (event) {
+        $(this).val(event.target.value);
+        if (event.target.id === 'staffactived') {
+          $('.staff-actived').trigger('click');
+        } else {
+          $('.staff-deactived').trigger('click');
+        }
+      });
+    });
+  }
+
+  // capture event when user clicks on status radio butoon
+  onRadioButtonchange(isactived: boolean) {
+     this.StaffInfo.IsActived = isactived;
+  }
+// ************************End UI Updating**********************
 }

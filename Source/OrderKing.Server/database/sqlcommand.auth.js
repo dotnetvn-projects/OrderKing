@@ -11,9 +11,15 @@ var defineProperty = function define(name, value) {
 defineProperty('getHashKey',
     'SELECT IsActived, HashKey FROM Account WHERE AccountName = @AccountName');
 
-//get user's hash key
+//login for user
 defineProperty('login',
     'SELECT AccountName, Id FROM Account WHERE AccountName = @AccountName AND Password = @Password');
+
+//login for manager
+defineProperty('loginManager',
+    `SELECT Account.AccountName, Account.Id FROM Account
+     INNER JOIN Store ON Store.OwnerId = Account.Id
+     WHERE AccountName = @AccountName AND Password = @Password`);
 
 //get login session
 defineProperty('queryLoginSession',

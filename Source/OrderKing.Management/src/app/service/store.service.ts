@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { UserInfoModel } from '../model/userinfo.model';
 import { WebClientService } from './webclient.service';
 import { Dictionary } from '../framework/objectextension/framework.dictionary';
@@ -67,7 +67,9 @@ export class StoreService {
     const params = new Dictionary<string, any>();
     params.put('MemberId' , staffId);
     await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.removeStaffUrl, params, (data: ApiResultModel) => {
-        if (data.ResponseCode !== AppSettings.RESPONSE_CODE.SUCCESS) {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+          result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+        } else if (data.ResponseCode !== AppSettings.RESPONSE_CODE.SUCCESS) {
           result = AppSettings.RESPONSE_MESSAGE.ERROR;
         }
     });
@@ -217,6 +219,9 @@ export class StoreService {
            }
         } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
           info.result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+        }
+        else {
+          info.result = AppSettings.RESPONSE_MESSAGE.ERROR;
         }
     });
 

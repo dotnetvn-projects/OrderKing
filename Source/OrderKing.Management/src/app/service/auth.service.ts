@@ -9,7 +9,7 @@ import { AppSettings } from '../framework/framework.app.setting';
   providedIn: 'root'
 })
 export class AuthService {
-  private loginUrl = 'auth/auth-user';
+  private loginUrl = 'auth/auth-manager';
   private logoutUrl = 'auth/remove-auth';
   private checkTokenUrl = 'auth/auth-token-status';
 

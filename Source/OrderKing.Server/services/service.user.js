@@ -6,7 +6,7 @@ const userSqlCmd = require('../database/sqlcommand.user');
 const moment = require('moment');
 
 //check user has already existed or not
-exports.CheckExist = async function (accountName) {
+exports.CheckExistAccount = async function (accountName) {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
     response.model.userinfo = 'false';
@@ -15,6 +15,44 @@ exports.CheckExist = async function (accountName) {
     const result = await pool.request()
         .input('AccountName', sql.NVarChar, accountName.toUpperCase())
         .query(userSqlCmd.CheckExistAccount);
+
+    if (result.recordset.length > 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        response.model.userinfo = 'true';
+    }
+    return response;
+};
+
+//check email has already existed or not
+exports.CheckExistEmail = async function (email) {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+    response.model.userinfo = 'false';
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('Email', sql.NVarChar, email.toUpperCase())
+        .query(userSqlCmd.CheckExistEmail);
+
+    if (result.recordset.length > 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        response.model.userinfo = 'true';
+    }
+    return response;
+};
+
+//check phone number has already existed or not
+exports.CheckExistPhoneNumber = async function (phoneNumber) {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+    response.model.userinfo = 'false';
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('PhoneNumber', sql.NVarChar, phoneNumber.toUpperCase())
+        .query(userSqlCmd.CheckExistPhone);
 
     if (result.recordset.length > 0) {
         response.model.statusmessage = status.common.suscess;

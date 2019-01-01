@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
   async ngOnInit() {
     if (sessionStorage.getItem(AppSettings.TOKEN_KEY) === null) {
       this.applyJs();
-      this.titleService.setTitle('Order King - Đăng nhập hệ thống');
+      this.titleService.setTitle(AppSettings.APP_TITLE_MESSAGE.LOGIN);
     } else {
       this.router.navigate(['dashboard']);
     }

@@ -61,6 +61,35 @@ authrouter.post('/auth-user', async function (req, res, next) {
     }
 });
 
+//auth manager api
+authrouter.post('/auth-manager', async function (req, res, next) {
+    try {
+        var ip = req.connection.remoteAddress;
+        var userAgent = req.headers['user-agent'];
+        logHandler.fire('info', format('ip [{0}] has requested for authentication', ip));
+
+        var account = req.body.AccountName;
+        var password = req.body.Password;
+        var result = await service.executeManageAuth(account, password, ip, userAgent);
+
+        var message = common.createResponseMessage(
+            {
+                accesstoken: result.model.accesstoken,
+                expireddate: result.model.expireddate
+            },
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        logHandler.fire('info', format('[{0}][ip {1}] has been authenticated sucessful', account, ip));
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
 //remove auth
 authrouter.post('/remove-auth', async function (req, res, next) {
     try {

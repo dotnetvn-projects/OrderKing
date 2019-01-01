@@ -15,34 +15,34 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="table-staff" appDatatable class="dt-table table table-bordered table-striped table-hover responsive display nowrap">
+              <table id="table-staff" class="dt-table table table-bordered table-striped table-hover responsive display nowrap">
                 <thead>
                   <tr>
                     <th class="text-center" width="20px">#</th>
                     <th class="text-center">Họ và tên</th>
                     <th width="105px" class="text-center">Ảnh</th>
-                    <th class="text-center">Điện thoại</th>
+                    <th width="100px" class="text-center">Điện thoại</th>
                     <th class="text-center">Email</th>
                     <th class="text-center">Ngày tạo</th>
                     <th class="text-center">Trạng thái</th>
-                    <th width="120px" class="text-center">Thao tác</th>
+                    <th data-priority="1" width="120px" class="text-center">Thao tác</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let staff of StaffList; let i = index">
                     <td class="text-center"><span class="badge bg-blue">{{ i + 1 }}</span></td>
                     <td>{{ staff.FullName }}</td>
-                    <td class="text-center"><img class="avatar" [src]="staff.Avatar" alt="User Avatar"></td>
+                    <td class="text-center"><img class="table-image" [src]="staff.Avatar" alt="User Avatar"></td>
                     <td>{{ staff.PhoneNumber }}</td>
                     <td><a href="mailto:{{staff.Email}}">{{ staff.Email }}</a></td>
                     <td class="text-right">{{ staff.JoinDate }}</td>
                     <td class="text-center"><span *ngIf = "staff.IsActived;then activeStatus else blockStatus"></span>
-                      <ng-template #activeStatus><i class="fa fa-check-circle text-green"></i> Đang hoạt động</ng-template>
-                      <ng-template #blockStatus><i class="fa fa-lock text-red"></i> Bị khóa</ng-template>
+                      <ng-template #activeStatus><i class="fa fa-check-circle text-green"></i> Kích hoạt</ng-template>
+                      <ng-template #blockStatus><i class="fa fa-lock text-red"></i> Khóa</ng-template>
                     </td>
                     <td class="text-center tools">
-                        <a [routerLink]="['/nhan-vien/chinh-sua', staff.UserId]" title="Chỉnh sửa" class="btn bg-yellow btn-default btn-sm"><i class="fa fa-edit"></i> Sửa</a>
-                        <a title="Xóa" (click)="removeStaff(staff.UserId)" class="btn bg-red btn-default btn-sm"><i class="fa fa-remove"> Xóa </i></a>
+                        <a [routerLink]="['/nhan-vien/chinh-sua', staff.UserId]" title="Chỉnh sửa" class="btn bg-green btn-default btn-sm"><i class="fa fa-edit"></i> Sửa</a>
+                        <a title="Xóa" (click)="removeStaff(staff.UserId)" class="btn bg-red btn-default btn-sm"><i class="fa fa-remove"></i> Xóa</a>
                     </td>
                   </tr>
                 </tbody>
@@ -50,12 +50,12 @@
                   <tr>
                     <th width="20px" class="text-center">#</th>
                     <th class="text-center">Họ và tên</th>
-                    <th width="105px"class="text-center">Ảnh</th>
-                    <th class="text-center">Điện thoại</th>
+                    <th width="105px" class="text-center">Ảnh</th>
+                    <th width="100px" class="text-center">Điện thoại</th>
                     <th class="text-center">Email</th>
                     <th class="text-center">Ngày tạo</th>
                     <th class="text-center">Trạng thái</th>
-                    <th width="120px" class="text-center">Thao tác</th>
+                    <th data-priority="1" width="120px" class="text-center">Thao tác</th>
                   </tr>
                 </tfoot>
               </table>

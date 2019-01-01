@@ -1,14 +1,17 @@
 import { OnInit, Injector } from '@angular/core';
 import { UserService } from '../service/user.service';
 import { UserInfoModel } from '../model/userinfo.model';
+import { AuthService } from '../service/auth.service';
 declare var $;
 
 export class BaseComponent implements OnInit {
   userService: UserService;
+  authService: AuthService;
   UserInfo: UserInfoModel;
 
   constructor(private inject: Injector) {
     this.userService = this.inject.get(UserService);
+    this.authService = this.inject.get(AuthService);
     this.UserInfo = new UserInfoModel();
   }
 
