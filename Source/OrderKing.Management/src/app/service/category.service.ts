@@ -11,7 +11,12 @@ import { ApiResultModel } from '../model/api.result.model';
 })
 export class CategoryService {
   private getCategoryListUrl = 'catalog/category-list';
-  private getCategoryImageUrl = 'catalog/cate-img?';
+  private createCateUrl = 'catalog/create-category';
+  private updateCateUrl = 'catalog/update-category';
+  private categoryInfoUrl = 'catalog/category-info';
+  private updateImageUrl = 'catalog/change-category-image';
+  private categoryImageUrl = 'catalog/cate-img?';
+  private removeCategoryUrl = 'catalog/delete-category';
 
   private categoryListSource = new BehaviorSubject<Array<CategoryModel>>(new Array<CategoryModel>());
   CategoryList = this.categoryListSource.asObservable();
@@ -23,8 +28,6 @@ export class CategoryService {
   // ** get category list of current store */
   fetchCategoryList(updateUI) {
     const params = new Dictionary<string, any>();
-    params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
-
     this.webClient.doPost(AppSettings.API_ENDPOINT + this.getCategoryListUrl, params, (data: ApiResultModel) => {
         const resultData = new Array<CategoryModel>();
         if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
@@ -44,7 +47,103 @@ export class CategoryService {
     });
   }
 
+    // add new category to store
+    async addCategory(category: CategoryModel) {
+      let result = AppSettings.RESPONSE_MESSAGE.ERROR;
+      const params = new Dictionary<string, any>();
+      params.put('Name' , category.CategoryName);
+
+      await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.createCateUrl, params, (data: ApiResultModel) => {
+          if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+            result = data.Result.categoryid;
+          } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+            result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+          }
+      });
+      return result;
+    }
+
+   // edit category from store
+   async editCategory(category: CategoryModel) {
+    let result = AppSettings.RESPONSE_MESSAGE.ERROR;
+
+    const params = new Dictionary<string, any>();
+    params.put('Id' , category.Id);
+    params.put('Name' , category.CategoryName);
+
+    await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.updateCateUrl, params, (data: ApiResultModel) => {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+          result = data.Result.categoryid;
+        } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+          result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+        }
+    });
+
+    return result;
+  }
+
+  // update image
+  async updateCategoryImage(fileData: any, cateId: string) {
+    let result = AppSettings.RESPONSE_MESSAGE.ERROR;
+
+    const params = new Dictionary<string, any>();
+    params.put('Id' , cateId);
+    params.put('CateImage' , fileData);
+
+    await this.webClient.doPostFileDataAsync(AppSettings.API_ENDPOINT + this.updateImageUrl, params, (data: ApiResultModel) => {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+          result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
+        } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+          result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+        }
+    });
+
+    return result;
+  }
+
+   // remove category from store
+   async removeCategory(cateId) {
+    let result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
+
+    const params = new Dictionary<string, any>();
+    params.put('Id' , cateId);
+    await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.removeCategoryUrl, params, (data: ApiResultModel) => {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+          result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+        } else if (data.ResponseCode !== AppSettings.RESPONSE_CODE.SUCCESS) {
+          result = AppSettings.RESPONSE_MESSAGE.ERROR;
+        }
+    });
+
+    return result;
+  }
+
+      // get category info by id
+  async getCategoryInfoById(id: string) {
+    const info = {result: AppSettings.RESPONSE_MESSAGE.ERROR, cateInfo: null};
+    const params = new Dictionary<string, any>();
+    params.put('Id' , id);
+
+    await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.categoryInfoUrl, params, (data: ApiResultModel) => {
+      if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+        if (data.Result !== null) {
+          info.result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
+          info.cateInfo = new CategoryModel();
+          info.cateInfo.Id = data.Result.categoryid;
+          info.cateInfo.CategoryName = data.Result.categoryname;
+          info.cateInfo.CreatedDate = data.Result.createddate;
+        }
+      } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+        info.result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+      } else {
+        info.result = AppSettings.RESPONSE_MESSAGE.ERROR;
+      }
+    });
+
+    return info;
+  }
+
   getImageUrlByCateId(cateId: string) {
-    return AppSettings.API_ENDPOINT + this.getCategoryImageUrl + 'cid=' + cateId + '&random=' + Math.random();
+    return AppSettings.API_ENDPOINT + this.categoryImageUrl + 'cid=' + cateId + '&random=' + Math.random();
   }
 }

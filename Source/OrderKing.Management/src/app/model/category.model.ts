@@ -2,6 +2,6 @@ import { ModelBase } from './base.model';
 
 export class CategoryModel extends ModelBase {
     CategoryName: string;
-    CreatedDate: Date;
+    CreatedDate: string;
     Image: string;
 }

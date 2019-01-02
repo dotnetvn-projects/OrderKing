@@ -48,13 +48,13 @@ export class BaseComponent implements OnInit {
 
   applyDataTable(name) {
     $(() => {
-      $('.' + name).dataTable();
+      $('#' + name).dataTable();
     });
   }
 
   destroyDataTable(name) {
     $(() => {
-      $('.' + name).dataTable().fnDestroy();
+      $('#' + name).dataTable().fnDestroy();
     });
   }
 }

@@ -34,7 +34,13 @@ defineProperty('deactivateCategory', `
 //get category in store
 defineProperty('getCategoryInStore', 
     `SELECT Id, Name, CreatedDate
-     FROM Category WHERE StoreId =@StoreId AND IsActived = 1
+     FROM Category WHERE StoreId =@StoreId AND IsActived = 1 ORDER BY CreatedDate DESC
+`);
+
+//get category by id
+defineProperty('getCategoryById',
+    `SELECT Id, Name, CreatedDate
+     FROM Category WHERE Id =@Id
 `);
 
 //create product

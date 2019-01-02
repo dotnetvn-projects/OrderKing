@@ -4,6 +4,8 @@ import { BaseComponent } from 'src/app/framework/framework.base.component';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
 import { CategoryModel } from 'src/app/model/category.model';
 import { CategoryService } from 'src/app/service/category.service';
+import { DialogService } from 'src/app/service/dialog.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-category',
@@ -12,8 +14,10 @@ import { CategoryService } from 'src/app/service/category.service';
 })
 export class CategoryComponent extends BaseComponent {
   categoryList: CategoryModel[];
+  private tableId = 'table-category';
 
-  constructor(private titleService: Title, private categoryService: CategoryService,
+  constructor(private titleService: Title, private dialogService: DialogService,
+    private router: Router, private categoryService: CategoryService,
      injector: Injector ) {
     super(injector);
  }
@@ -22,11 +26,31 @@ export class CategoryComponent extends BaseComponent {
    this.titleService.setTitle(AppSettings.APP_TITLE_MESSAGE.CATEGORY);
    this.categoryService.CategoryList.subscribe(categoryList => this.categoryList = categoryList);
     this.fetchCategoryList(() => {
-     this.applyDataTable('dt-table');
+     this.applyDataTable(this.tableId);
     });
  }
 
- //** load category list and apply datatable js */
+ // ** remove category */
+ async removeCategory(cateId) {
+  const result = await this.categoryService.removeCategory(cateId);
+  if (result === AppSettings.RESPONSE_MESSAGE.SUCCESS) {
+    this.dialogService.showSuccess(AppSettings.APP_SUCCESS_MESSAGE.DELETE_CATEGORY, () => {
+      this.destroyDataTable(this.tableId);
+      this.fetchCategoryList(() => {
+        this.applyDataTable(this.tableId);
+      });
+    });
+  } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
+    this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.SESSION_TIMEOUT, () => {
+      this.authService.clearLoginSession();
+      this.gotoLogin(this.router);
+    });
+  } else {
+    this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.BUSY);
+  }
+}
+
+ // ** load category list and apply datatable js */
  private fetchCategoryList(updateUI) {
   this.categoryService.fetchCategoryList(() => {
       updateUI();

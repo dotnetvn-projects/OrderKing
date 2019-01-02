@@ -14,10 +14,10 @@ export class DialogService {
       type: 'error',
       confirmButtonText: 'Đóng'
     }).then((result) => {
-          if (action!=null) {
+          if (action !== null) {
             setTimeout(() => {
               action();
-            }, 500);       
+            }, 500);
           }
     });
   }
@@ -30,10 +30,10 @@ export class DialogService {
       showConfirmButton: false,
       timer: 1500,
       onClose: () => {
-        if (action!=null) {
+        if (action !== null) {
           action();
         }
-      }    
+      }
     });
   }
 }

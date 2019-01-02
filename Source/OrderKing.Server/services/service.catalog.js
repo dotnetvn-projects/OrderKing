@@ -15,15 +15,15 @@ exports.createCatagory = async (categoryobject) => {
     const result = await pool.request()
         .input('StoreId', sql.BigInt, categoryobject.storeId)
         .input('Name', sql.NVarChar, categoryobject.name)
-        .input("Image", sql.VarBinary, buf)
+        .input("Image", sql.VarBinary, categoryobject.image)
         .query(catalogSqlCmd.createCategory);
 
     if (result.recordset.length > 0) {
         categoryResponse.model.statusmessage = status.common.suscess;
         categoryResponse.model.responsecode = status.common.suscesscode;
         categoryResponse.model.category = {
-            id: security.encrypt(result.recordset[0].CategoryId + '_' + security.serverKey()),
-            name: categoryobject.name
+            categoryid: security.encrypt(result.recordset[0].CategoryId + '_' + security.serverKey()),
+            categoryname: categoryobject.name
         };
     }
 
@@ -46,8 +46,8 @@ exports.updateCatagory = async (categoryobject) => {
         categoryResponse.model.statusmessage = status.common.suscess;
         categoryResponse.model.responsecode = status.common.suscesscode;
         categoryResponse.model.category = {
-            id: security.encrypt(categoryobject.id + '_' + security.serverKey()),
-            name: categoryobject.name
+            categoryid: security.encrypt(categoryobject.id + '_' + security.serverKey()),
+            categoryname: categoryobject.name
         };
     }
 
@@ -116,6 +116,29 @@ exports.getCategoryInStore = async (storeId) => {
         });
 
         categoryResponse.model.category = categories;
+    }
+
+    return categoryResponse;
+};
+
+//get category in store by Id
+exports.getCategoryById = async (id) => {
+    categoryResponse.model.statusmessage = status.common.failed;
+    categoryResponse.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    var result = await pool.request()
+        .input('Id', sql.BigInt, id)
+        .query(catalogSqlCmd.getCategoryById);
+
+    if (result.recordset.length > 0) {
+        categoryResponse.model.statusmessage = status.common.suscess;
+        categoryResponse.model.responsecode = status.common.suscesscode;          
+        categoryResponse.model.category = {
+            categoryid: security.encrypt(result.recordset[0].Id + '_' + security.serverKey()),
+            categoryname: result.recordset[0].Name,
+            createddate: moment(result.recordset[0].CreatedDate).format('DD/MM/YYYY')
+        };
     }
 
     return categoryResponse;
@@ -200,16 +223,16 @@ exports.updateProduct = async (productobject) => {
     return productResponse;
 };
 
-//delete product
-exports.deactivateCategory = async (productobject) => {
+//deactive category
+exports.deactivateCategory = async (categoryObject) => {
     productResponse.model.statusmessage = status.common.failed;
     productResponse.model.responsecode = status.common.failedcode;
 
     const pool = await poolPromise;
     const result = await pool.request()
-        .input('Id', sql.BigInt, productobject.id)
-        .input('StoreId', sql.BigInt, productobject.storeId)
-        .query(catalogSqlCmd.deactiveProduct);
+        .input('Id', sql.BigInt, categoryObject.id)
+        .input('StoreId', sql.BigInt, categoryObject.storeId)
+        .query(catalogSqlCmd.deactivateCategory);
 
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
         productResponse.model.statusmessage = status.common.suscess;
@@ -289,14 +312,14 @@ exports.getProductImage = async (productId) => {
     const pool = await poolPromise;
     const result = await pool.request()
         .input("Id", sql.BigInt, productId)
-        .query(userSqlCmd.getProductImage);
+        .query(catalogSqlCmd.getProductImage);
 
     if (result.recordset.length > 0) {
         productResponse.model.statusmessage = status.common.suscess;
         productResponse.model.responsecode = status.common.suscesscode;
         productResponse.model.product = result.recordset[0].Image;
     }
-    return response;
+    return productResponse;
 };
 
 //get category image
@@ -307,12 +330,12 @@ exports.getCategoryImage = async (categoryId) => {
     const pool = await poolPromise;
     const result = await pool.request()
         .input("Id", sql.BigInt, categoryId)
-        .query(userSqlCmd.getCategoryImage);
+        .query(catalogSqlCmd.getCategoryImage);
 
     if (result.recordset.length > 0) {
         categoryResponse.model.statusmessage = status.common.suscess;
         categoryResponse.model.responsecode = status.common.suscesscode;
         categoryResponse.model.category = result.recordset[0].Image;
     }
-    return response;
+    return categoryResponse;
 };

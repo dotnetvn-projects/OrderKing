@@ -19,8 +19,8 @@
                 <thead>
                   <tr>
                     <th class="text-center" width="20px">#</th>
-                    <th class="text-center">Họ và tên</th>
                     <th width="105px" class="text-center">Ảnh</th>
+                    <th class="text-center">Họ và tên</th>
                     <th width="100px" class="text-center">Điện thoại</th>
                     <th class="text-center">Email</th>
                     <th class="text-center">Ngày tạo</th>
@@ -31,11 +31,11 @@
                 <tbody>
                   <tr *ngFor="let staff of StaffList; let i = index">
                     <td class="text-center"><span class="badge bg-blue">{{ i + 1 }}</span></td>
+                    <td class="text-center"><img class="table-image" [src]="staff.Avatar" alt="ảnh đại diện"></td>
                     <td>{{ staff.FullName }}</td>
-                    <td class="text-center"><img class="table-image" [src]="staff.Avatar" alt="User Avatar"></td>
                     <td>{{ staff.PhoneNumber }}</td>
                     <td><a href="mailto:{{staff.Email}}">{{ staff.Email }}</a></td>
-                    <td class="text-right">{{ staff.JoinDate }}</td>
+                    <td class="text-center">{{ staff.JoinDate }}</td>
                     <td class="text-center"><span *ngIf = "staff.IsActived;then activeStatus else blockStatus"></span>
                       <ng-template #activeStatus><i class="fa fa-check-circle text-green"></i> Kích hoạt</ng-template>
                       <ng-template #blockStatus><i class="fa fa-lock text-red"></i> Khóa</ng-template>

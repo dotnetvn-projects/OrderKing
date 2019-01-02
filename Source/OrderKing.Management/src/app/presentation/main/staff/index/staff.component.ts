@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 })
 export class StaffComponent extends BaseComponent {
   StaffList: UserInfoModel[];
+  private tableId = 'table-staff';
 
   constructor(private titleService: Title, private storeService: StoreService, injector: Injector,
     private dialogService: DialogService, private router: Router) {
@@ -24,18 +25,18 @@ export class StaffComponent extends BaseComponent {
     this.titleService.setTitle(AppSettings.APP_TITLE_MESSAGE.STAFF);
     this.storeService.StaffList.subscribe(staffList => this.StaffList = staffList);
     this.fetchUserList(() => {
-     this.applyDataTable('dt-table');
+     this.applyDataTable(this.tableId);
     });
   }
 
-  //** remove staff */
+  // ** remove staff */
   async removeStaff(staffId) {
     const result = await this.storeService.removeStaff(staffId);
     if (result === AppSettings.RESPONSE_MESSAGE.SUCCESS) {
       this.dialogService.showSuccess(AppSettings.APP_SUCCESS_MESSAGE.DELETE_STAFF, () => {
-        this.destroyDataTable('dt-table');
+        this.destroyDataTable(this.tableId);
         this.fetchUserList(() => {
-          this.applyDataTable('dt-table');
+          this.applyDataTable(this.tableId);
         });
       });
     } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
@@ -43,13 +44,12 @@ export class StaffComponent extends BaseComponent {
         this.authService.clearLoginSession();
         this.gotoLogin(this.router);
       });
-    }
-    else {
+    } else {
       this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.BUSY);
     }
   }
 
-  //** load staff list and apply datatable js */
+  // ** load staff list and apply datatable js */
   private fetchUserList(updateUI) {
     this.storeService.fetchStaffList(() => {
         updateUI();

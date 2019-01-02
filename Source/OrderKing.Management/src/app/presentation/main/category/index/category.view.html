@@ -19,8 +19,8 @@
             <thead>
               <tr>
                 <th class="text-center" width="20px">#</th>
-                <th class="text-center">Tên danh mục</th>
                 <th width="105px" class="text-center">Ảnh</th>
+                <th class="text-center" width="200px">Tên danh mục</th>
                 <th width="100px" class="text-center">Ngày tạo</th>
                 <th data-priority="1" width="120px" class="text-center">Thao tác</th>
               </tr>
@@ -28,9 +28,9 @@
             <tbody>
               <tr *ngFor="let category of categoryList; let i = index">
                 <td class="text-center"><span class="badge bg-blue">{{ i + 1 }}</span></td>
-                <td>{{ category.CategoryName }}</td>
                 <td class="text-center"><img class="table-image" [src]="category.Image" alt="Ảnh đại diện"></td>
-                <td class="text-right">{{ category.CreatedDate }}</td>
+                <td>{{ category.CategoryName }}</td>
+                <td class="text-center">{{ category.CreatedDate }}</td>
                 <td class="text-center tools">
                     <a [routerLink]="['/danh-muc/chinh-sua', category.Id]" title="Chỉnh sửa" class="btn bg-green btn-default btn-sm"><i class="fa fa-edit"></i> Sửa</a>
                     <a title="Xóa" (click)="removeCategory(category.Id)" class="btn bg-red btn-default btn-sm"><i class="fa fa-remove"></i> Xóa</a>
@@ -40,8 +40,8 @@
             <tfoot>
               <tr>
                 <th class="text-center" width="20px">#</th>
-                <th class="text-center">Tên danh mục</th>
                 <th width="105px" class="text-center">Ảnh</th>
+                <th class="text-center"  width="200px">Tên danh mục</th>
                 <th width="100px" class="text-center">Ngày tạo</th>
                 <th data-priority="1" width="120px" class="text-center">Thao tác</th>
               </tr>

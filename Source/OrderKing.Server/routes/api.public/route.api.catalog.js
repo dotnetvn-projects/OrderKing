@@ -50,7 +50,7 @@ catalogrouter.post('/change-category-image', multipartMiddleware, async (req, re
         var accessToken = req.body.AccessToken;
         var categoryId = security.decrypt(req.body.Id).split('_')[0];
 
-        var storeId = await service.getStoreIdByAccessToken(accessToken);
+        var storeId = await storeService.getStoreIdByAccessToken(accessToken);
 
         var buff = io.readFileToBinary(req.files.CateImage.path);
 
@@ -156,6 +156,25 @@ catalogrouter.post('/category-list', async (req, res, next) => {
 
         res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(message));      
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//get category info
+catalogrouter.post('/category-info', async (req, res, next) => {
+    try {
+        var cateId = security.decrypt(req.body.Id).split('_')[0];
+
+        var result = await service.getCategoryById(cateId);
+
+        var message = common.createResponseMessage(result.model.category,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
     }
     catch (err) {
         next(err);
@@ -348,7 +367,7 @@ catalogrouter.post('/product-list-by-cate', async (req, res, next) => {
 });
 
 //get product image
-catalogrouter.post('/product-img', async (req, res, next) => {
+catalogrouter.get('/product-img', async (req, res, next) => {
     try {
         var productId = security.decrypt(req.query.pid).split('_')[0];
 
@@ -367,7 +386,7 @@ catalogrouter.post('/product-img', async (req, res, next) => {
 });
 
 //get category image
-catalogrouter.post('/cate-img', async (req, res, next) => {
+catalogrouter.get('/cate-img', async (req, res, next) => {
     try {
         var categoryId = security.decrypt(req.query.cid).split('_')[0];
 

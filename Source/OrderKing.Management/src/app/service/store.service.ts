@@ -219,8 +219,7 @@ export class StoreService {
            }
         } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
           info.result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
-        }
-        else {
+        } else {
           info.result = AppSettings.RESPONSE_MESSAGE.ERROR;
         }
     });

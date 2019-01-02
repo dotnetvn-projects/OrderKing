@@ -5,7 +5,6 @@ import { BaseComponent } from 'src/app/framework/framework.base.component';
 import { Title } from '@angular/platform-browser';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from 'src/app/service/auth.service';
 import { Converter } from 'src/app/framework/framework.converter';
 import { DialogService } from 'src/app/service/dialog.service';
 
@@ -49,7 +48,7 @@ export class StaffActionComponent extends BaseComponent {
     }
   }
 
-  //** Form submit event */
+  // ** Form submit event */
   async onSubmit() {
     if (this.staffId === null || this.staffId === undefined) {
       await this.createNew();
@@ -59,7 +58,7 @@ export class StaffActionComponent extends BaseComponent {
     }
   }
 
-  //** Load staff info */
+  // ** Load staff info */
   private async getStaffInfo() {
     const iresult = await this.storeService.getStaffInfoById(this.staffId);
     if (iresult.result === AppSettings.RESPONSE_MESSAGE.ERROR) {
@@ -86,7 +85,7 @@ export class StaffActionComponent extends BaseComponent {
       if (this.avatarData !== null && this.avatarData !== undefined) {
           await this.storeService.updateStaffAvatar(this.avatarData, result);
        }
-        this.dialogService.showSuccess(AppSettings.APP_SUCCESS_MESSAGE.CREATE_STAFF, 
+        this.dialogService.showSuccess(AppSettings.APP_SUCCESS_MESSAGE.CREATE_STAFF,
           () => {
             this.router.navigate(['nhan-vien/chinh-sua', result]);
           });
@@ -113,10 +112,10 @@ export class StaffActionComponent extends BaseComponent {
         } else {
             await this.storeService.unLockStaff(result);
         }
-        this.dialogService.showSuccess(AppSettings.APP_SUCCESS_MESSAGE.UPDATE_STAFF, 
+        this.dialogService.showSuccess(AppSettings.APP_SUCCESS_MESSAGE.UPDATE_STAFF,
           () => {
             this.router.navigate(['nhan-vien/chinh-sua', result]);
-          });    
+          });
       } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
           this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.SESSION_TIMEOUT, () => {
             this.authService.clearLoginSession();
@@ -128,7 +127,7 @@ export class StaffActionComponent extends BaseComponent {
    }
 
 // **********************UI Updating***********************
-   //** Handle upload avatar on view */
+   // ** Handle upload avatar on view */
     onAvatarChanged(imageInput: any) {
     const file: File = imageInput.files[0];
     const reader = new FileReader();

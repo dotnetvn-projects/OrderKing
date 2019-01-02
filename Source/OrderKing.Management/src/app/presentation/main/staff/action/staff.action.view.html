@@ -1,5 +1,5 @@
 <section class="content-header">
-  <app-bread-crumb [Title]="'Sửa thông tin nhân viên'" [Root]="['Nhân viên@(/nhan-vien)']" [Active]="'Sửa thông tin'"></app-bread-crumb>
+  <app-bread-crumb [Title]="IsEdit?'Sửa thông tin nhân viên' : 'Tạo mới nhân viên'" [Root]="['Nhân viên@(/nhan-vien)']" [Active]="'thông tin nhân viên'"></app-bread-crumb>
 </section>
 <section class="content container-fluid">
     <div class="nav-tabs-custom">
@@ -135,7 +135,7 @@
                   <div class="form-group">
                     <label for="inputIdNum" class="col-sm-2 control-label">Ngày tạo</label>
 
-                    <div class="col-sm-5 div-joindate">
+                    <div class="col-sm-5 created-date">
                         <span class="text-muted">Được tạo vào ngày {{StaffInfo.JoinDate}}</span>
                     </div>
                   </div>

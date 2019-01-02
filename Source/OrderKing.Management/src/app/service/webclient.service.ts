@@ -27,7 +27,7 @@ export class WebClientService {
 
   // build http form data
   private buildFormData(params: Dictionary<string, any>) {
-    const data = new FormData();
+    const data = AppSettings.createDefaultFormData();
     params.getKeys().forEach((key: any) => {
       data.append(key, params.get(key));
     });

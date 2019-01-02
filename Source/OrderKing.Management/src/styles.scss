@@ -7,6 +7,7 @@
 @import url(assets/themes/dist/css/skins/_all-skins.min.css);
 @import "assets/themes/plugins/iCheck/square/blue.css";
 @import "assets/themes/plugins/iCheck/minimal/green.css";
+@import "assets/styles/upload-image.css";
 
 /*Loading*/
 .boxLoading {
@@ -104,4 +105,9 @@ div.invalid-feedback {
   max-width: 100px;
   max-height: 100px;
   height: auto;
+}
+
+
+.created-date {
+  margin-top: 7px;
 }
