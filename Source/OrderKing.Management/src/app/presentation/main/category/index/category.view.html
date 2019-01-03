@@ -18,7 +18,7 @@
           <table id="table-category" class="dt-table table table-bordered table-striped table-hover responsive display nowrap">
             <thead>
               <tr>
-                <th class="text-center" width="20px">#</th>
+                <th class="text-center" width="10px">STT</th>
                 <th width="105px" class="text-center">Ảnh</th>
                 <th class="text-center" width="200px">Tên danh mục</th>
                 <th width="100px" class="text-center">Ngày tạo</th>
@@ -27,7 +27,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let category of categoryList; let i = index">
-                <td class="text-center"><span class="badge bg-blue">{{ i + 1 }}</span></td>
+                <td class="text-center"><span class="label label-success">{{ i + 1 }}</span></td>
                 <td class="text-center"><img class="table-image" [src]="category.Image" alt="Ảnh đại diện"></td>
                 <td>{{ category.CategoryName }}</td>
                 <td class="text-center">{{ category.CreatedDate }}</td>
@@ -39,7 +39,7 @@
             </tbody>
             <tfoot>
               <tr>
-                <th class="text-center" width="20px">#</th>
+                <th class="text-center" width="10px">STT</th>
                 <th width="105px" class="text-center">Ảnh</th>
                 <th class="text-center"  width="200px">Tên danh mục</th>
                 <th width="100px" class="text-center">Ngày tạo</th>

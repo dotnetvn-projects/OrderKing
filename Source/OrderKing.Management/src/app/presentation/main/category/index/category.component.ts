@@ -6,6 +6,7 @@ import { CategoryModel } from 'src/app/model/category.model';
 import { CategoryService } from 'src/app/service/category.service';
 import { DialogService } from 'src/app/service/dialog.service';
 import { Router } from '@angular/router';
+import { AppMessage } from 'src/app/framework/framework.app.messages';
 
 @Component({
   selector: 'app-category',
@@ -23,32 +24,34 @@ export class CategoryComponent extends BaseComponent {
  }
 
  onInit() {
-   this.titleService.setTitle(AppSettings.APP_TITLE_MESSAGE.CATEGORY);
+   this.titleService.setTitle(AppMessage.APP_TITLE_MESSAGE.CATEGORY);
    this.categoryService.CategoryList.subscribe(categoryList => this.categoryList = categoryList);
-    this.fetchCategoryList(() => {
+   this.fetchCategoryList(() => {
      this.applyDataTable(this.tableId);
-    });
+   });
  }
 
  // ** remove category */
- async removeCategory(cateId) {
-  const result = await this.categoryService.removeCategory(cateId);
-  if (result === AppSettings.RESPONSE_MESSAGE.SUCCESS) {
-    this.dialogService.showSuccess(AppSettings.APP_SUCCESS_MESSAGE.DELETE_CATEGORY, () => {
-      this.destroyDataTable(this.tableId);
-      this.fetchCategoryList(() => {
-        this.applyDataTable(this.tableId);
-      });
+  async removeCategory(cateId) {
+    this.dialogService.showConfirm(AppMessage.APP_DIALOG_TITLE.CONFIRM, AppMessage.APP_DIALOG_MESSAGE.DELETE_CATEGORY, async () => {
+      const result = await this.categoryService.removeCategory(cateId);
+      if (result === AppSettings.RESPONSE_MESSAGE.SUCCESS) {
+        this.dialogService.showSuccess(AppMessage.APP_SUCCESS_MESSAGE.DELETE_CATEGORY, () => {
+          this.destroyDataTable(this.tableId);
+          this.fetchCategoryList(() => {
+            this.applyDataTable(this.tableId);
+          });
+        });
+      } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
+        this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.SESSION_TIMEOUT, () => {
+          this.authService.clearLoginSession();
+          this.gotoLogin(this.router);
+        });
+      } else {
+        this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.BUSY);
+      }
     });
-  } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
-    this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.SESSION_TIMEOUT, () => {
-      this.authService.clearLoginSession();
-      this.gotoLogin(this.router);
-    });
-  } else {
-    this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.BUSY);
   }
-}
 
  // ** load category list and apply datatable js */
  private fetchCategoryList(updateUI) {

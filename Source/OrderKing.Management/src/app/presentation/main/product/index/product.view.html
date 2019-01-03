@@ -1,15 +1,65 @@
 <section class="content-header">
-    <h1>
-        Dashboard
-        <small>Order King</small>
-      </h1>
-      < <ol class="breadcrumb">
-        <li><a [routerLink]="['dashboard']" ><i class="fa fa-dashboard"></i> Dashboard</a></li>
-        <li class="active">Here</li>
-      </ol>
+  <app-bread-crumb [Title]="'Danh sách sản phẩm'" [Active]="'Sản phẩm'"></app-bread-crumb>
 </section>
 <section class="content container-fluid">
-  <p>
-    product works!
-  </p>
+<div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title"><i class="fa fa-list"></i> Danh sách sản phẩm</h3>
+          <div class="pull-right">
+              <a title="Tạo mới" [routerLink]="['/mat-hang/tao-moi']" class="btn btn-default btn-sm"><i class="fa fa-plus-circle text-green"></i> Tạo mới</a>&nbsp;&nbsp;
+              <a title="Tải lại" (click)="reload()" class="btn btn-default btn-sm"><i class="fa fa-refresh text-green"></i> Tải lại</a>&nbsp;&nbsp;
+              <a title="Xuất excel" class="btn btn-default btn-sm"><i class="fa fa-file-excel-o text-green"></i> Xuất excel</a>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <table id="table-product" class="dt-table table table-bordered table-striped table-hover responsive display nowrap">
+            <thead>
+              <tr>
+                <th class="text-center" width="10px">STT</th>
+                <th width="105px" class="text-center">Ảnh</th>
+                <th class="text-center" width="200px">Tên mặt hàng</th>
+                <th class="text-center" width="100px">Danh mục</th>
+                <th class="text-center" width="100px">Đơn giá</th>
+                <th width="100px" class="text-center">Ngày tạo</th>
+                <th data-priority="1" width="120px" class="text-center">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of ProductList; let i = index">
+                <td class="text-center"><span class="label label-success">{{ i + 1 }}</span></td>
+                <td class="text-center"><img class="table-image" [src]="product.Image" alt="Ảnh đại diện"></td>
+                <td>{{ product.ProductName }}</td>
+                <td class="text-center">{{ product.CategoryName }}</td>
+                <td class="text-center">{{ product.Price }}</td>
+                <td  class="text-center">{{ product.CreatedDate }}</td>
+                <td class="text-center tools">
+                    <a [routerLink]="['/mat-hang/chinh-sua', product.Id]" title="Chỉnh sửa" class="btn bg-green btn-default btn-sm"><i class="fa fa-edit"></i> Sửa</a>
+                    <a title="Xóa" (click)="removeProduct(product.Id)" class="btn bg-red btn-default btn-sm"><i class="fa fa-remove"></i> Xóa</a>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th class="text-center" width="10px">STT</th>
+                <th width="105px" class="text-center">Ảnh</th>
+                <th class="text-center" width="200px">Tên mặt hàng</th>
+                <th class="text-center" width="100px">Danh mục</th>
+                <th class="text-center" width="100px">Đơn giá</th>
+                <th width="100px" class="text-center">Ngày tạo</th>
+                <th data-priority="1" width="120px" class="text-center">Thao tác</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+
 </section>

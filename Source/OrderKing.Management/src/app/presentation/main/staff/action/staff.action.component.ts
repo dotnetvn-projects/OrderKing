@@ -7,6 +7,7 @@ import { AppSettings } from 'src/app/framework/framework.app.setting';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Converter } from 'src/app/framework/framework.converter';
 import { DialogService } from 'src/app/service/dialog.service';
+import { AppMessage } from 'src/app/framework/framework.app.messages';
 
 declare var $;
 
@@ -37,13 +38,13 @@ export class StaffActionComponent extends BaseComponent {
     this.staffId = this.getParam('id', this.activatedRoute);
 
     if (this.staffId !== null && this.staffId !== undefined) {
-      this.titleService.setTitle(AppSettings.APP_TITLE_MESSAGE.STAFF_UPDATE);
+      this.titleService.setTitle(AppMessage.APP_TITLE_MESSAGE.STAFF_UPDATE);
       this.getStaffInfo();
-      this.ButtonContent = AppSettings.APP_CONTROL_CONTENT.UPDATE;
+      this.ButtonContent = AppMessage.APP_CONTROL_CONTENT.UPDATE;
       this.IsEdit = true;
     } else {
-      this.titleService.setTitle(AppSettings.APP_TITLE_MESSAGE.STAFF_CREATE);
-      this.ButtonContent =  AppSettings.APP_CONTROL_CONTENT.CREATE;
+      this.titleService.setTitle(AppMessage.APP_TITLE_MESSAGE.STAFF_CREATE);
+      this.ButtonContent =  AppMessage.APP_CONTROL_CONTENT.CREATE;
       this.IsEdit = false;
     }
   }
@@ -85,18 +86,18 @@ export class StaffActionComponent extends BaseComponent {
       if (this.avatarData !== null && this.avatarData !== undefined) {
           await this.storeService.updateStaffAvatar(this.avatarData, result);
        }
-        this.dialogService.showSuccess(AppSettings.APP_SUCCESS_MESSAGE.CREATE_STAFF,
+        this.dialogService.showSuccess(AppMessage.APP_SUCCESS_MESSAGE.CREATE_STAFF,
           () => {
             this.router.navigate(['nhan-vien/chinh-sua', result]);
           });
      } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
-        this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.SESSION_TIMEOUT,
+        this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.SESSION_TIMEOUT,
           () => {
             this.authService.clearLoginSession();
             this.gotoLogin(this.router);
           });
      } else {
-        this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.BUSY);
+        this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.BUSY);
      }
   }
 
@@ -112,17 +113,17 @@ export class StaffActionComponent extends BaseComponent {
         } else {
             await this.storeService.unLockStaff(result);
         }
-        this.dialogService.showSuccess(AppSettings.APP_SUCCESS_MESSAGE.UPDATE_STAFF,
+        this.dialogService.showSuccess(AppMessage.APP_SUCCESS_MESSAGE.UPDATE_STAFF,
           () => {
             this.router.navigate(['nhan-vien/chinh-sua', result]);
           });
       } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
-          this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.SESSION_TIMEOUT, () => {
+          this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.SESSION_TIMEOUT, () => {
             this.authService.clearLoginSession();
             this.gotoLogin(this.router);
           });
       } else {
-          this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.BUSY);
+          this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.BUSY);
       }
    }
 

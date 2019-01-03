@@ -133,7 +133,6 @@ export class StoreService {
     let result = AppSettings.RESPONSE_MESSAGE.ERROR;
 
     const params = new Dictionary<string, any>();
-    params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
     params.put('MemberId' , staffId);
     params.put('Avatar' , fileData);
 
@@ -153,7 +152,6 @@ export class StoreService {
     let result = AppSettings.RESPONSE_MESSAGE.ERROR;
 
     const params = new Dictionary<string, any>();
-    params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
     params.put('MemberId' , staffId);
 
     await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.lockStaffUrl, params, (data: ApiResultModel) => {
@@ -172,7 +170,6 @@ export class StoreService {
     let result = AppSettings.RESPONSE_MESSAGE.ERROR;
 
     const params = new Dictionary<string, any>();
-    params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));
     params.put('MemberId' , staffId);
 
     await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.unLockStaffUrl, params, (data: ApiResultModel) => {

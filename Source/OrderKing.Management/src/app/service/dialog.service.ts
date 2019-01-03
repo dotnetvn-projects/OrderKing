@@ -22,6 +22,23 @@ export class DialogService {
     });
   }
 
+  showConfirm(title: string, message: string, action) {
+    swal({
+      title: title,
+      text: message,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Xử lý',
+      cancelButtonText: 'Hủy'
+    }).then((result) => {
+      if (result.value) {
+        action();
+      }
+    });
+  }
+
   showSuccess(message: string, action = null) {
     swal({
       position: 'top-end',

@@ -21,42 +21,10 @@ export class  AppSettings {
     UNAUTHORIZED: 401
   };
 
-    // error message
-    public static APP_ERROR_MESSAGE = {
-      BUSY : 'Hệ thống đang bận không thể xử lý, vui lòng thử lại !',
-      SESSION_TIMEOUT: 'Phiên làm việc đã kết thức, vui lòng đăng nhập lại !'
-    };
-
-    // success message
-    public static APP_SUCCESS_MESSAGE = {
-      CREATE_STAFF : 'Tạo mới nhân viên thành công !',
-      UPDATE_STAFF: 'Cập nhật thông tin nhân viên thành công !',
-      DELETE_STAFF: 'Xóa nhân viên thành công !',
-      CREATE_CATEGORY : 'Tạo mới danh mục thành công !',
-      UPDATE_CATEGORY: 'Cập nhật thông tin danh mục thành công !',
-      DELETE_CATEGORY: 'Xóa danh mục thành công !'
-    };
-
-     // title message
-     public static APP_TITLE_MESSAGE = {
-      LOGIN: 'Order King - Đăng nhập hệ thống',
-      STAFF : 'Order King - Danh sách nhân viên',
-      STAFF_CREATE: 'Order King - Tạo mới nhân viên',
-      STAFF_UPDATE: 'Order King - Chỉnh sửa thông tin nhân viên',
-      CATEGORY: 'Order King - Danh mục',
-      CATEGORY_CREATE: 'Order King - Tạo mới danh mục',
-      CATEGORY_UPDATE: 'Order King - Chỉnh sửa danh mục'
-    };
-
-    // Control content
-    public static APP_CONTROL_CONTENT = {
-      CREATE: 'Tạo mới',
-      UPDATE: 'Chỉnh sửa'
-    };
-
     // default image
     public static APP_DEFAULT_IMAGE = {
       DEFAULT_AVATAR: '../../../../assets/images/no-avatar.png',
+      DEFAULT_PRODUCT: '../../../../assets/images/default-product.png',
       NO_IMAGE: '../../../../assets/images/no-image.png'
     };
 

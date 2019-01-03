@@ -163,8 +163,8 @@ exports.createProduct = async (productobject) => {
         productResponse.model.statusmessage = status.common.suscess;
         productResponse.model.responsecode = status.common.suscesscode;
         productResponse.model.product = {
-            id: security.encrypt(result.recordset[0].ProductId + '_' + security.serverKey()),
-            name: productobject.name,
+            productid: security.encrypt(result.recordset[0].ProductId + '_' + security.serverKey()),
+            productname: productobject.name,
             description: productobject.description,
             price: productobject.price
         };
@@ -213,8 +213,8 @@ exports.updateProduct = async (productobject) => {
         productResponse.model.statusmessage = status.common.suscess;
         productResponse.model.responsecode = status.common.suscesscode;
         productResponse.model.product = {
-            id: security.encrypt(security.encrypt(productobject.id + '_' + security.serverKey())),
-            name: productobject.name,
+            productid: security.encrypt(security.encrypt(productobject.id + '_' + security.serverKey())),
+            productname: productobject.name,
             description: productobject.description,
             price: productobject.price
         };
@@ -253,21 +253,25 @@ exports.getProductsInStore = async (storeId) => {
         .input('StoreId', sql.BigInt, storeId)
         .query(catalogSqlCmd.getProductsInStore);
 
-    if (result.recordset.length > 0) {
+    if (result.recordset.length >= 0) {
+        productResponse.model.statusmessage = status.common.suscess;
+        productResponse.model.responsecode = status.common.suscesscode;
+
         var products = [];
         result.recordset.forEach(function (value) {
             products.push({
-                categoryName: value.CategoryName,
-                id: security.encrypt(value.Id + '_' + security.serverKey()),
-                name: value.Name,
-                createdDate: value.CreatedDate,
+                categoryname: value.CategoryName,
+                productid: security.encrypt(value.Id + '_' + security.serverKey()),
+                categoryid: security.encrypt(value.CategoryId + '_' + security.serverKey()),
+                productname: value.Name,
+                createddate: moment(value.CreatedDate).format('DD/MM/YYYY'),
                 description: value.Description,
-                storeName: value.StoreName,
+                storename: value.StoreName,
                 price: value.Price
             });
         });
 
-        productResponse.model.product = products;
+         productResponse.model.product = products;
     }
 
     return productResponse;
@@ -285,15 +289,19 @@ exports.getProductsInStoreByCate = async (productobject) => {
         .query(catalogSqlCmd.getProductsInStoreByCate);
 
     if (result.recordset.length > 0) {
+        productResponse.model.statusmessage = status.common.suscess;
+        productResponse.model.responsecode = status.common.suscesscode;
+
         var products = [];
         result.recordset.forEach(function (value) {
             products.push({
-                categoryName: value.CategoryName,
-                id: security.encrypt(value.Id + '_' + security.serverKey()),
-                name: value.Name,
-                createdDate: value.CreatedDate,
+                categoryname: value.CategoryName,
+                productid: security.encrypt(value.Id + '_' + security.serverKey()),
+                categoryid: security.encrypt(value.CategoryId + '_' + security.serverKey()),
+                productname: value.Name,
+                createddate: moment(value.CreatedDate).format('DD/MM/YYYY'),
                 description: value.Description,
-                storeName: value.StoreName,
+                storename: value.StoreName,
                 price: value.Price
             });
         });
@@ -301,6 +309,35 @@ exports.getProductsInStoreByCate = async (productobject) => {
         productResponse.model.product = products;
     }
 
+    return productResponse;
+};
+
+//get product in store by id
+exports.getProductInStoreById = async (productobject) => {
+    productResponse.model.statusmessage = status.common.failed;
+    productResponse.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    var result = await pool.request()
+        .input('StoreId', sql.BigInt, productobject.storeId)
+        .input('Id', sql.BigInt, productobject.productId)
+        .query(catalogSqlCmd.getProductById);
+
+    if (result.recordset.length > 0) {
+        productResponse.model.statusmessage = status.common.suscess;
+        productResponse.model.responsecode = status.common.suscesscode;
+
+        productResponse.model.product = {
+            categoryname: result.recordset[0].CategoryName,
+            productid: security.encrypt(result.recordset[0].Id + '_' + security.serverKey()),
+            categoryid: security.encrypt(result.recordset[0].CategoryId + '_' + security.serverKey()),
+            productname: result.recordset[0].Name,
+            createddate: moment(result.recordset[0].CreatedDate).format('DD/MM/YYYY'),
+            description: result.recordset[0].Description,
+            storename: result.recordset[0].StoreName,
+            price: result.recordset[0].Price
+        };
+    }
     return productResponse;
 };
 

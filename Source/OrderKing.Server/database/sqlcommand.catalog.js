@@ -90,6 +90,8 @@ defineProperty('getProductsInStore', `
     FROM Product INNER JOIN Store ON Store.Id = Product.StoreId
     INNER JOIN Category ON Product.CategoryId = Category.Id AND Store.Id = Category.StoreId
     WHERE Product.StoreId = @StoreId AND Product.IsActived = 1 AND Category.IsActived =1
+    GROUP BY Product.Id, Product.[Name], Product.Description, Product.CreatedDate,
+           Product.Price, Product.CategoryId, Category.[Name], Store.StoreName
     ORDER BY Product.CreatedDate DESC
 `);
 
@@ -103,6 +105,15 @@ defineProperty('getProductsInStoreByCate', `
           AND Product.IsActived = 1 AND Category.IsActived =1
     ORDER BY Product.CreatedDate DESC
 `);
+
+//get product info by id
+defineProperty('getProductById',
+    `SELECT Product.Id, Product.[Name], Product.Description, Product.CreatedDate,
+           Product.Price, Product.CategoryId, Category.[Name] AS CategoryName, Store.StoreName
+    FROM Product INNER JOIN Store ON Store.Id = Product.StoreId
+    INNER JOIN Category ON Product.CategoryId = Category.Id AND Store.Id = Category.StoreId
+    WHERE Product.StoreId = @StoreId AND Product.IsActived = 1
+          AND Category.IsActived =1 AND Product.Id = @Id`);
 
 //get product image
 defineProperty('getProductImage',

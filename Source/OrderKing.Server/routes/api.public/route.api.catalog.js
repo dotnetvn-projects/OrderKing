@@ -366,6 +366,32 @@ catalogrouter.post('/product-list-by-cate', async (req, res, next) => {
     }
 });
 
+//get product info by id
+catalogrouter.post('/product-info', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+        var productId = security.decrypt(req.body.Id).split('_')[0];
+
+        var product = {
+            storeId: storeId,
+            productId: productId
+        };
+
+        var result = await service.getProductInStoreById(product);
+
+        var message = common.createResponseMessage(result.model.product,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
 //get product image
 catalogrouter.get('/product-img', async (req, res, next) => {
     try {

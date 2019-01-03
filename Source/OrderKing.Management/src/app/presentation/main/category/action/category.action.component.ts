@@ -7,6 +7,7 @@ import { CategoryModel } from 'src/app/model/category.model';
 import { CategoryService } from 'src/app/service/category.service';
 import { Converter } from 'src/app/framework/framework.converter';
 import { DialogService } from 'src/app/service/dialog.service';
+import { AppMessage } from 'src/app/framework/framework.app.messages';
 
 @Component({
   selector: 'app-action-category',
@@ -34,13 +35,13 @@ export class CategoryActionComponent extends BaseComponent {
     this.cateId = this.getParam('id', this.activatedRoute);
 
     if (this.cateId !== null && this.cateId !== undefined) {
-      this.titleService.setTitle(AppSettings.APP_TITLE_MESSAGE.CATEGORY_UPDATE);
+      this.titleService.setTitle(AppMessage.APP_TITLE_MESSAGE.CATEGORY_UPDATE);
       this.getCategoryInfo();
-      this.ButtonContent = AppSettings.APP_CONTROL_CONTENT.UPDATE;
+      this.ButtonContent = AppMessage.APP_CONTROL_CONTENT.UPDATE;
       this.IsEdit = true;
     } else {
-      this.titleService.setTitle(AppSettings.APP_TITLE_MESSAGE.CATEGORY_CREATE);
-      this.ButtonContent =  AppSettings.APP_CONTROL_CONTENT.CREATE;
+      this.titleService.setTitle(AppMessage.APP_TITLE_MESSAGE.CATEGORY_CREATE);
+      this.ButtonContent =  AppMessage.APP_CONTROL_CONTENT.CREATE;
       this.IsEdit = false;
     }
   }
@@ -61,18 +62,18 @@ export class CategoryActionComponent extends BaseComponent {
      if (this.imageData !== null && this.imageData !== undefined) {
          await this.categoryService.updateCategoryImage(this.imageData, result);
       }
-       this.dialogService.showSuccess(AppSettings.APP_SUCCESS_MESSAGE.CREATE_CATEGORY,
+       this.dialogService.showSuccess(AppMessage.APP_SUCCESS_MESSAGE.CREATE_CATEGORY,
          () => {
            this.router.navigate(['danh-muc/chinh-sua', result]);
          });
     } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
-       this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.SESSION_TIMEOUT,
+       this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.SESSION_TIMEOUT,
          () => {
            this.authService.clearLoginSession();
            this.gotoLogin(this.router);
          });
     } else {
-       this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.BUSY);
+       this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.BUSY);
     }
  }
 
@@ -84,17 +85,17 @@ export class CategoryActionComponent extends BaseComponent {
            await this.categoryService.updateCategoryImage(this.imageData, result);
        }
 
-       this.dialogService.showSuccess(AppSettings.APP_SUCCESS_MESSAGE.UPDATE_CATEGORY,
+       this.dialogService.showSuccess(AppMessage.APP_SUCCESS_MESSAGE.UPDATE_CATEGORY,
          () => {
            this.router.navigate(['danh-muc/chinh-sua', result]);
          });
      } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
-         this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.SESSION_TIMEOUT, () => {
+         this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.SESSION_TIMEOUT, () => {
            this.authService.clearLoginSession();
            this.gotoLogin(this.router);
          });
      } else {
-         this.dialogService.showError(AppSettings.APP_ERROR_MESSAGE.BUSY);
+         this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.BUSY);
      }
   }
 

@@ -18,7 +18,7 @@
               <table id="table-staff" class="dt-table table table-bordered table-striped table-hover responsive display nowrap">
                 <thead>
                   <tr>
-                    <th class="text-center" width="20px">#</th>
+                    <th class="text-center" width="20px">STT</th>
                     <th width="105px" class="text-center">Ảnh</th>
                     <th class="text-center">Họ và tên</th>
                     <th width="100px" class="text-center">Điện thoại</th>
@@ -30,7 +30,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let staff of StaffList; let i = index">
-                    <td class="text-center"><span class="badge bg-blue">{{ i + 1 }}</span></td>
+                    <td class="text-center"><span class="label label-success">{{ i + 1 }}</span></td>
                     <td class="text-center"><img class="table-image" [src]="staff.Avatar" alt="ảnh đại diện"></td>
                     <td>{{ staff.FullName }}</td>
                     <td>{{ staff.PhoneNumber }}</td>
@@ -48,7 +48,7 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <th width="20px" class="text-center">#</th>
+                    <th width="20px" class="text-center">STT</th>
                     <th class="text-center">Họ và tên</th>
                     <th width="105px" class="text-center">Ảnh</th>
                     <th width="100px" class="text-center">Điện thoại</th>

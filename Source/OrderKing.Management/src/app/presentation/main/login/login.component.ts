@@ -5,6 +5,7 @@ import { LoginModel } from '../../../model/login.model';
 import { AuthService } from '../../../service/auth.service';
 import { UserService } from 'src/app/service/user.service';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
+import { AppMessage } from 'src/app/framework/framework.app.messages';
 declare var $;
 
 @Component({
@@ -40,7 +41,7 @@ export class LoginComponent implements OnInit {
   async ngOnInit() {
     if (sessionStorage.getItem(AppSettings.TOKEN_KEY) === null) {
       this.applyJs();
-      this.titleService.setTitle(AppSettings.APP_TITLE_MESSAGE.LOGIN);
+      this.titleService.setTitle(AppMessage.APP_TITLE_MESSAGE.LOGIN);
     } else {
       this.router.navigate(['dashboard']);
     }

@@ -12,7 +12,7 @@ export const MainRoutes = [
             { path: 'dashboard', loadChildren: 'src/app/presentation/main/dashboard/dashboard.module#DashboardModule'},
             { path: '', loadChildren: 'src/app/presentation/main/dashboard/dashboard.module#DashboardModule' },
             { path: 'danh-muc', loadChildren: 'src/app/presentation/main/category/category.module#CategoryModule' },
-            { path: 'san-pham', loadChildren: 'src/app/presentation/main/product/product.module#ProductModule' },
+            { path: 'mat-hang', loadChildren: 'src/app/presentation/main/product/product.module#ProductModule' },
             { path: 'nhan-vien', loadChildren: 'src/app/presentation/main/staff/staff.module#StaffModule' }
         ],
         canActivate: [AuthGuard]

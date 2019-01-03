@@ -9,6 +9,7 @@ import { LoginLayoutComponent } from './presentation/_layout/login-layout/login-
 import { MainLayoutComponent } from './presentation/_layout/main-layout/main-layout.component';
 import { LoginModule } from './presentation/main/login/login.module';
 import { MainRoutes } from './routing/main.routing';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,7 @@ import { MainRoutes } from './routing/main.routing';
   ],
   imports: [
     RouterModule.forRoot(MainRoutes),
-    LoginModule,
+    LoginModule, LoadingBarRouterModule,
     BrowserModule, FormsModule, HttpClientModule
   ],
   providers: [
