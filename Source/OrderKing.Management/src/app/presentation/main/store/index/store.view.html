@@ -1,0 +1,45 @@
+<section class="content-header">
+  <app-bread-crumb [Title]="'Thông tin cửa hàng'" [Active]="'Cửa hàng'"></app-bread-crumb>
+</section>
+<section class="content container-fluid">
+<div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title"><i class="fa fa-list"></i> Thông tin cửa hàng</h3>
+          <div class="pull-right">
+            <a title="Sửa thông tin" [routerLink]="['/cua-hang/chinh-sua', StoreInfo.Id]" class="btn btn-default btn-sm"><i class="fa fa-edit text-green"></i> Sửa thông tin</a>
+        </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="box box-widget widget-user-2">
+            <!-- Add the bg color to the header using any of the bg-* classes -->
+            <div class="widget-user-header bg-yellow">
+              <div class="widget-user-image">
+                <img class="img-circle" [src]="StoreInfo.Image" alt="Logo">
+              </div>
+              <!-- /.widget-user-image -->
+              <h3 class="widget-user-username">{{ StoreInfo.StoreName }}</h3>
+              <h5 class="widget-user-desc">{{ StoreInfo.Slogan }}</h5>
+            </div>
+            <div class="box-footer no-padding">
+              <ul class="nav nav-stacked">
+                <li><a href="#">Email liên hệ của hàng <span class="pull-right badge bg-blue">{{ StoreInfo.Email }}</span></a></li>
+                <li><a href="#">Địa chỉ cửa hàng <span class="pull-right badge bg-yellow">{{ StoreInfo.PhoneNumber }}</span></a></li>
+                <li><a href="#">Số điện thoại của hàng <span class="pull-right badge bg-aqua">{{ StoreInfo.Address }}</span></a></li>
+                <li><a href="#">Người quản lý trực tiếp <span class="pull-right badge bg-green">{{ StoreInfo.Manager }}</span></a></li>
+                <li><a href="#">Đăng ký ngày <span class="pull-right badge bg-red">{{ StoreInfo.CreatedDate }}</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+
+</section>

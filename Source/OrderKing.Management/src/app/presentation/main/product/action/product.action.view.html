@@ -30,7 +30,7 @@
             <label for="inputCate" class="col-sm-2 control-label">Danh mục</label>
 
             <div class="col-sm-5">
-              <select id="inputCate"  [(ngModel)]="ProductInfo.CategoryId">
+              <select class="form-control" (change)="categorySelectChange($event)" id="inputCate" name="category"  [(ngModel)]="ProductInfo.CategoryId">
                 <option *ngFor="let c of CategoryList" [value]="c.Id" [selected]="c.Id === ProductInfo.CategoryId">{{c.CategoryName}}</option>
               </select>
             </div>
@@ -42,15 +42,29 @@
             <div class="col-sm-5">
               <input type="number" [(ngModel)]="ProductInfo.Price" name="price" #price="ngModel" [ngClass]="{ 'is-invalid': f.submitted && price.invalid }"
                 required min="0" max = "99999999" class="form-control" id="inputPrice" placeholder="Đơn giá">
+                <span class="users-list-date">Lưu ý: vui lòng nhập số nguyên, nhập 25000 nếu đơn giá là 25 nghìn</span>
               <div *ngIf="f.submitted && price.invalid" class="invalid-feedback">
-                <div *ngIf="price?.errors.required"><i class="fa fa-warning text-red"></i> Đơn giá không được trống !</div>
+                <div *ngIf="price?.errors.required"><i class="fa fa-warning text-red"></i> Đơn giá không hợp lệ !</div>
                 <div *ngIf="price?.errors.range"><i class="fa fa-warning text-red"></i> Đơn giá không hợp lệ !</div>
               </div>
             </div>
           </div>
 
           <div class="form-group">
-            <label for="inputDescription" class="col-sm-2 control-label">Đơn giá</label>
+            <label for="inputStock" class="col-sm-2 control-label">Tồn kho</label>
+
+            <div class="col-sm-2">
+              <input type="number" [(ngModel)]="ProductInfo.InStock" name="stock" #stock="ngModel" [ngClass]="{ 'is-invalid': f.submitted && stock.invalid }"
+                required min="0" max = "99999999" class="form-control" id="inputStock" placeholder="Đơn giá">
+              <div *ngIf="f.submitted && stock.invalid" class="invalid-feedback">
+                <div *ngIf="stock?.errors.required"><i class="fa fa-warning text-red"></i> Tồn khi không hợp lệ !</div>
+                <div *ngIf="stock?.errors.range"><i class="fa fa-warning text-red"></i> Tồn khi không hợp lệ !</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="inputDescription" class="col-sm-2 control-label">Mô tả</label>
 
             <div class="col-sm-5">
               <textarea rows="6" [(ngModel)]="ProductInfo.Description" name="description"  id="inputDescription" placeholder="Mô tả sản phẩm"></textarea>
@@ -85,7 +99,7 @@
             </div>
           </div>
           <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
+            <div class="col-sm-offset-4 col-sm-10">
               <button class="btn btn-danger">{{ButtonContent}}</button>
             </div>
           </div>

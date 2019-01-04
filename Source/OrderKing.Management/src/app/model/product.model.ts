@@ -7,5 +7,12 @@ export class ProductModel extends ModelBase {
     Description: string;
     StoreName: string;
     CreatedDate: string;
+    InStock: number;
     Price: number;
+
+    constructor () {
+      super();
+          this.Price = 0;
+          this.InStock = 0;
+    }
 }

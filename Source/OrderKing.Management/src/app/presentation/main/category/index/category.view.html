@@ -21,6 +21,7 @@
                 <th class="text-center" width="10px">STT</th>
                 <th width="105px" class="text-center">Ảnh</th>
                 <th class="text-center" width="200px">Tên danh mục</th>
+                <th width="150px" class="text-center">Số lượng mặt hàng</th>
                 <th width="100px" class="text-center">Ngày tạo</th>
                 <th data-priority="1" width="120px" class="text-center">Thao tác</th>
               </tr>
@@ -30,6 +31,7 @@
                 <td class="text-center"><span class="label label-success">{{ i + 1 }}</span></td>
                 <td class="text-center"><img class="table-image" [src]="category.Image" alt="Ảnh đại diện"></td>
                 <td>{{ category.CategoryName }}</td>
+                <td class="text-center">Đang có <b>{{ category.ProductAmount }}</b> mặt hàng</td>
                 <td class="text-center">{{ category.CreatedDate }}</td>
                 <td class="text-center tools">
                     <a [routerLink]="['/danh-muc/chinh-sua', category.Id]" title="Chỉnh sửa" class="btn bg-green btn-default btn-sm"><i class="fa fa-edit"></i> Sửa</a>
@@ -42,6 +44,7 @@
                 <th class="text-center" width="10px">STT</th>
                 <th width="105px" class="text-center">Ảnh</th>
                 <th class="text-center"  width="200px">Tên danh mục</th>
+                <th width="150px" class="text-center">Số lượng mặt hàng</th>
                 <th width="100px" class="text-center">Ngày tạo</th>
                 <th data-priority="1" width="120px" class="text-center">Thao tác</th>
               </tr>

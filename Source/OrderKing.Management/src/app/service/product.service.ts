@@ -43,6 +43,7 @@ export class ProductService {
             productInfo.Description = e.description;
             productInfo.StoreName = e.storename;
             productInfo.Price = e.price;
+            productInfo.InStock = e.instock;
             productInfo.Image = this.getImageUrlById(productInfo.Id);
             resultData.push(productInfo);
            });
@@ -60,6 +61,7 @@ export class ProductService {
     const params = new Dictionary<string, any>();
     params.put('Name', product.ProductName);
     params.put('Description', product.Description);
+    params.put('InStock' , product.InStock);
     params.put('CategoryId', product.CategoryId);
     params.put('Price', product.Price);
 
@@ -81,6 +83,7 @@ export class ProductService {
     params.put('Id', product.Id);
     params.put('CategoryId', product.CategoryId);
     params.put('Name', product.ProductName);
+    params.put('InStock' , product.InStock);
     params.put('Description', product.Description);
     params.put('Price', product.Price);
 
@@ -149,6 +152,7 @@ export class ProductService {
           info.productInfo.ProductName = data.Result.productname;
           info.productInfo.Description = data.Result.description;
           info.productInfo.StoreName = data.Result.storename;
+          info.productInfo.InStock = data.Result.instock;
           info.productInfo.Price = data.Result.price;
         }
       } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {

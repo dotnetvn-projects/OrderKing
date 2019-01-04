@@ -196,6 +196,7 @@ catalogrouter.post('/create-product', async (req, res, next) => {
                 storeId: storeId,
                 name: req.body.Name,
                 description: req.body.Description,
+                inStock: req.body.InStock,
                 categoryId: security.decrypt(req.body.CategoryId).split('_')[0],
                 price: req.body.Price,
                 image: null
@@ -235,6 +236,7 @@ catalogrouter.post('/update-product', async (req, res, next) => {
             var product = {
                 storeId: storeId,
                 name: req.body.Name,
+                inStock: req.body.InStock,
                 description: req.body.Description,
                 categoryId: cateId,
                 price: req.body.Price,
@@ -261,7 +263,7 @@ catalogrouter.post('/change-product-image', multipartMiddleware, async (req, res
     try {
         var accessToken = req.body.AccessToken;
         var productId = security.decrypt(req.body.Id).split('_')[0];
-        var storeId = await service.getStoreIdByAccessToken(accessToken);
+        var storeId = await storeService.getStoreIdByAccessToken(accessToken);
 
         var buff = io.readFileToBinary(req.files.ProductImage.path);
 

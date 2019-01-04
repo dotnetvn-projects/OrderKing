@@ -36,15 +36,10 @@ export class ProductActionComponent extends BaseComponent {
   ) {
     super(injector);
     this.ProductInfo.CreatedDate = Converter.ConvertCurrentDateToString();
-    this.loadCategoryList();
   }
 
-  private loadCategoryList = async () => {
-    this.CategoryList = await this.categoryService.getSimpleList();
- }
-
   async onInit() {
-
+    this.CategoryList = await this.categoryService.getSelectedList();
     this.ImageUrl = AppSettings.APP_DEFAULT_IMAGE.DEFAULT_PRODUCT;
 
     // get id from url
@@ -56,7 +51,7 @@ export class ProductActionComponent extends BaseComponent {
       this.ButtonContent = AppMessage.APP_CONTROL_CONTENT.UPDATE;
       this.IsEdit = true;
     } else {
-      this.ProductInfo.CategoryId = this.CategoryList[0].Id;
+      this.ProductInfo.CategoryId = '0';
       this.titleService.setTitle(AppMessage.APP_TITLE_MESSAGE.PRODUCT_CREATE);
       this.ButtonContent = AppMessage.APP_CONTROL_CONTENT.CREATE;
       this.IsEdit = false;
@@ -64,11 +59,15 @@ export class ProductActionComponent extends BaseComponent {
   }
 
   async onSubmit() {
-    if (this.productId === null || this.productId === undefined) {
-      await this.createNew();
+    if (this.ProductInfo.CategoryId === '0') {
+      this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.SELECT_CATEGORY);
     } else {
-      this.ProductInfo.Id = this.productId;
-      await this.edit();
+      if (this.productId === null || this.productId === undefined) {
+        await this.createNew();
+      } else {
+        this.ProductInfo.Id = this.productId;
+        await this.edit();
+      }
     }
   }
 
@@ -140,6 +139,11 @@ export class ProductActionComponent extends BaseComponent {
   }
 
   // **********************UI Updating***********************
+
+  categorySelectChange(event) {
+    this.ProductInfo.CategoryId = event.currentTarget.value;
+  }
+
   // ** Handle upload image on view */
   onImageChanged(imageInput: any) {
     const file: File = imageInput.files[0];

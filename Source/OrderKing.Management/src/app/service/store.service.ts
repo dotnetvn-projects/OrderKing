@@ -6,6 +6,7 @@ import { Dictionary } from '../framework/objectextension/framework.dictionary';
 import { ApiResultModel } from '../model/api.result.model';
 import { AppSettings } from '../framework/framework.app.setting';
 import { UserService } from './user.service';
+import { StoreModel } from '../model/store.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,13 +20,87 @@ export class StoreService {
   private editStaffAvatarUrl = 'store/edit-member-avatar';
   private lockStaffUrl = 'store/lock-member';
   private unLockStaffUrl = 'store/unlock-member';
+  private storeInfoUrl = 'store/get-info';
+  private storeLogoUrl = 'store/logo?';
+  private updateStoreLogoUrl = 'store/update-logo';
+  private editStoreUrl = 'store/edit-info';
 
+  // staff list
   private staffListSource = new BehaviorSubject<Array<UserInfoModel>>(new Array<UserInfoModel>());
   StaffList = this.staffListSource.asObservable();
 
+  // store info
+  private storeInfoSource = new BehaviorSubject<StoreModel>(new StoreModel());
+  StoreInfo = this.storeInfoSource.asObservable();
+
   constructor(private webClient: WebClientService, private userService: UserService ) {}
 
-   // ** get staffs list of current store */
+  // ** get store info*/
+  fetchStoreInfo() {
+    const params = new Dictionary<string, any>();
+    this.webClient.doPost(AppSettings.API_ENDPOINT + this.storeInfoUrl, params, (data: ApiResultModel) => {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+          const storeInfo = new StoreModel();
+          storeInfo.Id = data.Result.storeid;
+          storeInfo.StoreName = data.Result.storename;
+          storeInfo.Email = data.Result.email;
+          storeInfo.Address = data.Result.address;
+          storeInfo.PhoneNumber = data.Result.phone;
+          storeInfo.Slogan = data.Result.slogan;
+          storeInfo.Manager = data.Result.manager;
+          storeInfo.CreatedDate = data.Result.createddate;
+          storeInfo.Image = this.getStoreLogoUrlByToken();
+          this.storeInfoSource.next(storeInfo);
+        }
+    });
+  }
+
+  // ** get store logo url*/
+  getStoreLogoUrlByToken() {
+    return AppSettings.API_ENDPOINT + this.storeLogoUrl + 'access_token='
+    + sessionStorage.getItem(AppSettings.TOKEN_KEY) + '&random=' + Math.random();
+  }
+
+  // update store logo
+  async updateStoreLogo(fileData: any) {
+    let result = AppSettings.RESPONSE_MESSAGE.ERROR;
+
+    const params = new Dictionary<string, any>();
+    params.put('StoreLogo', fileData);
+
+    await this.webClient.doPostFileDataAsync(AppSettings.API_ENDPOINT + this.updateStoreLogoUrl, params, (data: ApiResultModel) => {
+      if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+        result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
+      } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+        result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+      }
+    });
+    return result;
+  }
+
+  // edit store info
+  async editStoreInfo(store: StoreModel) {
+    let result = AppSettings.RESPONSE_MESSAGE.ERROR;
+
+    const params = new Dictionary<string, any>();
+    params.put('StoreName' , store.StoreName);
+    params.put('Email' , store.Email);
+    params.put('StoreAddress' , store.Address);
+    params.put('Phone' , store.PhoneNumber);
+    params.put('Slogan' , store.Slogan);
+
+    await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.editStoreUrl, params, (data: ApiResultModel) => {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+          result = data.Result.storeid;
+        } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+          result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+        }
+    });
+
+    return result;
+  }
+
+   // ** get staff list of current store */
    fetchStaffList(updateUI) {
     const params = new Dictionary<string, any>();
     params.put('AccessToken' , sessionStorage.getItem(AppSettings.TOKEN_KEY));

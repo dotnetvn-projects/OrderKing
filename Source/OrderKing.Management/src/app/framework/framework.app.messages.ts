@@ -2,7 +2,8 @@ export class AppMessage {
   // error message
   public static APP_ERROR_MESSAGE = {
     BUSY: 'Hệ thống đang bận không thể xử lý, vui lòng thử lại !',
-    SESSION_TIMEOUT: 'Phiên làm việc đã kết thức, vui lòng đăng nhập lại !'
+    SESSION_TIMEOUT: 'Phiên làm việc đã kết thức, vui lòng đăng nhập lại !',
+    SELECT_CATEGORY: 'Vui lòng chọn danh mục !'
   };
 
   // success message
@@ -15,7 +16,8 @@ export class AppMessage {
     DELETE_CATEGORY: 'Xóa danh mục thành công !',
     CREATE_PRODUCT: 'Tạo mới mặt hàng thành công !',
     UPDATE_PRODUCT: 'Cập nhật thông tin mặt hàng thành công !',
-    DELETE_PRODUCT: 'Xóa mặt hàng thành công'
+    DELETE_PRODUCT: 'Xóa mặt hàng thành công',
+    UPDATE_STORE: 'Cập nhật thông tin cửa hàng thành công',
   };
 
   // title message
@@ -29,7 +31,9 @@ export class AppMessage {
     CATEGORY_UPDATE: 'Order King - Chỉnh sửa thông tin danh mục',
     PRODUCT: 'Order King - Danh sách mặt hàng',
     PRODUCT_CREATE: 'Order King - Tạo mới mặt hàng',
-    PRODUCT_UPDATE: 'Order King - Chỉnh sửa thông tin mặt hàng'
+    PRODUCT_UPDATE: 'Order King - Chỉnh sửa thông tin mặt hàng',
+    STORE: 'Order King - Thông tin cửa hàng',
+    STORE_UPDATE: 'Order King - Chỉnh sửa thông tin cửa hàng'
   };
 
   // Control content

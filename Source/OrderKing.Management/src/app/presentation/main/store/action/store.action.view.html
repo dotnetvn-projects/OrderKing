@@ -1,0 +1,108 @@
+<section class="content-header">
+  <app-bread-crumb [Title]="'Sửa thông tin cửa hàng'" [Root]="['Cửa hàng@(/cua-hang)']" [Active]="'thông tin cửa hàng'"></app-bread-crumb>
+</section>
+<section class="content container-fluid">
+  <div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#settings" data-toggle="tab">Thông tin cửa hàng</a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="active tab-pane" id="settings">
+        <form (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" class="form-horizontal" novalidate>
+          <div class="form-group">
+            <label for="inputName" class="col-sm-2 control-label">Tên cửa hàng</label>
+
+            <div class="col-sm-5">
+              <input type="text" [(ngModel)]="StoreInfo.StoreName" name="name" #name="ngModel" [ngClass]="{ 'is-invalid': f.submitted && name.invalid }"
+                required class="form-control" id="inputName" placeholder="Tên cửa hàng">
+              <div *ngIf="f.submitted && name.invalid" class="invalid-feedback">
+                <div *ngIf="name?.errors.required"><i class="fa fa-warning text-red"></i> Tên cửa hàng không được rỗng
+                  !</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+
+            <div class="col-sm-5">
+              <input type="text" [(ngModel)]="StoreInfo.Email" name="email" #email="ngModel" [ngClass]="{ 'is-invalid': f.submitted && email.invalid }"
+                required email class="form-control" id="inputEmail" placeholder="Email">
+              <div *ngIf="f.submitted && email.invalid" class="invalid-feedback">
+                <div *ngIf="email?.errors.required"><i class="fa fa-warning text-red"></i> Tên cửa hàng không được rỗng
+                  !</div>
+                <div *ngIf="email?.errors.email">Email không đúng định dạng !</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="inputPhone" class="col-sm-2 control-label">Điện thoại</label>
+
+            <div class="col-sm-5">
+              <input type="text" [(ngModel)]="StoreInfo.PhoneNumber" name="phoneNumber" #phoneNumber="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && phoneNumber.invalid }" required class="form-control" id="inputPhone"
+                placeholder="Số điện thoại cửa hàng">
+              <div *ngIf="f.submitted && phoneNumber.invalid" class="invalid-feedback">
+                <div *ngIf="phoneNumber?.errors.required"><i class="fa fa-warning text-red"></i> Số điện thoại không
+                  được rỗng !</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="inputSlogan" class="col-sm-2 control-label">Slogan</label>
+
+            <div class="col-sm-5">
+              <input type="text" [(ngModel)]="StoreInfo.Slogan" name="slogan" class="form-control" id="inputSlogan"
+                placeholder="Slogan cửa hàng">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="inputAddress" class="col-sm-2 control-label">Slogan</label>
+
+            <div class="col-sm-5">
+              <input type="text" [(ngModel)]="StoreInfo.Address" name="address" class="form-control" id="inputAddress"
+                placeholder="Địa chỉ cửa hàng">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="inputPass" class="col-sm-2 control-label">Logo</label>
+            <div class="col-sm-5">
+              <div class="box box-primary">
+                <div class="box-body box-profile">
+                  <img class="profile-user-img img-responsive img-avatar" [src]="StoreInfo.Image">
+                  <div class="upload-avatar-button">
+
+                    <label for="image-upload" class="custom-file-upload">
+                      <i class="fa fa-cloud-upload"></i> Upload logo
+                    </label>
+                    <input #imageInput (change)="onImageChanged(imageInput)" accept="image/x-png,image/gif,image/jpeg"
+                      id="image-upload" type="file" />
+
+                  </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputIdNum" class="col-sm-2 control-label">Ngày tạo</label>
+
+            <div class="col-sm-5 created-date">
+              <span class="text-muted">Được tạo vào ngày {{StoreInfo.CreatedDate}}</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-10">
+              <button class="btn btn-danger">{{ButtonContent}}</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</section>

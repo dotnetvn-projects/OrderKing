@@ -33,8 +33,12 @@ defineProperty('deactivateCategory', `
 
 //get category in store
 defineProperty('getCategoryInStore', 
-    `SELECT Id, Name, CreatedDate
-     FROM Category WHERE StoreId =@StoreId AND IsActived = 1 ORDER BY CreatedDate DESC
+    `SELECT Category.Id, Category.Name, Category.CreatedDate, COUNT(PRODUCT.Id) AS ProductAmount
+     FROM Category 
+     LEFT JOIN PRODUCT ON Product.CategoryId = Category.Id 
+     WHERE Category.StoreId =@StoreId AND Category.IsActived = 1 
+     GROUP BY Category.Id, Category.Name, Category.CreatedDate
+     ORDER BY CreatedDate DESC
 `);
 
 //get category by id
@@ -45,8 +49,8 @@ defineProperty('getCategoryById',
 
 //create product
 defineProperty('createProduct', `
-    INSERT INTO Product(Name, Image, Description, StoreId, CategoryId, CreatedDate, Price, IsActived)
-    VALUES(@Name, @Image, @Description, @StoreId, @CategoryId, GETDATE(), @Price, 1)
+    INSERT INTO Product(Name, Image, Description, InStock, StoreId, CategoryId, CreatedDate, Price, IsActived)
+    VALUES(@Name, @Image, @Description, @InStock @StoreId, @CategoryId, GETDATE(), @Price, 1)
     SELECT SCOPE_IDENTITY() AS ProductId
 `);
 
@@ -54,7 +58,8 @@ defineProperty('createProduct', `
 defineProperty('updateProduct', `
     UPDATE Product 
     SET Name = @Name, Description = @Description, 
-        CategoryId = @CategoryId, Price = @Price)
+        CategoryId = @CategoryId, Price = @Price,
+        InStock = @InStock
     WHERE Id = @Id and StoreId = @StoreId
 `);
 
@@ -85,19 +90,19 @@ defineProperty('deactiveProduct', `
 
 //get product in store
 defineProperty('getProductsInStore', `
-    SELECT Product.Id, Product.[Name], Product.Description, Product.CreatedDate,
+    SELECT Product.Id, Product.[Name], Product.Description, Product.CreatedDate, Product.InStock,
            Product.Price, Product.CategoryId, Category.[Name] AS CategoryName, Store.StoreName
     FROM Product INNER JOIN Store ON Store.Id = Product.StoreId
     INNER JOIN Category ON Product.CategoryId = Category.Id AND Store.Id = Category.StoreId
     WHERE Product.StoreId = @StoreId AND Product.IsActived = 1 AND Category.IsActived =1
     GROUP BY Product.Id, Product.[Name], Product.Description, Product.CreatedDate,
-           Product.Price, Product.CategoryId, Category.[Name], Store.StoreName
+           Product.Price, Product.CategoryId, Category.[Name], Store.StoreName, Product.InStock
     ORDER BY Product.CreatedDate DESC
 `);
 
 //get product in store by category
 defineProperty('getProductsInStoreByCate', `
-    SELECT Product.Id, Product.[Name], Product.Description, Product.CreatedDate,
+    SELECT Product.Id, Product.[Name], Product.Description, Product.CreatedDate, Product.InStock,
            Product.Price, Product.CategoryId, Category.[Name] AS CategoryName, Store.StoreName
     FROM Product INNER JOIN Store ON Store.Id = Product.StoreId
     INNER JOIN Category ON Product.CategoryId = Category.Id AND Store.Id = Category.StoreId
@@ -108,7 +113,7 @@ defineProperty('getProductsInStoreByCate', `
 
 //get product info by id
 defineProperty('getProductById',
-    `SELECT Product.Id, Product.[Name], Product.Description, Product.CreatedDate,
+    `SELECT Product.Id, Product.[Name], Product.Description, Product.CreatedDate, Product.InStock,
            Product.Price, Product.CategoryId, Category.[Name] AS CategoryName, Store.StoreName
     FROM Product INNER JOIN Store ON Store.Id = Product.StoreId
     INNER JOIN Category ON Product.CategoryId = Category.Id AND Store.Id = Category.StoreId

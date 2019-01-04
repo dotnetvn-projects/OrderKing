@@ -111,6 +111,7 @@ exports.getCategoryInStore = async (storeId) => {
             categories.push({
                 categoryid: security.encrypt(value.Id + '_' + security.serverKey()),
                 categoryname: value.Name,
+                productamount: value.ProductAmount,
                 createddate: moment(value.CreatedDate).format('DD/MM/YYYY')
             });
         });
@@ -155,6 +156,7 @@ exports.createProduct = async (productobject) => {
         .input('Name', sql.NVarChar, productobject.name)
         .input('Image', sql.VarBinary, productobject.image)
         .input("Description", sql.NVarChar, productobject.description)
+        .input('InStock', sql.Int, productobject.inStock)
         .input("CategoryId", sql.BigInt, productobject.categoryId)
         .input("Price", sql.Int, productobject.price)
         .query(catalogSqlCmd.createProduct);
@@ -204,16 +206,17 @@ exports.updateProduct = async (productobject) => {
         .input('StoreId', sql.BigInt, productobject.storeId)
         .input('Name', sql.NVarChar, productobject.name)
         .input("Description", sql.NVarChar, productobject.description)
+        .input('InStock', sql.Int, productobject.inStock)
         .input("CategoryId", sql.BigInt, productobject.categoryId)
         .input("Price", sql.Int, productobject.price)
-        .input('Id', sql.BigInt, categoryobject.id)
+        .input('Id', sql.BigInt, productobject.id)
         .query(catalogSqlCmd.updateProduct);
 
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
         productResponse.model.statusmessage = status.common.suscess;
         productResponse.model.responsecode = status.common.suscesscode;
         productResponse.model.product = {
-            productid: security.encrypt(security.encrypt(productobject.id + '_' + security.serverKey())),
+            productid: security.encrypt(productobject.id + '_' + security.serverKey()),
             productname: productobject.name,
             description: productobject.description,
             price: productobject.price
@@ -267,6 +270,7 @@ exports.getProductsInStore = async (storeId) => {
                 createddate: moment(value.CreatedDate).format('DD/MM/YYYY'),
                 description: value.Description,
                 storename: value.StoreName,
+                instock: value.InStock,
                 price: value.Price
             });
         });
@@ -302,6 +306,7 @@ exports.getProductsInStoreByCate = async (productobject) => {
                 createddate: moment(value.CreatedDate).format('DD/MM/YYYY'),
                 description: value.Description,
                 storename: value.StoreName,
+                instock: value.InStock,
                 price: value.Price
             });
         });
@@ -335,6 +340,7 @@ exports.getProductInStoreById = async (productobject) => {
             createddate: moment(result.recordset[0].CreatedDate).format('DD/MM/YYYY'),
             description: result.recordset[0].Description,
             storename: result.recordset[0].StoreName,
+            instock: result.recordset[0].InStock,
             price: result.recordset[0].Price
         };
     }

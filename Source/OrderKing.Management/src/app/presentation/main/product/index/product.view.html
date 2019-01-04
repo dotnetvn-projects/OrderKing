@@ -12,6 +12,7 @@
               <a title="Tải lại" (click)="reload()" class="btn btn-default btn-sm"><i class="fa fa-refresh text-green"></i> Tải lại</a>&nbsp;&nbsp;
               <a title="Xuất excel" class="btn btn-default btn-sm"><i class="fa fa-file-excel-o text-green"></i> Xuất excel</a>
           </div>
+          <div>Danh mục</div>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -23,7 +24,8 @@
                 <th class="text-center" width="200px">Tên mặt hàng</th>
                 <th class="text-center" width="100px">Danh mục</th>
                 <th class="text-center" width="100px">Đơn giá</th>
-                <th width="100px" class="text-center">Ngày tạo</th>
+                <th class="text-center" width="80px">Tồn kho</th>
+                <th width="80px" class="text-center">Ngày tạo</th>
                 <th data-priority="1" width="120px" class="text-center">Thao tác</th>
               </tr>
             </thead>
@@ -33,7 +35,8 @@
                 <td class="text-center"><img class="table-image" [src]="product.Image" alt="Ảnh đại diện"></td>
                 <td>{{ product.ProductName }}</td>
                 <td class="text-center">{{ product.CategoryName }}</td>
-                <td class="text-center">{{ product.Price }}</td>
+                <td class="text-center">{{ product.Price | currency:'VND':true }}</td>
+                <td class="text-center">{{ product.InStock }} mặt hàng</td>
                 <td  class="text-center">{{ product.CreatedDate }}</td>
                 <td class="text-center tools">
                     <a [routerLink]="['/mat-hang/chinh-sua', product.Id]" title="Chỉnh sửa" class="btn bg-green btn-default btn-sm"><i class="fa fa-edit"></i> Sửa</a>
@@ -48,7 +51,8 @@
                 <th class="text-center" width="200px">Tên mặt hàng</th>
                 <th class="text-center" width="100px">Danh mục</th>
                 <th class="text-center" width="100px">Đơn giá</th>
-                <th width="100px" class="text-center">Ngày tạo</th>
+                <th class="text-center" width="80px">Tồn kho</th>
+                <th width="80px" class="text-center">Ngày tạo</th>
                 <th data-priority="1" width="120px" class="text-center">Thao tác</th>
               </tr>
             </tfoot>

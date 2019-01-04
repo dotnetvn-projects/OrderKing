@@ -39,6 +39,7 @@ export class CategoryService {
             categoryInfo.Id = e.categoryid;
             categoryInfo.CategoryName = e.categoryname;
             categoryInfo.CreatedDate = e.createddate;
+            categoryInfo.ProductAmount = e.productamount;
             categoryInfo.Image = this.getImageUrlByCateId(categoryInfo.Id);
             resultData.push(categoryInfo);
           });
@@ -52,13 +53,14 @@ export class CategoryService {
   }
 
   // get simple list
-  async getSimpleList() {
+  async getSelectedList() {
     const params = new Dictionary<string, any>();
     const resultData = new Array<CategoryModel>();
-    await this.webClient.doPostAsync(
-      AppSettings.API_ENDPOINT + this.getCategoryListUrl,
-      params,
-      (data: ApiResultModel) => {
+    const tempCate = new CategoryModel();
+    tempCate.CategoryName = '--- Chọn danh mục ---';
+    tempCate.Id = '0';
+    resultData.push(tempCate);
+    await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.getCategoryListUrl, params, (data: ApiResultModel) => {
         if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
           data.Result.forEach(e => {
             const categoryInfo = new CategoryModel();

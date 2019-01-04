@@ -39,6 +39,7 @@ storerouter.post('/edit-info', async (req, res, next) => {
         var accessToken = req.body.AccessToken;
         var storeInfo = {
             storename: req.body.StoreName,
+            email: req.body.Email,
             address: req.body.StoreAddress,
             phone: req.body.Phone,
             slogan: req.body.Slogan
