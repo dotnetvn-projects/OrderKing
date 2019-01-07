@@ -292,7 +292,7 @@ exports.getProductsInStoreByCate = async (productobject) => {
         .input('CategoryId', sql.BigInt, productobject.categoryId)
         .query(catalogSqlCmd.getProductsInStoreByCate);
 
-    if (result.recordset.length > 0) {
+    if (result.recordset.length >= 0) {
         productResponse.model.statusmessage = status.common.suscess;
         productResponse.model.responsecode = status.common.suscesscode;
 

@@ -7,6 +7,8 @@ import { DialogService } from 'src/app/service/dialog.service';
 import { ProductService } from 'src/app/service/product.service';
 import { AppMessage } from 'src/app/framework/framework.app.messages';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
+import { CategoryModel } from 'src/app/model/category.model';
+import { CategoryService } from 'src/app/service/category.service';
 
 @Component({
   selector: 'app-product',
@@ -16,18 +18,22 @@ import { AppSettings } from 'src/app/framework/framework.app.setting';
 export class ProductComponent extends BaseComponent {
   ProductList: ProductModel[];
   private tableId = 'table-product';
+  CategoryList: CategoryModel[];
+  SelectedCategoryId: string;
 
   constructor(private titleService: Title, private dialogService: DialogService,
-    private router: Router, private productService: ProductService, injector: Injector) {
+    private router: Router, private categoryService: CategoryService, private productService: ProductService, injector: Injector) {
     super(injector);
   }
 
-  onInit() {
+  async onInit() {
     this.titleService.setTitle(AppMessage.APP_TITLE_MESSAGE.PRODUCT);
     this.productService.ProductList.subscribe(productList => this.ProductList = productList);
     this.fetchProductList(() => {
       this.applyDataTable(this.tableId);
     });
+    this.CategoryList = await this.categoryService.getSelectedList();
+    this.SelectedCategoryId = this.CategoryList[0].Id;
   }
 
   // ** remove product */
@@ -57,5 +63,26 @@ export class ProductComponent extends BaseComponent {
     this.productService.fetchProductList(() => {
       updateUI();
     });
+  }
+
+  // ** load product list by categỏy and apply datatable js */
+  private fetchProductListByCategory(updateUI) {
+    this.productService.fetchProductListBycate(this.SelectedCategoryId, () => {
+      updateUI();
+    });
+  }
+
+  categorySelectChange(event) {
+    this.SelectedCategoryId = event.currentTarget.value;
+    this.destroyDataTable(this.tableId);
+    if (this.SelectedCategoryId === '0') {
+      this.fetchProductList(() => {
+        this.applyDataTable(this.tableId);
+      });
+    } else {
+      this.fetchProductListByCategory(() => {
+        this.applyDataTable(this.tableId);
+      });
+    }
   }
 }

@@ -50,7 +50,7 @@ defineProperty('getCategoryById',
 //create product
 defineProperty('createProduct', `
     INSERT INTO Product(Name, Image, Description, InStock, StoreId, CategoryId, CreatedDate, Price, IsActived)
-    VALUES(@Name, @Image, @Description, @InStock @StoreId, @CategoryId, GETDATE(), @Price, 1)
+    VALUES(@Name, @Image, @Description, @InStock, @StoreId, @CategoryId, GETDATE(), @Price, 1)
     SELECT SCOPE_IDENTITY() AS ProductId
 `);
 

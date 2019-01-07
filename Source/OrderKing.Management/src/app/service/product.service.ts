@@ -27,7 +27,7 @@ export class ProductService {
 
   }
 
-  // ** get category list of current store */
+  // ** get product list of current store */
   fetchProductList(updateUI) {
     const params = new Dictionary<string, any>();
     this.webClient.doPost(AppSettings.API_ENDPOINT + this.getProductListUrl, params, (data: ApiResultModel) => {
@@ -54,6 +54,36 @@ export class ProductService {
         }
     });
   }
+
+  // ** get product list of current store by category */
+  fetchProductListBycate(cateId, updateUI) {
+    const params = new Dictionary<string, any>();
+    params.put('CategoryId', cateId);
+    this.webClient.doPost(AppSettings.API_ENDPOINT + this.getProductListByCateUrl, params, (data: ApiResultModel) => {
+        const resultData = new Array<ProductModel>();
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+          data.Result.forEach(e => {
+            const productInfo = new ProductModel();
+            productInfo.Id = e.productid;
+            productInfo.CategoryId = e.categoryid;
+            productInfo.CategoryName = e.categoryname;
+            productInfo.CreatedDate = e.createddate;
+            productInfo.ProductName = e.productname;
+            productInfo.Description = e.description;
+            productInfo.StoreName = e.storename;
+            productInfo.Price = e.price;
+            productInfo.InStock = e.instock;
+            productInfo.Image = this.getImageUrlById(productInfo.Id);
+            resultData.push(productInfo);
+           });
+           this.productListSource.next(resultData);
+           if (updateUI !== null) {
+             updateUI();
+          }
+        }
+    });
+  }
+
 
    // add new product to store
    async addProduct(product: ProductModel) {
