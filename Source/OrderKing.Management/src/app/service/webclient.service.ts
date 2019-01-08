@@ -18,9 +18,11 @@ export class WebClientService {
   // build http parameters for call normal api
   private buildHttpParams(params: Dictionary<string, any>) {
     let body = AppSettings.createDefaultHttpParams();
-    params.getKeys().forEach((key: any) => {
-      body = body.set(key, params.get(key));
-    });
+    if (params !== null) {
+      params.getKeys().forEach((key: any) => {
+        body = body.set(key, params.get(key));
+      });
+    }
 
     return body;
   }

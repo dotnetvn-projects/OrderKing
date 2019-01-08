@@ -6,15 +6,12 @@ var defineProperty = function define(name, value) {
 };
 
 //get order list by store
+//status: 1 :completed, 2: cancel, 3 not yet processed
 defineProperty('getOrderListByStore', `
     SELECT [Order].Id, Store.StoreName, [Order].OrderCode, [Order].SeqNum,
            [Order].TotalPrice, [Order].TotalAmount,[Order].CreatedDate,
            [Order].PrintedDate, [Order].Comment,
-           CASE [Order].[OrderStatus] 
-               WHEN 1 THEN N'Ho?n Th?nh' 
-               WHEN 2 THEN N'H?y' 
-               WHEN 3 THEN N'Ch?a Ho?n Th?nh' END AS OrderStatus,
-          Account.AccountName AS SellerAccount, UserProfile.FullName AS Seller 
+           [Order].[OrderStatus], Account.AccountName AS SellerAccount, UserProfile.FullName AS Seller 
     FROM [Order]
     INNER JOIN Account ON [Order].SellerId = Account.Id
     INNER JOIN UserProfile ON Account.Id = UserProfile.AccountId
@@ -25,8 +22,8 @@ defineProperty('getOrderListByStore', `
 //create new order
 defineProperty('createNewOrder', `
     INSERT INTO [Order] (OrderCode, SeqNum, SellerId, StoreId, 
-                TotalPrice, TotalAmount, CreatedDate, OrderStatus)
-          VALUES ('0', @SeqNum, @SellerId, @StoreId, @TotalPrice, @TotalAmount, GETDATE(), @OrderStatus)
+                TotalPrice, TotalAmount, CreatedDate, OrderStatus, PrintedDate)
+          VALUES ('0', @SeqNum, @SellerId, @StoreId, @TotalPrice, @TotalAmount, GETDATE(), @OrderStatus, GETDATE())
 `);
 
 //update ordercode
@@ -51,10 +48,7 @@ defineProperty('getOrderInfo', `
      SELECT [Order].Id, Store.StoreName, [Order].OrderCode, [Order].SeqNum,
            [Order].TotalPrice, [Order].TotalAmount,[Order].CreatedDate,
            [Order].PrintedDate, [Order].Comment,
-           CASE [Order].[OrderStatus] 
-               WHEN 1 THEN N'Ho?n Th?nh' 
-               WHEN 2 THEN N'H?y' 
-               WHEN 3 THEN N'Ch?a Ho?n Th?nh' END AS OrderStatus,
+           [Order].[OrderStatus],
           Account.AccountName AS SellerAccount, UserProfile.FullName AS Seller 
     FROM [Order]
     INNER JOIN Account ON [Order].SellerId = Account.Id

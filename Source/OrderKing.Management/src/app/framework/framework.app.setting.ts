@@ -21,12 +21,12 @@ export class  AppSettings {
     UNAUTHORIZED: 401
   };
 
-    // default image
-    public static APP_DEFAULT_IMAGE = {
-      DEFAULT_AVATAR: '../../../../assets/images/no-avatar.png',
-      DEFAULT_PRODUCT: '../../../../assets/images/default-product.png',
-      NO_IMAGE: '../../../../assets/images/no-image.png'
-    };
+  // default image
+  public static APP_DEFAULT_IMAGE = {
+    DEFAULT_AVATAR: '../../../../assets/images/no-avatar.png',
+    DEFAULT_PRODUCT: '../../../../assets/images/default-product.png',
+    NO_IMAGE: '../../../../assets/images/no-image.png'
+  };
 
   /** create default http params */
   public static createDefaultHeaders() {
@@ -43,6 +43,7 @@ export class  AppSettings {
     return params;
   }
 
+  // ** create formdata */
   public static createDefaultFormData() {
     const data = new FormData();
     data.append('AccessToken', this.accessToken());
@@ -53,4 +54,5 @@ export class  AppSettings {
   public static accessToken() {
     return sessionStorage.getItem(this.TOKEN_KEY);
   }
+
 }

@@ -14,7 +14,8 @@ export const MainRoutes = [
             { path: 'danh-muc', loadChildren: 'src/app/presentation/main/category/category.module#CategoryModule' },
             { path: 'mat-hang', loadChildren: 'src/app/presentation/main/product/product.module#ProductModule' },
             { path: 'nhan-vien', loadChildren: 'src/app/presentation/main/staff/staff.module#StaffModule' },
-            { path: 'cua-hang', loadChildren: 'src/app/presentation/main/store/store.module#StoreModule' }
+            { path: 'cua-hang', loadChildren: 'src/app/presentation/main/store/store.module#StoreModule' },
+            { path: 'don-hang', loadChildren: 'src/app/presentation/main/order/order.module#OrderModule' }
         ],
         canActivate: [AuthGuard]
     },

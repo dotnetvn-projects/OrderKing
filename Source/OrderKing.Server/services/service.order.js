@@ -33,21 +33,21 @@ exports.getOrderListByStore = async (storeId) => {
         .input('StoreId', sql.BigInt, storeId)
         .query(format(orderSqlCmd.getOrderListByStore, ' '));
 
-    if (result.recordset.length > 0) {
+    if (result.recordset.length >= 0) {
         var orders = [];
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
 
         result.recordset.forEach(function (value) {
             orders.push({
-                orderid: security.encrypt(value.Id),
+                orderid: security.encrypt(value.Id + '_' + security.serverKey()),
                 storename: value.StoreName,
                 ordercode: value.OrderCode,
                 seqnum: value.SeqNum,
                 totalprice: value.TotalPrice,
                 amount: value.TotalAmount,
-                createddate: value.CreatedDate,
-                printeddate: value.PrintedDate,
+                createddate: moment(value.CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
+                printeddate: moment(value.PrintedDate).format('DD/MM/YYYY HH:mm:ss'),
                 orderstatus: value.OrderStatus,
                 selleraccount: value.SellerAccount,
                 seller: value.Seller
@@ -76,17 +76,18 @@ exports.getOrderListBySellerId = async (sellerid) => {
 
         result.recordset.forEach(function (value) {
             orders.push({
-                orderid: security.encrypt(value.Id),
+                orderid: security.encrypt(value.Id + '_' + security.serverKey()),
                 storename: value.StoreName,
                 ordercode: value.OrderCode,
                 seqnum: value.SeqNum,
                 totalprice: value.TotalPrice,
                 amount: value.TotalAmount,
-                createddate: value.CreatedDate,
-                printeddate: value.PrintedDate,
+                createddate: moment(value.CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
+                printeddate: moment(value.PrintedDate).format('DD/MM/YYYY HH:mm:ss'),
                 orderstatus: value.OrderStatus,
                 selleraccount: value.SellerAccount,
-                seller: value.Seller
+                seller: value.Seller,
+                commemt: value.Comment
             });
         });
 
@@ -133,24 +134,25 @@ exports.searchOrderListByStore = async (searchPattern) => {
         .input('Seller', sql.NVarChar, searchPattern.seller)
         .query(format(query, searchString));
 
-    if (result.recordset.length > 0) {
+    if (result.recordset.length >= 0) {
         var orders = [];
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
 
         result.recordset.forEach(function (value) {
             orders.push({
-                orderid: security.encrypt(value.Id),
+                orderid: security.encrypt(value.Id + '_' + security.serverKey()),
                 storename: value.StoreName,
                 ordercode: value.OrderCode,
                 seqnum: value.SeqNum,
                 totalprice: value.TotalPrice,
                 amount: value.TotalAmount,
-                createddate: value.CreatedDate,
-                printeddate: value.PrintedDate,
+                createddate: moment(value.CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
+                printeddate: moment(value.PrintedDate).format('DD/MM/YYYY HH:mm:ss'),
                 orderstatus: value.OrderStatus,
                 selleraccount: value.SellerAccount,
-                seller: value.Seller
+                seller: value.Seller,
+                commemt: value.Comment
             });
         });
 
@@ -193,7 +195,7 @@ exports.createNewOrder = async (orderInfo) => {
             .query(orderSqlCmd.updateOrderCode);
 
         response.model.orderinfo = {
-            code: orderCode, orderid: orderId
+            code: orderCode, orderid: security.encrypt(orderId + '_' + security.serverKey())
         };
     }
 
@@ -216,7 +218,7 @@ exports.createOrderDetail = async (orderDetailInfo) => {
     if (result.recordset.length > 0) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
-        response.model.orderinfo = result.recordset[0].OrderDetailId;
+        response.model.orderinfo = security.encrypt(result.recordset[0].OrderDetailId + '_' + security.serverKey());
     }
 
     return response;
@@ -237,7 +239,7 @@ exports.updateOrderStatus = async (statusInfo) => {
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
-        response.model.orderinfo = statusInfo.orderid;
+        response.model.orderinfo = security.encrypt(statusInfo.orderid + '_' + security.serverKey());
     }
 
     return response;
@@ -258,17 +260,18 @@ exports.getOrderInfo = async (orderInfo) => {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
         response.model.orderinfo = {
-            orderid: security.encrypt(result.recordset[0].Id),
+            orderid: security.encrypt(result.recordset[0].Id + '_' + security.serverKey()),
             storename: result.recordset[0].StoreName,
             ordercode: result.recordset[0].OrderCode,
             seqnum: result.recordset[0].SeqNum,
             totalprice: result.recordset[0].TotalPrice,
             amount: result.recordset[0].TotalAmount,
-            createddate: result.recordset[0].CreatedDate,
-            printeddate: result.recordset[0].PrintedDate,
+            createddate: moment(result.recordset[0].CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
+            printeddate: moment(result.recordset[0].PrintedDate).format('DD/MM/YYYY HH:mm:ss'),
             orderstatus: result.recordset[0].OrderStatus,
             selleraccount: result.recordset[0].SellerAccount,
-            seller: result.recordset[0].Seller
+            seller: result.recordset[0].Seller,
+            commemt: result.recordset[0].Comment
         };
     }
     return response;
