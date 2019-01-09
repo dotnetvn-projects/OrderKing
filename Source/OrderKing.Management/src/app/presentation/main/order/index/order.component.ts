@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { AppMessage } from 'src/app/framework/framework.app.messages';
 import { OrderService } from 'src/app/service/order.service';
 import { OrderModel } from 'src/app/model/order.model';
+import { OrderFilterModel } from 'src/app/model/order.filter.model';
+declare var $;
 
 @Component({
   selector: 'app-order',
@@ -18,10 +20,18 @@ import { OrderModel } from 'src/app/model/order.model';
 export class OrderComponent extends BaseComponent {
   OrderList: OrderModel[];
   private tableId = 'table-order';
+  OrderFilter: OrderFilterModel = new OrderFilterModel();
 
   constructor(private titleService: Title, private orderService: OrderService, injector: Injector,
     private dialogService: DialogService, private router: Router) {
     super(injector);
+  }
+
+  applyJs() {
+    $(() => {
+      $('.order-fromdate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
+      $('.order-todate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' });
+    });
   }
 
   onInit() {
@@ -30,6 +40,11 @@ export class OrderComponent extends BaseComponent {
     this.fetchOrderList(() => {
      this.applyDataTable(this.tableId);
     });
+  }
+
+  filterData() {
+     const t = 'ưefwefwe';
+     const s = this.OrderFilter;
   }
 
   removeOrder(orderid) {

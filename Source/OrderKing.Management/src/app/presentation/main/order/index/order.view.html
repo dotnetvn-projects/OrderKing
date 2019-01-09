@@ -11,6 +11,22 @@
               <a title="Tải lại" (click)="reload()" class="btn btn-default btn-sm"><i class="fa fa-refresh text-green"></i> Tải lại</a>&nbsp;&nbsp;
               <a title="Xuất excel" class="btn btn-default btn-sm"><i class="fa fa-file-excel-o text-green"></i> Xuất excel</a>
           </div>
+            <div class="order-filter-panel">
+              <div class="row">
+                  <div class="col-sm-2 col-md-1">
+                      <input type="text" name="code" [(ngModel)]="OrderFilter.OrderCode" class="form-control order-code" size="10" placeholder="mã ĐH" >
+                    </div>
+                  <div class="col-sm-3 col-md-2">
+                    <input type="text" name="fromdate"  [(ngModel)]="OrderFilter.FromDate" class="form-control order-fromdate" size="10" placeholder="Từ ngày" >
+                  </div>
+                  <div class="col-sm-3 col-md-2">
+                      <input type="text" name="todate"  [(ngModel)]="OrderFilter.ToDate" class="form-control order-todate" size="10" placeholder="Đến ngày" >
+                  </div>
+                  <div class="col-sm-3 col-md-2">
+                      <button (click)="filterData()" class="btn btn-default btn-sm"><i class="fa fa-filter"></i> Lọc</button>
+                  </div>
+              </div>
+            </div>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -18,13 +34,13 @@
             <thead>
               <tr>
                 <th class="text-center" width="20px">STT</th>
-                <th class="text-center">Mã ĐH</th>
-                <th class="text-center">Nhân viên xử lý</th>
-                <th class="text-center">Số lượng</th>
-                <th class="text-center">Tổng tiền</th>
-                <th class="text-center">Ngày tạo</th>
-                <th class="text-center">Ngày xuất</th>
-                <th class="text-center">Trạng thái</th>
+                <th width="50px" class="text-center">Mã ĐH</th>
+                <th width="250px" class="text-center">Nhân viên lập đơn</th>
+                <th width="80px" class="text-center">Số lượng</th>
+                <th width="80px" class="text-center">Tổng tiền</th>
+                <th width="80px" class="text-center">Ngày tạo</th>
+                <th width="80px" class="text-center">Ngày xuất</th>
+                <th width="50px" class="text-center">Trạng thái</th>
                 <th data-priority="1" width="120px" class="text-center">Thao tác</th>
               </tr>
             </thead>

@@ -12,14 +12,11 @@
               <a title="Tải lại" (click)="reload()" class="btn btn-default btn-sm"><i class="fa fa-refresh text-green"></i> Tải lại</a>&nbsp;&nbsp;
               <a title="Xuất excel" class="btn btn-default btn-sm"><i class="fa fa-file-excel-o text-green"></i> Xuất excel</a>
           </div>
-          <div class="form-group product-cate-select">
-              <label for="inputStock" class="col-sm-1 control-label">Chọn danh mục</label>
-              <div class="col-sm-2">
-                  <select class="form-control " (change)="categorySelectChange($event)" id="inputCate" name="category"  [(ngModel)]="SelectedCategoryId">
-                      <option *ngFor="let c of CategoryList" [value]="c.Id" [selected]="c.Id === SelectedCategoryId">{{c.CategoryName}}</option>
-                    </select>
-              </div>
-            </div>
+          <div class="product-cate-select">
+              <select class="form-control " (change)="categorySelectChange($event)" id="inputCate" name="category"  [(ngModel)]="SelectedCategoryId">
+                  <option *ngFor="let c of CategoryList" [value]="c.Id" [selected]="c.Id === SelectedCategoryId">{{c.CategoryName}}</option>
+                </select>
+          </div>
         </div>
         <!-- /.box-header -->
         <div class="box-body">

@@ -246,7 +246,7 @@ storerouter.post('/edit-member-avatar', multipartMiddleware, async (req, res, ne
 });
 
 //update logo
-storerouter.post('/update-logo', multipartMiddleware, async (req, res) => {
+storerouter.post('/update-store-logo', multipartMiddleware, async (req, res) => {
     try {
         var accessToken = req.body.AccessToken;
         var isStoreOwner = await security.isStoreOwner(accessToken);
@@ -423,7 +423,7 @@ storerouter.post('/unlock-member', async (req, res, next) => {
 });
 
 //get logo
-storerouter.get('/logo', async (req, res, next) => {
+storerouter.get('/store-logo', async (req, res, next) => {
     try {
         var accessToken = req.query.access_token;
 

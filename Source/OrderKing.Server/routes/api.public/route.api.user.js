@@ -126,7 +126,7 @@ userrouter.post('/change-pass', async function (req, res, next) {
 });
 
 //get avatar
-userrouter.get('/avatar', async function (req, res, next) {
+userrouter.get('/user-avatar', async function (req, res, next) {
     try {
         var accountId = -1;
         var accessToken = req.query.access_token;

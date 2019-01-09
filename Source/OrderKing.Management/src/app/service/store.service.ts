@@ -21,8 +21,8 @@ export class StoreService {
   private lockStaffUrl = 'store/lock-member';
   private unLockStaffUrl = 'store/unlock-member';
   private storeInfoUrl = 'store/get-info';
-  private storeLogoUrl = 'store/logo?';
-  private updateStoreLogoUrl = 'store/update-logo';
+  private storeLogoUrl = 'store/store-logo?';
+  private updateStoreLogoUrl = 'store/update-store-logo';
   private editStoreUrl = 'store/edit-info';
 
   // staff list

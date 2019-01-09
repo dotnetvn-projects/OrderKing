@@ -46,7 +46,7 @@ export class StoreActionComponent extends BaseComponent {
 
       this.dialogService.showSuccess(AppMessage.APP_SUCCESS_MESSAGE.UPDATE_STORE,
         () => {
-          this.router.navigate(['cua-hang', result]);
+          this.router.navigate(['cua-hang']);
         });
     } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
         this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.SESSION_TIMEOUT, () => {

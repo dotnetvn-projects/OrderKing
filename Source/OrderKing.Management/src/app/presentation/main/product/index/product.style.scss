@@ -1,6 +1,10 @@
-.product-cate-select select {
-  margin-top: 15px;
-}
-.product-cate-select label {
+.product-cate-select {
   margin-top: 20px;
+  border-bottom: 2px solid #f4f4f4;
+}
+
+.product-cate-select select {
+  padding-left: 28px;
+  max-width: 200px;
+  margin-bottom: 10px;
 }

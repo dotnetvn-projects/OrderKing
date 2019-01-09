@@ -13,7 +13,7 @@ import { Converter } from '../framework/framework.converter';
 export class UserService {
   private getUserInfoUrl = 'user/get-info';
   private checkUserExistUrl = 'user/check-exist-user';
-  private avatarUrl = 'user/avatar?';
+  private avatarUrl = 'user/user-avatar?';
 
   private userInfoSource = new BehaviorSubject<UserInfoModel>(new UserInfoModel());
   CurrentUserInfo = this.userInfoSource.asObservable();

@@ -7,9 +7,28 @@ const apiConfig = require('../resources/resource.api.config');
 const authenSqlCmd = require('../database/sqlcommand.auth');
 const sessionLoginHandler = require('../eventHandlers/event.handler.sessionlogin');
 
+function allowPassValidate(req) {
+    return req.url.indexOf('auth-user') >= 0
+        || req.url.indexOf('auth-manager') >= 0
+        || req.url.indexOf('product-img') >= 0
+        || req.url.indexOf('cate-img') >= 0
+        || req.url.indexOf('auth-token-status') >= 0
+        || req.url.indexOf('store-logo') >= 0
+        || req.url.indexOf('user-avatar') >= 0
+        || req.url.indexOf('change-category-image') >= 0
+        || req.url.indexOf('change-product-image') >= 0
+        || req.url.indexOf('edit-member-avatar') >= 0
+        || req.url.indexOf('update-store-logo') >= 0;
+}
+
+
 //filter request
 function isAcceptedRequest(req) {
     var isvalid = false;
+
+    if (allowPassValidate(req)) {
+        return true;
+    }
     var appname = req.headers.appname;
     var apikey = req.headers.apikey;
 
@@ -40,11 +59,7 @@ var validateRequest = async function (req, res, next) {
             else {
                 accessToken = req.query.access_token;
             }
-            if (req.url.indexOf('auth-user') === -1
-                && req.url.indexOf('auth-manager') === -1
-                && req.url.indexOf('product-img') === -1
-                && req.url.indexOf('cate-img') === -1
-                && req.url.indexOf('auth-token-status') === -1) {
+            if (allowPassValidate(req) === false) {
                 if (accessToken === undefined || accessToken === '') {
                     logHandler.fire('error', format('ip [{0}] {1} ', ip, 'has sent a request without accesstoken'));
                     common.sendUnauthorizedRequest(res);
