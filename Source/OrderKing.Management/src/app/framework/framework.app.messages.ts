@@ -33,7 +33,9 @@ export class AppMessage {
     PRODUCT_CREATE: 'Order King - Tạo mới mặt hàng',
     PRODUCT_UPDATE: 'Order King - Chỉnh sửa thông tin mặt hàng',
     STORE: 'Order King - Thông tin cửa hàng',
-    STORE_UPDATE: 'Order King - Chỉnh sửa thông tin cửa hàng'
+    STORE_UPDATE: 'Order King - Chỉnh sửa thông tin cửa hàng',
+    ORDER: 'Order King - Danh sách đơn hàng',
+    ORDER_DETAIL: 'Order King - Chi tiết đơn hàng'
   };
 
   // Control content

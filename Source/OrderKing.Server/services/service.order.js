@@ -47,7 +47,7 @@ exports.getOrderListByStore = async (storeId) => {
                 totalprice: value.TotalPrice,
                 amount: value.TotalAmount,
                 createddate: moment(value.CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
-                printeddate: moment(value.PrintedDate).format('DD/MM/YYYY HH:mm:ss'),
+                updateddate: moment(value.UpdatedDate).format('DD/MM/YYYY HH:mm:ss'),
                 orderstatus: value.OrderStatus,
                 selleraccount: value.SellerAccount,
                 seller: value.Seller
@@ -83,7 +83,7 @@ exports.getOrderListBySellerId = async (sellerid) => {
                 totalprice: value.TotalPrice,
                 amount: value.TotalAmount,
                 createddate: moment(value.CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
-                printeddate: moment(value.PrintedDate).format('DD/MM/YYYY HH:mm:ss'),
+                updateddate: moment(value.UpdatedDate).format('DD/MM/YYYY HH:mm:ss'),
                 orderstatus: value.OrderStatus,
                 selleraccount: value.SellerAccount,
                 seller: value.Seller,
@@ -105,22 +105,53 @@ exports.searchOrderListByStore = async (searchPattern) => {
     var searchString = '';
     var startdate = null;
     var enddate = null;
-    if (searchPattern.ordercode !== undefined
-        && (searchPattern.ordercode !== '' && searchPattern.ordercode !== null)) {
-        searchString += 'AND OrderCode = @OrderCode ';
-        startdate = new Date(searchPattern.startdate);
+
+    if (searchPattern.ordercode !== undefined && searchPattern.ordercode !== '' && searchPattern.ordercode !== null) {
+        searchString += 'AND OrderCode = @OrderCode ';       
     }
-    if (searchPattern.startdate !== undefined
-        && (searchPattern.startdate !== '' && searchPattern.startdate !==null)) {
-        searchString += 'AND (CreatedDate BETWEEN @StartDate AND @EndDate) ';
-        enddate = new Date(searchPattern.enddate);
+    if ((searchPattern.startdate !== undefined && searchPattern.startdate !== '' && searchPattern.startdate !== null)
+        &&
+        (searchPattern.enddate !== undefined && searchPattern.enddate !== '' && searchPattern.enddate !== null)) {
+        searchString += 'AND ([Order].CreatedDate BETWEEN @StartDate AND @EndDate) ';
+
+        var startDay = searchPattern.startdate.split('/')[0];
+        var startMonth = searchPattern.startdate.split('/')[1];
+        var startYear = searchPattern.startdate.split('/')[2];
+        var endDay = searchPattern.enddate.split('/')[0];
+        var endMonth = searchPattern.enddate.split('/')[1];
+        var endYear = searchPattern.enddate.split('/')[2];
+
+        startdate = new Date(moment({ y: startYear, m: startMonth, d: startDay }).format('YYYY-MM-DD HH:mm:ss'));
+        enddate = new Date(moment({ y: endYear, m: endMonth, d: endDay }).format('YYYY-MM-DD HH:mm:ss'));
+
+    } else if ((searchPattern.startdate !== undefined && searchPattern.startdate !== '' && searchPattern.startdate !== null)
+        &&
+        (searchPattern.enddate === undefined || searchPattern.enddate !== '' || searchPattern.enddate !== null)) {
+        searchString += 'AND [Order].CreatedDate >= @StartDate ';
+
+        startDay = searchPattern.startdate.split('/')[0];
+        startMonth = searchPattern.startdate.split('/')[1];
+        startYear = searchPattern.startdate.split('/')[2];
+
+        startdate = new Date(moment({ y: startYear, m: startMonth, d: startDay }).format('YYYY-MM-DD HH:mm:ss'));
+
+    } else if((searchPattern.enddate !== undefined && searchPattern.enddate !== '' && searchPattern.enddate !== null)
+        &&
+        (searchPattern.startdate === undefined || searchPattern.startdate !== '' || searchPattern.startdate !== null)) {
+        searchString += 'AND [Order].CreatedDate <= @EndDate ';
+
+        endDay = searchPattern.enddate.split('/')[0];
+        endMonth = searchPattern.enddate.split('/')[1];
+        endYear = searchPattern.enddate.split('/')[2];
+
+        enddate = new Date(moment({ y: endYear, m: endMonth, d: endDay }).format('YYYY-MM-DD HH:mm:ss'));
     }
-    if (searchPattern.status !== undefined
-        && (searchPattern.status !== '' && searchPattern.status !== null)) {
+
+    if (searchPattern.status !== undefined && searchPattern.status !== '' && searchPattern.status !== null
+        && searchPattern.status !== '0') {
         searchString += 'AND OrderStatus = @Status ';
     }
-    if (searchPattern.seller !== undefined
-        && (searchPattern.seller !== '' && searchPattern.seller !== null)) {
+    if (searchPattern.seller !== undefined && searchPattern.seller !== '' && searchPattern.seller !== null) {
         searchString += "AND (Account.AccountName LIKE '%@Seller%' OR UserProfile.FullName LIKE '%@Seller%' ";
     }
 
@@ -128,8 +159,8 @@ exports.searchOrderListByStore = async (searchPattern) => {
     const result = await pool.request()
         .input('StoreId', sql.BigInt, searchPattern.storeid)
         .input('OrderCode', sql.NVarChar, searchPattern.ordercode)
-        .input('StartDate', sql.NVarChar, startdate)
-        .input('EndDate', sql.NVarChar, enddate)
+        .input('StartDate', sql.DateTime, startdate)
+        .input('EndDate', sql.DateTime, enddate)
         .input('Status', sql.NVarChar, searchPattern.status)
         .input('Seller', sql.NVarChar, searchPattern.seller)
         .query(format(query, searchString));
@@ -148,7 +179,7 @@ exports.searchOrderListByStore = async (searchPattern) => {
                 totalprice: value.TotalPrice,
                 amount: value.TotalAmount,
                 createddate: moment(value.CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
-                printeddate: moment(value.PrintedDate).format('DD/MM/YYYY HH:mm:ss'),
+                updateddate: moment(value.UpdatedDate).format('DD/MM/YYYY HH:mm:ss'),
                 orderstatus: value.OrderStatus,
                 selleraccount: value.SellerAccount,
                 seller: value.Seller,
@@ -267,7 +298,7 @@ exports.getOrderInfo = async (orderInfo) => {
             totalprice: result.recordset[0].TotalPrice,
             amount: result.recordset[0].TotalAmount,
             createddate: moment(result.recordset[0].CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
-            printeddate: moment(result.recordset[0].PrintedDate).format('DD/MM/YYYY HH:mm:ss'),
+            updateddate: moment(result.recordset[0].UpdatedDate).format('DD/MM/YYYY HH:mm:ss'),
             orderstatus: result.recordset[0].OrderStatus,
             selleraccount: result.recordset[0].SellerAccount,
             seller: result.recordset[0].Seller,

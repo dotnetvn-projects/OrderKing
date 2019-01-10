@@ -79,9 +79,9 @@ orderrouter.post('/search-order', async (req, res, next) => {
             common.sendUnauthorizedRequest(res);
         }
         else {
-            var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+            var storeid = await storeService.getStoreIdByAccessToken(accessToken);
 
-            if (storeId === -1) {
+            if (storeid === -1) {
                 common.sendBadRequest(res, 'Request data is invalid !');
             }
             else {

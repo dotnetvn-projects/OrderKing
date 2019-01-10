@@ -7,7 +7,7 @@ export class OrderModel extends ModelBase {
   TotalPrice: number;
   Amount: number;
   CreatedDate: string;
-  PrintedDate: string;
+  UpdatedDate: string;
   OrderStatus: number;
   SellerAccount: string;
   Seller: string;
