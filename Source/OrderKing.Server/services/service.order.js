@@ -193,6 +193,39 @@ exports.searchOrderListByStore = async (searchPattern) => {
 };
 
 
+//get orders detail
+exports.getOrderDetail = async (info) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('StoreId', sql.BigInt, info.storeid)
+        .input('OrderId', sql.BigInt, info.orderid)
+        .query(orderSqlCmd.getOrderDetail);
+
+    if (result.recordset.length > 0) {
+        var orders = [];
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+
+        result.recordset.forEach(function (value) {
+            orders.push({
+                id: security.encrypt(value.Id + '_' + security.serverKey()),
+                productname: value.ProductName,
+                productcode: value.ProductCode,
+                amount: value.Amount,
+                price: value.Price,
+                total: value.Total
+            });
+        });
+
+        response.model.orderinfo = orders;
+    }
+    return response;
+};
+
+
 //add new order
 exports.createNewOrder = async (orderInfo) => {
     response.model.statusmessage = status.common.failed;
@@ -271,6 +304,46 @@ exports.updateOrderStatus = async (statusInfo) => {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
         response.model.orderinfo = security.encrypt(statusInfo.orderid + '_' + security.serverKey());
+    }
+
+    return response;
+};
+
+//update order comment
+exports.updateOrderComment = async (info) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('OrderId', sql.BigInt, info.orderid)
+        .input('StoreId', sql.BigInt, info.storeid)
+        .input('Comment', sql.NVarChar, info.comment)
+        .query(orderSqlCmd.updateOrderComment);
+
+    if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        response.model.orderinfo = security.encrypt(info.orderid + '_' + security.serverKey());
+    }
+
+    return response;
+};
+
+//remove order
+exports.removeOrder = async (info) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('OrderId', sql.BigInt, info.orderid)
+        .input('StoreId', sql.BigInt, info.storeid)
+        .query(orderSqlCmd.removeOrder);
+
+    if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
     }
 
     return response;

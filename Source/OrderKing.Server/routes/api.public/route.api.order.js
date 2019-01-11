@@ -188,7 +188,59 @@ orderrouter.post('/update-status', async (req, res, next) => {
     }
 });
 
-//get order order
+//update order comment
+orderrouter.post('/update-comment', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+        var orderId = security.decrypt(req.body.OrderId);
+        var comment = req.body.Comment;
+
+        var result = await service.updateOrderComment({
+            storeid: storeId,
+            orderid: orderId,
+            comment: comment
+        });
+
+        var message = common.createResponseMessage(null,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//remove order
+orderrouter.post('/remove', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+        var orderId = security.decrypt(req.body.OrderId);
+
+        var result = await service.removeOrder({
+            storeid: storeId,
+            orderid: orderId
+        });
+
+        var message = common.createResponseMessage(null,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//get order info
 orderrouter.post('/get-info', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
@@ -212,6 +264,32 @@ orderrouter.post('/get-info', async (req, res, next) => {
         next(err);
     }
 });
+
+//get order detail
+orderrouter.post('/get-detail', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+        var orderId = security.decrypt(req.body.OrderId);
+
+        var result = await service.getOrderDetail({
+            storeid: storeId,
+            orderid: orderId
+        });
+
+        var message = common.createResponseMessage(null,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
 
 
 module.exports = orderrouter;

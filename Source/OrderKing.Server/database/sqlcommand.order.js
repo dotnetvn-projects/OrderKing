@@ -40,8 +40,20 @@ defineProperty('createOrderDetail', `
 
 //update status
 defineProperty('updateOrderStatus', `
-    UPDATE [Order] SET OrderStatus = @Status, UpdatedDate = GETDATE() WHERE StoreId = @StoreId  Id = @OrderId
+    UPDATE [Order] SET OrderStatus = @Status, UpdatedDate = GETDATE() WHERE StoreId = @StoreId AND Id = @OrderId
 `);
+
+//update status
+defineProperty('updateOrderComment', `
+    UPDATE [Order] SET Comment = @Comment, UpdatedDate = GETDATE() WHERE StoreId = @StoreId AND Id = @OrderId
+`);
+
+//update status
+defineProperty('removeOrder', `
+    DELETE FROM [OrderDetail] WHERE WHERE StoreId = @StoreId AND OrderId = @OrderId
+    DELETE FROM [Order] WHERE WHERE StoreId = @StoreId AND Id = @OrderId
+`);
+
 
 //get ordrer info
 defineProperty('getOrderInfo', `
@@ -54,14 +66,14 @@ defineProperty('getOrderInfo', `
     INNER JOIN Account ON [Order].SellerId = Account.Id
     INNER JOIN UserProfile ON Account.Id = UserProfile.AccountId
 	INNER JOIN Store ON Store.Id = [Order].StoreId
-    WHERE StoreId = @StoreId AND [Order].Id = @OrderId
+    WHERE [Order].StoreId = @StoreId AND [Order].Id = @OrderId
 `);
 
 //get order detail list
 defineProperty('getOrderDetail', `
-    SELECT OrderDetail.Id, Product.[Name], Product.Code, OrderDetail.Amount, 
+    SELECT OrderDetail.Id, Product.[Name] AS ProductName, Product.Code AS ProductCode, OrderDetail.Amount, 
           OrderDetail.Price, (OrderDetail.Price * OrderDetail.Amount) AS Total
     FROM [OrderDetail] 
-    INNER JOIN Order ON [Order].Id = OrderDetail.OrderId
+    INNER JOIN [Order] ON [Order].Id = OrderDetail.OrderId
 	INNER JOIN Product ON Product.Id = OrderDetail.ProductId
-    WHERE OrderDetail.OrderId = @OrderId`);
+    WHERE [Order].StoreId = @StoreId AND OrderDetail.OrderId = @OrderId`);
