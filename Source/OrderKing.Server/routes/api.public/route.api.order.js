@@ -245,14 +245,14 @@ orderrouter.post('/get-info', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
         var storeId = await storeService.getStoreIdByAccessToken(accessToken);
-        var orderId = security.decrypt(req.body.OrderId);
+        var orderId = security.decrypt(req.body.OrderId).split('_')[0];
 
         var result = await service.getOrderInfo({
             storeid: storeId,
             orderid: orderId
         });
 
-        var message = common.createResponseMessage(null,
+        var message = common.createResponseMessage(result.model.orderinfo,
             result.model.responsecode,
             result.model.statusmessage);
 
@@ -270,14 +270,14 @@ orderrouter.post('/get-detail', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
         var storeId = await storeService.getStoreIdByAccessToken(accessToken);
-        var orderId = security.decrypt(req.body.OrderId);
+        var orderId = security.decrypt(req.body.OrderId).split('_')[0];
 
         var result = await service.getOrderDetail({
             storeid: storeId,
             orderid: orderId
         });
 
-        var message = common.createResponseMessage(null,
+        var message = common.createResponseMessage(result.model.orderinfo,
             result.model.responsecode,
             result.model.statusmessage);
 

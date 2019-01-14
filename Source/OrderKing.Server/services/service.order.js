@@ -360,7 +360,7 @@ exports.getOrderInfo = async (orderInfo) => {
         .input('OrderId', sql.BigInt, orderInfo.orderid)
         .query(orderSqlCmd.getOrderInfo);
 
-    if (result.recordset.length > 0) {
+    if (result.recordset.length >= 0) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
         response.model.orderinfo = {
