@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { OrderComponent } from './index/order.component';
 import { OrderDetailComponent } from './detail/order.detail.component';
+import { PrintOrderComponent } from './print/order.print.component';
 import { UiComponentModule } from '../../_uicomponents/uicomponent.module';
 import { OrderRoutes } from '../../../routing/order.routing';
 import { DirectiveModule } from '../../_directives/directive.module';
@@ -12,7 +13,8 @@ import { DirectiveModule } from '../../_directives/directive.module';
 @NgModule({
   declarations: [
     OrderComponent,
-    OrderDetailComponent
+    OrderDetailComponent,
+    PrintOrderComponent
   ],
   imports: [
     RouterModule.forChild(OrderRoutes),

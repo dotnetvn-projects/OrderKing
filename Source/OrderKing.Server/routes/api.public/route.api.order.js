@@ -166,7 +166,7 @@ orderrouter.post('/update-status', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
         var storeId = await storeService.getStoreIdByAccessToken(accessToken);
-        var orderId = security.decrypt(req.body.OrderId);
+        var orderId = security.decrypt(req.body.OrderId).split('_')[0];
         var status = req.body.OrderStatus;
 
         var result = await service.updateOrderStatus({
@@ -193,7 +193,7 @@ orderrouter.post('/update-comment', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
         var storeId = await storeService.getStoreIdByAccessToken(accessToken);
-        var orderId = security.decrypt(req.body.OrderId);
+        var orderId = security.decrypt(req.body.OrderId).split('_')[0];
         var comment = req.body.Comment;
 
         var result = await service.updateOrderComment({

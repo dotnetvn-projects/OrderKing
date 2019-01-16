@@ -33,6 +33,30 @@ export class OrderDetailComponent extends BaseComponent {
     this.orderService.fetchOrderDetailList(this.orderId);
   }
 
+  // ** update order */
+ async updateOrder() {
+    let result = await this.orderService.updateOrderStatus(this.OrderInfo);
+    result = await this.orderService.updateOrderComment(this.OrderInfo);
+    if (result !== AppSettings.RESPONSE_MESSAGE.ERROR) {
+      this.dialogService.showSuccess(
+        AppMessage.APP_SUCCESS_MESSAGE.UPDATE_ORDER,
+        () => {
+          this.router.navigate(['don-hang/chi-tiet', this.orderId]);
+        }
+      );
+    } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
+      this.dialogService.showError(
+        AppMessage.APP_ERROR_MESSAGE.SESSION_TIMEOUT,
+        () => {
+          this.authService.clearLoginSession();
+          this.gotoLogin(this.router);
+        }
+      );
+    } else {
+      this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.BUSY);
+    }
+  }
+
   // ** Load order by id*/
   private async getOrderInfo() {
     const iresult = await this.orderService.getOrderInfoById(this.orderId);
@@ -47,6 +71,6 @@ export class OrderDetailComponent extends BaseComponent {
   }
 
   statusSelectChange(event) {
-
+    this.OrderInfo.OrderStatus = event.currentTarget.value;
   }
 }

@@ -12,4 +12,17 @@ export class OrderModel extends ModelBase {
   SellerAccount: string;
   Seller: string;
   Comment: string;
+
+  getOrderStatusString() {
+    switch (this.OrderStatus) {
+      case 1:
+         return 'Hoàn thành';
+      case 2:
+         return 'Hủy';
+      case 3:
+         return 'Chửa xử lý';
+      default:
+        return '';
+    }
+  }
 }

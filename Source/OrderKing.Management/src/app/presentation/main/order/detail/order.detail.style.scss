@@ -2,14 +2,6 @@
   max-width: 250px;
 }
 
-.order-detail-tool {
-  padding-left: 15px;
-  padding-right: 15px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-  padding-top: 10px;
-  margin-bottom: 10px;
-}
 
 @media (max-width: 800px) {
   .order-status {
@@ -17,5 +9,8 @@
   }
    .invoice-col select {
     max-width: 100%;
+   }
+   .invoice-info {
+    margin-bottom: 20px;
    }
  }

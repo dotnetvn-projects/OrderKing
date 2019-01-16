@@ -7,6 +7,7 @@ import { AuthGuard } from './framework/framework.auth.guard';
 import { AppComponent } from './app.component';
 import { LoginLayoutComponent } from './presentation/_layout/login-layout/login-layout.component';
 import { MainLayoutComponent } from './presentation/_layout/main-layout/main-layout.component';
+import { PrintLayoutComponent } from './presentation/_layout/print-layout/print-layout.component';
 import { LoginModule } from './presentation/main/login/login.module';
 import { MainRoutes } from './routing/main.routing';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
@@ -15,7 +16,8 @@ import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
   declarations: [
     AppComponent,
     LoginLayoutComponent,
-    MainLayoutComponent
+    MainLayoutComponent,
+    PrintLayoutComponent
   ],
   imports: [
     RouterModule.forRoot(MainRoutes),

@@ -18,6 +18,7 @@ export class AppMessage {
     UPDATE_PRODUCT: 'Cập nhật thông tin mặt hàng thành công !',
     DELETE_PRODUCT: 'Xóa mặt hàng thành công',
     UPDATE_STORE: 'Cập nhật thông tin cửa hàng thành công',
+    UPDATE_ORDER: 'Cập nhật thông tin đơn hàng thành công'
   };
 
   // title message
@@ -35,7 +36,8 @@ export class AppMessage {
     STORE: 'Order King - Thông tin cửa hàng',
     STORE_UPDATE: 'Order King - Chỉnh sửa thông tin cửa hàng',
     ORDER: 'Order King - Danh sách đơn hàng',
-    ORDER_DETAIL: 'Order King - Chi tiết đơn hàng'
+    ORDER_DETAIL: 'Order King - Chi tiết đơn hàng',
+    ORDER_PRINT: 'Đơn hàng - '
   };
 
   // Control content

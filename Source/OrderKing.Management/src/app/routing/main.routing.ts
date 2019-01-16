@@ -2,6 +2,7 @@ import { LoginLayoutComponent } from '../presentation/_layout/login-layout/login
 import { MainLayoutComponent } from '../presentation/_layout/main-layout/main-layout.component';
 import { LoginComponent } from '../presentation/main/login/login.component';
 import { AuthGuard } from '../framework/framework.auth.guard';
+import { PrintLayoutComponent } from '../presentation/_layout/print-layout/print-layout.component';
 
 export const MainRoutes = [
     // main routes
@@ -19,6 +20,14 @@ export const MainRoutes = [
         ],
         canActivate: [AuthGuard]
     },
+    {
+      path: '',
+      component: PrintLayoutComponent,
+      children: [
+          { path: 'printer', loadChildren: 'src/app/presentation/main/order/order.module#OrderModule' }
+      ],
+      canActivate: [AuthGuard]
+  },
     // login route
     {
         path: '',

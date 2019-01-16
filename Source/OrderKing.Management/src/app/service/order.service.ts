@@ -17,6 +17,8 @@ export class OrderService {
   private searchOrderUrl = 'order/search-order';
   private detailUrl = 'order/get-detail';
   private infoUrl = 'order/get-info';
+  private updateStatusUrl = 'order/update-status';
+  private updateCommentUrl = 'order/update-comment';
 
   private orderListSource = new BehaviorSubject<Array<OrderModel>>(new Array<OrderModel>());
   OrderList = this.orderListSource.asObservable();
@@ -67,11 +69,11 @@ export class OrderService {
     );
   }
 
-  async fetchOrderDetailList(orderId) {
+  fetchOrderDetailList(orderId) {
     const params = new Dictionary<string, any>();
     params.put('OrderId', orderId);
 
-    this.webClient.doPost(AppSettings.API_ENDPOINT + this.detailUrl, params, (data: ApiResultModel) => {
+     this.webClient.doPost(AppSettings.API_ENDPOINT + this.detailUrl, params, (data: ApiResultModel) => {
       const resultData = new Array<OrderDetailModel>();
       if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
         data.Result.forEach(e => {
@@ -88,6 +90,27 @@ export class OrderService {
       }
     }
   );
+  }
+
+  async getOrderDetailList(orderId) {
+    const params = new Dictionary<string, any>();
+    params.put('OrderId', orderId);
+    const resultData = new Array<OrderDetailModel>();
+    await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.detailUrl, params, (data: ApiResultModel) => {
+      if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+        data.Result.forEach(e => {
+          const detailInfo = new OrderDetailModel();
+          detailInfo.Id = e.id;
+          detailInfo.ProductName = e.productname;
+          detailInfo.ProductCode = e.productcode;
+          detailInfo.Amount = e.amount;
+          detailInfo.Price = e.price;
+          detailInfo.Total = e.total;
+          resultData.push(detailInfo);
+        });
+      }
+    });
+    return resultData;
   }
 
   // get order info by id
@@ -126,4 +149,44 @@ export class OrderService {
 
     return info;
   }
+
+  // ** update order status */
+  async updateOrderStatus(orderInfo: OrderModel) {
+    let result = AppSettings.RESPONSE_MESSAGE.ERROR;
+
+    const params = new Dictionary<string, any>();
+    params.put('OrderId', orderInfo.Id);
+    params.put('OrderStatus', orderInfo.OrderStatus);
+
+    await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.updateStatusUrl, params, (data: ApiResultModel) => {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+          result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
+        } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+          result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+        }
+      }
+    );
+    return result;
+  }
+
+  // ** update order comment */
+  async updateOrderComment(orderInfo: OrderModel) {
+    let result = AppSettings.RESPONSE_MESSAGE.ERROR;
+
+    const params = new Dictionary<string, any>();
+    params.put('OrderId', orderInfo.Id);
+    params.put('Comment', orderInfo.Comment);
+
+    await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.updateCommentUrl, params, (data: ApiResultModel) => {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+          result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
+        } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+          result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+        }
+      }
+    );
+
+    return result;
+  }
+
 }
