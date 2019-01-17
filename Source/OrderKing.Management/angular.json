@@ -49,7 +49,9 @@
               "src/assets/themes/bower_components/datatables.net/js/jquery.dataTables.min.js",
               "src/assets/themes/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js",
               "src/assets/themes/bower_components/datatable-responsive/dataTables.responsive.min.js",
-              "src/assets/main.js"
+              "src/assets/main.js",
+              "src/assets/plugins/jspdf.min.js",
+              "src/assets/plugins/html2canvas.min.js"
             ]
           },
           "configurations": {

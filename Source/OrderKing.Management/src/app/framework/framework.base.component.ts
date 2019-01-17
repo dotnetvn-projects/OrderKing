@@ -2,6 +2,7 @@ import { OnInit, Injector } from '@angular/core';
 import { UserService } from '../service/user.service';
 import { UserInfoModel } from '../model/userinfo.model';
 import { AuthService } from '../service/auth.service';
+import { Router } from '@angular/router';
 declare var $;
 
 export class BaseComponent implements OnInit {
@@ -40,6 +41,10 @@ export class BaseComponent implements OnInit {
     } catch (ex) {
       return null;
     }
+  }
+
+  getUrl(router: Router) {
+     return router.url;
   }
 
   applyJs() {

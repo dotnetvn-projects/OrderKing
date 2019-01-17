@@ -220,7 +220,7 @@ orderrouter.post('/remove', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
         var storeId = await storeService.getStoreIdByAccessToken(accessToken);
-        var orderId = security.decrypt(req.body.OrderId);
+        var orderId = security.decrypt(req.body.OrderId).split('_')[0];
 
         var result = await service.removeOrder({
             storeid: storeId,

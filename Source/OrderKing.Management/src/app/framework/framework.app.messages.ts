@@ -18,7 +18,8 @@ export class AppMessage {
     UPDATE_PRODUCT: 'Cập nhật thông tin mặt hàng thành công !',
     DELETE_PRODUCT: 'Xóa mặt hàng thành công',
     UPDATE_STORE: 'Cập nhật thông tin cửa hàng thành công',
-    UPDATE_ORDER: 'Cập nhật thông tin đơn hàng thành công'
+    UPDATE_ORDER: 'Cập nhật thông tin đơn hàng thành công',
+    DELETE_ORDER: 'Xóa đơn hàng thành công'
   };
 
   // title message
@@ -55,6 +56,7 @@ export class AppMessage {
   public static APP_DIALOG_MESSAGE = {
     DELETE_STAFF: 'Bạn có chắc muốn xóa nhân viên này?',
     DELETE_CATEGORY: 'Bạn có chắc muốn xóa danh mục này?',
-    DELETE_PRODUCT: 'Bạn có chắc muốn xóa mặt hàng này?'
+    DELETE_PRODUCT: 'Bạn có chắc muốn xóa mặt hàng này?',
+    DELETE_ORDER: 'Bạn có chắc muốn xóa đơn hàng này?'
   };
 }

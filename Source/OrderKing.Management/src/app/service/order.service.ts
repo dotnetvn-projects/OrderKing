@@ -19,6 +19,7 @@ export class OrderService {
   private infoUrl = 'order/get-info';
   private updateStatusUrl = 'order/update-status';
   private updateCommentUrl = 'order/update-comment';
+  private removeOrderUrl = 'order/remove';
 
   private orderListSource = new BehaviorSubject<Array<OrderModel>>(new Array<OrderModel>());
   OrderList = this.orderListSource.asObservable();
@@ -189,4 +190,22 @@ export class OrderService {
     return result;
   }
 
+
+  // ** remove status */
+  async RemoveOrder(orderId) {
+    let result = AppSettings.RESPONSE_MESSAGE.ERROR;
+
+    const params = new Dictionary<string, any>();
+    params.put('OrderId', orderId);
+
+    await this.webClient.doPostAsync(AppSettings.API_ENDPOINT + this.removeOrderUrl, params, (data: ApiResultModel) => {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+          result = AppSettings.RESPONSE_MESSAGE.SUCCESS;
+        } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
+          result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;
+        }
+      }
+    );
+    return result;
+  }
 }

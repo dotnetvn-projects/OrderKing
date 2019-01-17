@@ -50,8 +50,8 @@ defineProperty('updateOrderComment', `
 
 //update status
 defineProperty('removeOrder', `
-    DELETE FROM [OrderDetail] WHERE WHERE StoreId = @StoreId AND OrderId = @OrderId
-    DELETE FROM [Order] WHERE WHERE StoreId = @StoreId AND Id = @OrderId
+    DELETE FROM [OrderDetail] WHERE OrderId = @OrderId
+    DELETE FROM [Order] WHERE StoreId = @StoreId AND Id = @OrderId
 `);
 
 

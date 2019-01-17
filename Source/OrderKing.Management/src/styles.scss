@@ -9,6 +9,7 @@
 @import "assets/themes/plugins/iCheck/square/blue.css";
 @import "assets/themes/plugins/iCheck/minimal/green.css";
 @import "assets/styles/upload-image.css";
+@import "assets/styles/fix.css";
 
 /*Loading*/
 .boxLoading {
@@ -102,6 +103,7 @@ div.invalid-feedback {
 .dt-table .tools > a{
   margin-left: 5px;
 }
+
 .table-image {
   max-width: 100px;
   max-height: 100px;

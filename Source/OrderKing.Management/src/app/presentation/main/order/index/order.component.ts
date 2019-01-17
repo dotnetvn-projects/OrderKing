@@ -7,6 +7,7 @@ import { AppMessage } from 'src/app/framework/framework.app.messages';
 import { OrderService } from 'src/app/service/order.service';
 import { OrderModel } from 'src/app/model/order.model';
 import { OrderFilterModel } from 'src/app/model/order.filter.model';
+import { AppSettings } from 'src/app/framework/framework.app.setting';
 
 @Component({
   selector: 'app-order',
@@ -31,6 +32,7 @@ export class OrderComponent extends BaseComponent {
      });
   }
 
+  // ** search order list */
   filterData() {
     this.destroyDataTable(this.tableId);
     this.fetchOrderList(() => {
@@ -38,10 +40,26 @@ export class OrderComponent extends BaseComponent {
      });
   }
 
+  // ** remove order out of store*/
   removeOrder(orderid) {
-
+    this.dialogService.showConfirm(AppMessage.APP_DIALOG_TITLE.CONFIRM, AppMessage.APP_DIALOG_MESSAGE.DELETE_ORDER, async () => {
+      const result = await this.orderService.RemoveOrder(orderid);
+      if (result === AppSettings.RESPONSE_MESSAGE.SUCCESS) {
+        this.dialogService.showSuccess(AppMessage.APP_SUCCESS_MESSAGE.DELETE_ORDER, () => {
+          this.filterData();
+        });
+      } else if (result === AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED) {
+        this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.SESSION_TIMEOUT, () => {
+          this.authService.clearLoginSession();
+          this.gotoLogin(this.router);
+        });
+      } else {
+        this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.BUSY);
+      }
+    });
   }
 
+  // ** clear condition when order code is being changed*/
   orderCodeTextChange() {
     const code = this.OrderFilter.OrderCode.trim();
     if (code.length > 0) {
@@ -51,6 +69,7 @@ export class OrderComponent extends BaseComponent {
     }
   }
 
+  // ** set status when status select input changed*/
   statusSelectChange(event) {
      this.OrderFilter.OrderStatus = event.currentTarget.value;
   }

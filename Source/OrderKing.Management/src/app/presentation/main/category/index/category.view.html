@@ -10,7 +10,7 @@
           <div class="pull-right">
               <a title="Tạo mới" [routerLink]="['/danh-muc/tao-moi']" class="btn btn-default btn-sm"><i class="fa fa-plus-circle text-green"></i> Tạo mới</a>&nbsp;&nbsp;
               <a title="Tải lại" (click)="reload()" class="btn btn-default btn-sm"><i class="fa fa-refresh text-green"></i> Tải lại</a>&nbsp;&nbsp;
-              <a title="Xuất excel" class="btn btn-default btn-sm"><i class="fa fa-file-excel-o text-green"></i> Xuất excel</a>
+              <a title="Xuất excel" (click)="exportExcel()" class="btn btn-default btn-sm"><i class="fa fa-file-excel-o text-green"></i> Xuất excel</a>
           </div>
         </div>
         <!-- /.box-header -->

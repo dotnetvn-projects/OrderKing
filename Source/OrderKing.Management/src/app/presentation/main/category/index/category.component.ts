@@ -7,6 +7,7 @@ import { CategoryService } from 'src/app/service/category.service';
 import { DialogService } from 'src/app/service/dialog.service';
 import { Router } from '@angular/router';
 import { AppMessage } from 'src/app/framework/framework.app.messages';
+import { ExcelService } from 'src/app/service/export.exel.service';
 
 @Component({
   selector: 'app-category',
@@ -18,7 +19,7 @@ export class CategoryComponent extends BaseComponent {
   private tableId = 'table-category';
 
   constructor(private titleService: Title, private dialogService: DialogService,
-    private router: Router, private categoryService: CategoryService,
+    private router: Router, private categoryService: CategoryService, private excelService: ExcelService,
      injector: Injector ) {
     super(injector);
  }
@@ -29,6 +30,10 @@ export class CategoryComponent extends BaseComponent {
    this.fetchCategoryList(() => {
      this.applyDataTable(this.tableId);
    });
+ }
+
+ exportExcel() {
+   this.excelService.exportAsExcelFile(this.categoryList, 'danh-muc');
  }
 
  // ** remove category */

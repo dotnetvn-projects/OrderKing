@@ -103,9 +103,9 @@
   <div class="row no-print">
     <div class="col-xs-12">
       <a [routerLink]="['/printer/in-don-hang', OrderInfo.Id]"  target="_blank" class="btn btn-default pull-right"><i class="fa fa-print"></i> In</a>
-      <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
+      <a [routerLink]="['/printer/in-don-hang/tao-pdf', OrderInfo.Id]" target="_blank" class="btn btn-primary pull-right" style="margin-right: 5px;">
         <i class="fa fa-download"></i> Tạo PDF
-      </button>
+      </a>
       <button (click)="updateOrder()" style="margin-right: 5px;" class="pull-right btn btn-success"><i class="fa fa-edit"></i> Cập nhật</button>
     </div>
   </div>
