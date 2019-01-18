@@ -8,6 +8,7 @@ import { DialogService } from 'src/app/service/dialog.service';
 import { Router } from '@angular/router';
 import { AppMessage } from 'src/app/framework/framework.app.messages';
 import { ExcelService } from 'src/app/service/export.exel.service';
+import { ExcelService2 } from 'src/app/service/export.excel.service2';
 
 @Component({
   selector: 'app-category',
@@ -19,7 +20,8 @@ export class CategoryComponent extends BaseComponent {
   private tableId = 'table-category';
 
   constructor(private titleService: Title, private dialogService: DialogService,
-    private router: Router, private categoryService: CategoryService, private excelService: ExcelService,
+    private router: Router, private categoryService: CategoryService,
+     private excelService: ExcelService, private excelService2: ExcelService2,
      injector: Injector ) {
     super(injector);
  }
@@ -33,7 +35,11 @@ export class CategoryComponent extends BaseComponent {
  }
 
  exportExcel() {
-   this.excelService.exportAsExcelFile(this.categoryList, 'danh-muc');
+   const column = [];
+   column.push('da');
+   column.push('dr');
+   // this.excelService.exportAsExcelFile([''], 'danh-muc', column);
+   this.excelService2.generateExcel();
  }
 
  // ** remove category */
