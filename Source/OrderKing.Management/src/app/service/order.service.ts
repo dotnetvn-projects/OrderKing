@@ -58,6 +58,7 @@ export class OrderService {
             orderInfo.SellerAccount = e.selleraccount;
             orderInfo.Comment = e.comment;
             orderInfo.OrderStatus = e.orderstatus;
+            orderInfo.PaymentMethod = e.paymentmethod;
 
             resultData.push(orderInfo);
           });
@@ -138,6 +139,7 @@ export class OrderService {
             order.SellerAccount = data.Result.selleraccount;
             order.Seller = data.Result.seller;
             order.Comment = data.Result.commemt;
+            order.PaymentMethod = data.Result.paymentmethod;
             info.orderInfo = order;
           }
         } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {

@@ -25,6 +25,13 @@
               </div>
             </div>
           </div>
+          <div *ngIf="IsEdit" class="form-group">
+            <label for="inputProductCode" class="col-sm-2 control-label">Mã mặt hàng</label>
+
+            <div class="col-sm-5">
+              <input class="form-control" id="inputProductCode" disabled type="text" [(ngModel)]="ProductInfo.ProductCode" name="code">
+            </div>
+          </div>
 
           <div class="form-group">
             <label for="inputCate" class="col-sm-2 control-label">Danh mục</label>

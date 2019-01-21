@@ -54,7 +54,7 @@ export class ExcelService2 {
     const subTitleRow = worksheet.addRow(['Date : ']);
     // Add Image
     const logo = workbook.addImage({
-      base64: logoFile.logoBase64,
+     // base64: logoFile.logoBase64,
       extension: 'png',
     });
     worksheet.addImage(logo, 'E1:F3');

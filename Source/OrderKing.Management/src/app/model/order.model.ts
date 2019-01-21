@@ -12,6 +12,7 @@ export class OrderModel extends ModelBase {
   SellerAccount: string;
   Seller: string;
   Comment: string;
+  PaymentMethod: string;
 
   getOrderStatusString() {
     switch (this.OrderStatus) {

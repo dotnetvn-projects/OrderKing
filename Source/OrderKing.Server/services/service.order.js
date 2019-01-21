@@ -12,12 +12,12 @@ const format = require('string-format');
 //generate order code
 function generateOrderCode(id) {
     if (id < 10) {
-        return 'DH00' + id;
+        return 'DH-#00' + id;
     } else if (id < 100 && id > 9) {
-        return 'DH0' + id;
+        return 'DH-#0' + id;
     }
     else {
-        return 'DH' + id;
+        return 'DH-#' + id;
     }
 }
 
@@ -50,7 +50,9 @@ exports.getOrderListByStore = async (storeId) => {
                 updateddate: moment(value.UpdatedDate).format('DD/MM/YYYY HH:mm:ss'),
                 orderstatus: value.OrderStatus,
                 selleraccount: value.SellerAccount,
-                seller: value.Seller
+                seller: value.Seller,
+                comment: value.Comment,
+                paymentmethod: value.PaymentMethod
             });
         });
 
@@ -87,7 +89,8 @@ exports.getOrderListBySellerId = async (sellerid) => {
                 orderstatus: value.OrderStatus,
                 selleraccount: value.SellerAccount,
                 seller: value.Seller,
-                commemt: value.Comment
+                commemt: value.Comment,
+                paymentmethod: value.PaymentMethod
             });
         });
 
@@ -183,7 +186,8 @@ exports.searchOrderListByStore = async (searchPattern) => {
                 orderstatus: value.OrderStatus,
                 selleraccount: value.SellerAccount,
                 seller: value.Seller,
-                commemt: value.Comment
+                commemt: value.Comment,
+                paymentmethod: value.PaymentMethod
             });
         });
 
@@ -204,7 +208,7 @@ exports.getOrderDetail = async (info) => {
         .input('OrderId', sql.BigInt, info.orderid)
         .query(orderSqlCmd.getOrderDetail);
 
-    if (result.recordset.length > 0) {
+    if (result.recordset.length >= 0) {
         var orders = [];
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
@@ -241,6 +245,7 @@ exports.createNewOrder = async (orderInfo) => {
         .input('SeqNum', sql.NVarChar, seqNum)
         .input('SellerId', sql.NVarChar, orderInfo.sellerid)
         .input('StoreId', sql.NVarChar, orderInfo.storeid)
+        .input('PaymentId', sql.Int, orderInfo.paymentId)
         .input('TotalPrice', sql.Int, orderInfo.price)
         .input('TotalAmount', sql.Int, orderInfo.amount)
         .input('OrderStatus', sql.NVarChar, statusValue.orderStatus.NotCompleted)
@@ -330,6 +335,27 @@ exports.updateOrderComment = async (info) => {
     return response;
 };
 
+//update order payment
+exports.updateOrderPayment = async (info) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('OrderId', sql.BigInt, info.orderid)
+        .input('StoreId', sql.BigInt, info.storeid)
+        .input('PaymentId', sql.Int, info.paymentId)
+        .query(orderSqlCmd.updateOrderPayment);
+
+    if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        response.model.orderinfo = security.encrypt(info.orderid + '_' + security.serverKey());
+    }
+
+    return response;
+};
+
 //remove order
 exports.removeOrder = async (info) => {
     response.model.statusmessage = status.common.failed;
@@ -375,7 +401,8 @@ exports.getOrderInfo = async (orderInfo) => {
             orderstatus: result.recordset[0].OrderStatus,
             selleraccount: result.recordset[0].SellerAccount,
             seller: result.recordset[0].Seller,
-            commemt: result.recordset[0].Comment
+            commemt: result.recordset[0].Comment,
+            paymentmethod: result.recordset[0].PaymentMethod
         };
     }
     return response;

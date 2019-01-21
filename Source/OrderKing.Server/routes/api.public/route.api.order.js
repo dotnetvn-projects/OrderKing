@@ -116,6 +116,7 @@ orderrouter.post('/create-new', async (req, res, next) => {
         var accessToken = req.body.AccessToken;
         var storeId = await storeService.getStoreIdByAccessToken(accessToken);
         var sellerId = await userService.getAccountIdByAccessToken(accessToken);
+        var paymentId = security.decrypt(req.body.PaymentId).split('_')[0];
 
         if (storeId === -1 || sellerId === -1) {
             common.sendBadRequest(res, 'Request data is invalid !');
@@ -123,6 +124,7 @@ orderrouter.post('/create-new', async (req, res, next) => {
         else {
             var orderInfo = {
                 storeid: storeid,
+                paymentId: paymentId,
                 seqnum: req.body.SeqNumber,
                 sellerid: sellerId,
                 amount: req.body.TotalAmount,
@@ -200,6 +202,33 @@ orderrouter.post('/update-comment', async (req, res, next) => {
             storeid: storeId,
             orderid: orderId,
             comment: comment
+        });
+
+        var message = common.createResponseMessage(null,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//update order payment
+orderrouter.post('/update-payment', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+        var orderId = security.decrypt(req.body.OrderId).split('_')[0];
+        var paymentId = security.decrypt(req.body.PaymentId).split('_')[0];
+
+        var result = await service.updateOrderPayment({
+            storeid: storeId,
+            orderid: orderId,
+            paymentId: paymentId
         });
 
         var message = common.createResponseMessage(null,

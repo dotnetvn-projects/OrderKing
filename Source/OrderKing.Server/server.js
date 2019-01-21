@@ -16,6 +16,7 @@ var orderApi = require('./routes/api.public/route.api.order');
 var reportApi = require('./routes/api.public/route.api.report');
 var storeApi = require('./routes/api.public/route.api.store');
 var userApi = require('./routes/api.public/route.api.user');
+var paymentApi = require('./routes/api.public/route.api.payment');
 
 //apply default middleware for body message format
 app.use(bodyParser.json());
@@ -33,6 +34,7 @@ app.use('/api/public/order', orderApi);
 app.use('/api/public/report', reportApi);
 app.use('/api/public/store', storeApi);
 app.use('/api/public/user', userApi);
+app.use('/api/public/payment', paymentApi);
 
 //in development mode, please comment out errorCatcher middleware
 app.use(errorCatcher.setmiddleware);

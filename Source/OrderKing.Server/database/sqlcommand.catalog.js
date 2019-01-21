@@ -54,6 +54,9 @@ defineProperty('createProduct', `
     SELECT SCOPE_IDENTITY() AS ProductId
 `);
 
+//update product code
+defineProperty('updateProductCode', 'UPDATE Product Set Code = @Code WHERE Id = @Id');
+
 //update product
 defineProperty('updateProduct', `
     UPDATE Product 
@@ -90,19 +93,17 @@ defineProperty('deactiveProduct', `
 
 //get product in store
 defineProperty('getProductsInStore', `
-    SELECT Product.Id, Product.[Name], Product.Description, Product.CreatedDate, Product.InStock,
+    SELECT Product.Id, Product.[Name], Product.Code, Product.Description, Product.CreatedDate, Product.InStock,
            Product.Price, Product.CategoryId, Category.[Name] AS CategoryName, Store.StoreName
     FROM Product INNER JOIN Store ON Store.Id = Product.StoreId
     INNER JOIN Category ON Product.CategoryId = Category.Id AND Store.Id = Category.StoreId
     WHERE Product.StoreId = @StoreId AND Product.IsActived = 1 AND Category.IsActived =1
-    GROUP BY Product.Id, Product.[Name], Product.Description, Product.CreatedDate,
-           Product.Price, Product.CategoryId, Category.[Name], Store.StoreName, Product.InStock
     ORDER BY Product.CreatedDate DESC
 `);
 
 //get product in store by category
 defineProperty('getProductsInStoreByCate', `
-    SELECT Product.Id, Product.[Name], Product.Description, Product.CreatedDate, Product.InStock,
+    SELECT Product.Id, Product.[Name], Product.Code, Product.Description, Product.CreatedDate, Product.InStock,
            Product.Price, Product.CategoryId, Category.[Name] AS CategoryName, Store.StoreName
     FROM Product INNER JOIN Store ON Store.Id = Product.StoreId
     INNER JOIN Category ON Product.CategoryId = Category.Id AND Store.Id = Category.StoreId
@@ -113,7 +114,7 @@ defineProperty('getProductsInStoreByCate', `
 
 //get product info by id
 defineProperty('getProductById',
-    `SELECT Product.Id, Product.[Name], Product.Description, Product.CreatedDate, Product.InStock,
+    `SELECT Product.Id, Product.[Name], Product.Code, Product.Description, Product.CreatedDate, Product.InStock,
            Product.Price, Product.CategoryId, Category.[Name] AS CategoryName, Store.StoreName
     FROM Product INNER JOIN Store ON Store.Id = Product.StoreId
     INNER JOIN Category ON Product.CategoryId = Category.Id AND Store.Id = Category.StoreId

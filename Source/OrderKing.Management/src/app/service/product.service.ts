@@ -44,6 +44,7 @@ export class ProductService {
             productInfo.StoreName = e.storename;
             productInfo.Price = e.price;
             productInfo.InStock = e.instock;
+            productInfo.ProductCode = e.code;
             productInfo.Image = this.getImageUrlById(productInfo.Id);
             resultData.push(productInfo);
            });
@@ -73,6 +74,7 @@ export class ProductService {
             productInfo.StoreName = e.storename;
             productInfo.Price = e.price;
             productInfo.InStock = e.instock;
+            productInfo.ProductCode = e.code;
             productInfo.Image = this.getImageUrlById(productInfo.Id);
             resultData.push(productInfo);
            });
@@ -184,6 +186,7 @@ export class ProductService {
           info.productInfo.StoreName = data.Result.storename;
           info.productInfo.InStock = data.Result.instock;
           info.productInfo.Price = data.Result.price;
+          info.productInfo.ProductCode = data.Result.code;
         }
       } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
         info.result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;

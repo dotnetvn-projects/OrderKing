@@ -6,6 +6,18 @@ const { poolPromise, sql } = require('../database/dbconnection');
 const security = require('../services/service.security');
 const moment = require('moment');
 
+//generate product code
+function generateProductCode(id) {
+    if (id < 10) {
+        return 'SP-#00' + id;
+    } else if (id < 100 && id > 9) {
+        return 'SP-#0' + id;
+    }
+    else {
+        return 'SP-#' + id;
+    }
+}
+
 //create new category
 exports.createCatagory = async (categoryobject) => {
     categoryResponse.model.statusmessage = status.common.failed;
@@ -153,6 +165,7 @@ exports.createProduct = async (productobject) => {
     const pool = await poolPromise;
     const result = await pool.request()
         .input('StoreId', sql.BigInt, productobject.storeId)
+        .input('Code', sql.NVarChar, productobject.code)
         .input('Name', sql.NVarChar, productobject.name)
         .input('Image', sql.VarBinary, productobject.image)
         .input("Description", sql.NVarChar, productobject.description)
@@ -162,6 +175,14 @@ exports.createProduct = async (productobject) => {
         .query(catalogSqlCmd.createProduct);
 
     if (result.recordset.length > 0) {
+        var productId = result.recordset[0].ProductId;
+        var productCode = generateProductCode(productId);
+
+        result = await pool.request()
+            .input('Code', sql.NVarChar, productCode)
+            .input('Id', sql.BigInt, productCode)
+            .query(catalogSqlCmd.updateProductCode);
+
         productResponse.model.statusmessage = status.common.suscess;
         productResponse.model.responsecode = status.common.suscesscode;
         productResponse.model.product = {
@@ -271,7 +292,8 @@ exports.getProductsInStore = async (storeId) => {
                 description: value.Description,
                 storename: value.StoreName,
                 instock: value.InStock,
-                price: value.Price
+                price: value.Price,
+                code: value.Code
             });
         });
 
@@ -307,7 +329,8 @@ exports.getProductsInStoreByCate = async (productobject) => {
                 description: value.Description,
                 storename: value.StoreName,
                 instock: value.InStock,
-                price: value.Price
+                price: value.Price,
+                code: value.Code
             });
         });
 
@@ -341,7 +364,8 @@ exports.getProductInStoreById = async (productobject) => {
             description: result.recordset[0].Description,
             storename: result.recordset[0].StoreName,
             instock: result.recordset[0].InStock,
-            price: result.recordset[0].Price
+            price: result.recordset[0].Price,
+            code: result.recordset[0].Code
         };
     }
     return productResponse;

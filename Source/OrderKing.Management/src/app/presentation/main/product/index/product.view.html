@@ -37,7 +37,7 @@
               <tr *ngFor="let product of ProductList; let i = index">
                 <td class="text-center"><span class="label label-success">{{ i + 1 }}</span></td>
                 <td class="text-center"><img class="table-image" [src]="product.Image" alt="Ảnh đại diện"></td>
-                <td>{{ product.ProductName }}</td>
+                <td>{{ product.ProductName }}<span class="users-list-date">(Mã: {{ product.ProductCode }})</span></td>
                 <td class="text-center">{{ product.CategoryName }}</td>
                 <td class="text-center">{{ product.Price | currency:'VND':true }}</td>
                 <td class="text-center">{{ product.InStock }} mặt hàng</td>

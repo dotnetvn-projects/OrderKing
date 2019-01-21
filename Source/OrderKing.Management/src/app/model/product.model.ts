@@ -2,6 +2,7 @@ import { ModelBase } from './base.model';
 
 export class ProductModel extends ModelBase {
     ProductName: string;
+    ProductCode: string;
     CategoryName: string;
     CategoryId: string;
     Description: string;
