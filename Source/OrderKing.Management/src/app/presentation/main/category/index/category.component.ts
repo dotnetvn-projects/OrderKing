@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { AppMessage } from 'src/app/framework/framework.app.messages';
 import { ExcelService } from 'src/app/service/export.exel.service';
 import { ExcelService2 } from 'src/app/service/export.excel.service2';
+import { ExportExcelModel } from 'src/app/model/export.excel.model';
+import { StoreService } from 'src/app/service/store.service';
 
 @Component({
   selector: 'app-category',
@@ -22,7 +24,7 @@ export class CategoryComponent extends BaseComponent {
   constructor(private titleService: Title, private dialogService: DialogService,
     private router: Router, private categoryService: CategoryService,
      private excelService: ExcelService, private excelService2: ExcelService2,
-     injector: Injector ) {
+     injector: Injector, private storeService: StoreService ) {
     super(injector);
  }
 
@@ -34,12 +36,26 @@ export class CategoryComponent extends BaseComponent {
    });
  }
 
- exportExcel() {
+ async exportExcel() {
    const column = [];
    column.push('da');
    column.push('dr');
    // this.excelService.exportAsExcelFile([''], 'danh-muc', column);
-   this.excelService2.generateExcel();
+   const headers =  ['STT', 'Tên danh mục', 'Số lượng mặt hàng', 'Ngày tạo'];
+   const data = [];
+
+   for (let i = 0 ; i < this.categoryList.length ; i++) {
+    data.push([(i + 1), this.categoryList[i].CategoryName, this.categoryList[i].ProductAmount, this.categoryList[i].CreatedDate]);
+   }
+
+   const excelModel = new ExportExcelModel();
+   excelModel.Data = data;
+   excelModel.FileName =  'danh-muc' + '_export_' + new Date().getTime() + '.xlsx';
+   excelModel.Logo = await this.storeService.getStoreLogoBaseByToken();
+   excelModel.Headers = headers;
+   excelModel.Title = 'Danh sách danh mục trong cửa hàng';
+   excelModel.ColumnWidths = [5, 40, 30, 15];
+   this.excelService2.generateExcel(excelModel);
  }
 
  // ** remove category */

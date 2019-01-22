@@ -413,6 +413,27 @@ catalogrouter.get('/product-img', async (req, res, next) => {
     }
 });
 
+//get product image return to base64
+catalogrouter.get('/product-img-base64', async (req, res, next) => {
+    try {
+        var productId = security.decrypt(req.query.pid).split('_')[0];
+
+        var result = await service.getProductImage(productId);
+        var img = new Buffer(result.model.product);
+
+        const base64data = img.toString('base64');
+        var message = common.createResponseMessage(base64data,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
 //get category image
 catalogrouter.get('/cate-img', async (req, res, next) => {
     try {
@@ -426,6 +447,26 @@ catalogrouter.get('/cate-img', async (req, res, next) => {
             'Content-Length': img.length
         });
         res.end(img);
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//get category image return to base64
+catalogrouter.get('/cate-img-base64', async (req, res, next) => {
+    try {
+        var categoryId = security.decrypt(req.query.cid).split('_')[0];
+
+        var result = await service.getCategoryImage(categoryId);
+        var img = new Buffer(result.model.category);
+        const base64data = img.toString('base64');
+        var message = common.createResponseMessage(base64data,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
     }
     catch (err) {
         next(err);

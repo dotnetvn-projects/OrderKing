@@ -22,6 +22,7 @@ export class StoreService {
   private unLockStaffUrl = 'store/unlock-member';
   private storeInfoUrl = 'store/get-info';
   private storeLogoUrl = 'store/store-logo?';
+  private storeLogoBase64Url = 'store/store-logo-base64?';
   private updateStoreLogoUrl = 'store/update-store-logo';
   private editStoreUrl = 'store/edit-info';
 
@@ -60,6 +61,21 @@ export class StoreService {
     return AppSettings.API_ENDPOINT + this.storeLogoUrl + 'access_token='
     + sessionStorage.getItem(AppSettings.TOKEN_KEY) + '&random=' + Math.random();
   }
+
+   // ** get store logo base64*/
+   async getStoreLogoBaseByToken() {
+    const url = AppSettings.API_ENDPOINT + this.storeLogoBase64Url + 'access_token='
+    + sessionStorage.getItem(AppSettings.TOKEN_KEY) ;
+    let result = '';
+    await this.webClient.doGetAsync(url, (data: ApiResultModel) => {
+        if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+         result = data.Result;
+        }
+    });
+
+    return result;
+  }
+
 
   // update store logo
   async updateStoreLogo(fileData: any) {

@@ -11,6 +11,7 @@ import { PrintLayoutComponent } from './presentation/_layout/print-layout/print-
 import { LoginModule } from './presentation/main/login/login.module';
 import { MainRoutes } from './routing/main.routing';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,7 @@ import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
     BrowserModule, FormsModule, HttpClientModule
   ],
   providers: [
-    Title, AuthGuard
+    Title, AuthGuard, DatePipe
   ],
   bootstrap: [AppComponent]
 })

@@ -442,4 +442,25 @@ storerouter.get('/store-logo', async (req, res, next) => {
     }
 });
 
+//get logo return base64
+storerouter.get('/store-logo-base64', async (req, res, next) => {
+    try {
+        var accessToken = req.query.access_token;
+
+        var result = await service.getLogo(accessToken);
+
+        var img = new Buffer(result.model.storeinfo);
+        const base64data = img.toString('base64');
+        var message = common.createResponseMessage(base64data,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
 module.exports = storerouter;
