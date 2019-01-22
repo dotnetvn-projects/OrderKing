@@ -9,15 +9,24 @@ var defineProperty = function define(name, value) {
 defineProperty('getUserInfoByAccessToken',
                `SELECT ac.AccountName, profile.FullName, profile.Email,
                        profile.PhoneNumber, profile.Address, profile.Address2,
-                       profile.IdentityCard
+                       profile.IdentityCard, ac.CreatedDate
                        FROM Account ac
                        INNER JOIN UserProfile profile ON ac.Id = profile.AccountId
                        INNER JOIN LoginSession ss ON ac.Id = ss.AccountId
                        WHERE ss.AccessToken = @AccessToken AND ac.IsActived = 1`);
 
+//get user info by id
+defineProperty('getUserInfoById',
+    `SELECT ac.AccountName, profile.FullName, profile.Email,
+                       profile.PhoneNumber, profile.Address, profile.Address2,
+                       profile.IdentityCard, ac.CreatedDate, ac.IsActived
+                       FROM Account ac
+                       INNER JOIN UserProfile profile ON ac.Id = profile.AccountId
+                       WHERE ac.Id = @AccountId`);
+
 //get account by account id
 defineProperty('getAccountByAccountId',
-    `SELECT ac.* FROM Account ac WHERE ac.Id = @AccountId AND ac.IsActived = 1`);
+    `SELECT ac.* FROM Account ac WHERE ac.Id = @AccountId`);
 
 //get account by account name
 defineProperty('getAccountByAccountName',
@@ -64,10 +73,30 @@ defineProperty('deleteAccount', `
 
 //lock member
 defineProperty('lockMember', `
-    UPDATE Account SET IsActived = 0 WHERE AccountName = @AccountName
+    UPDATE Account SET IsActived = 0 WHERE Id = @AccountId
+`);
+
+//unlock member
+defineProperty('unLockMember', `
+    UPDATE Account SET IsActived = 1 WHERE Id = @AccountId
 `);
 
 //get avatar
 defineProperty('getAvatar', `
     SELECT [Avatar] FROM UserProfile WHERE AccountId = @AccountId
+`);
+
+//check whether account has already exist in database
+defineProperty('CheckExistAccount', `
+    SELECT Id FROM Account WHERE UPPER(AccountName) = @AccountName
+`);
+
+//check whether email has already exist in database
+defineProperty('CheckExistEmail', `
+    SELECT Id FROM UserProfile WHERE UPPER(Email) = @Email
+`);
+
+//check whether phone has already exist in database
+defineProperty('CheckExistPhone', `
+    SELECT Id FROM UserProfile WHERE UPPER(PhoneNumber) = @PhoneNumber
 `);

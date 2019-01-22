@@ -1,18 +1,33 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { AuthGuard } from './framework/framework.auth.guard';
 import { AppComponent } from './app.component';
+import { LoginLayoutComponent } from './presentation/_layout/login-layout/login-layout.component';
+import { MainLayoutComponent } from './presentation/_layout/main-layout/main-layout.component';
+import { PrintLayoutComponent } from './presentation/_layout/print-layout/print-layout.component';
+import { LoginModule } from './presentation/main/login/login.module';
+import { MainRoutes } from './routing/main.routing';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginLayoutComponent,
+    MainLayoutComponent,
+    PrintLayoutComponent
   ],
   imports: [
-    BrowserModule,
-    AppRoutingModule
+    RouterModule.forRoot(MainRoutes),
+    LoginModule, LoadingBarRouterModule,
+    BrowserModule, FormsModule, HttpClientModule
   ],
-  providers: [],
+  providers: [
+    Title, AuthGuard, DatePipe
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class MainModule { }

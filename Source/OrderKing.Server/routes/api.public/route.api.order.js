@@ -79,9 +79,9 @@ orderrouter.post('/search-order', async (req, res, next) => {
             common.sendUnauthorizedRequest(res);
         }
         else {
-            var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+            var storeid = await storeService.getStoreIdByAccessToken(accessToken);
 
-            if (storeId === -1) {
+            if (storeid === -1) {
                 common.sendBadRequest(res, 'Request data is invalid !');
             }
             else {
@@ -116,6 +116,7 @@ orderrouter.post('/create-new', async (req, res, next) => {
         var accessToken = req.body.AccessToken;
         var storeId = await storeService.getStoreIdByAccessToken(accessToken);
         var sellerId = await userService.getAccountIdByAccessToken(accessToken);
+        var paymentId = security.decrypt(req.body.PaymentId).split('_')[0];
 
         if (storeId === -1 || sellerId === -1) {
             common.sendBadRequest(res, 'Request data is invalid !');
@@ -123,6 +124,7 @@ orderrouter.post('/create-new', async (req, res, next) => {
         else {
             var orderInfo = {
                 storeid: storeid,
+                paymentId: paymentId,
                 seqnum: req.body.SeqNumber,
                 sellerid: sellerId,
                 amount: req.body.TotalAmount,
@@ -166,7 +168,7 @@ orderrouter.post('/update-status', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
         var storeId = await storeService.getStoreIdByAccessToken(accessToken);
-        var orderId = security.decrypt(req.body.OrderId);
+        var orderId = security.decrypt(req.body.OrderId).split('_')[0];
         var status = req.body.OrderStatus;
 
         var result = await service.updateOrderStatus({
@@ -188,14 +190,68 @@ orderrouter.post('/update-status', async (req, res, next) => {
     }
 });
 
-//get order order
-orderrouter.post('/get-info', async (req, res, next) => {
+//update order comment
+orderrouter.post('/update-comment', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
         var storeId = await storeService.getStoreIdByAccessToken(accessToken);
-        var orderId = security.decrypt(req.body.OrderId);
+        var orderId = security.decrypt(req.body.OrderId).split('_')[0];
+        var comment = req.body.Comment;
 
-        var result = await service.getOrderInfo({
+        var result = await service.updateOrderComment({
+            storeid: storeId,
+            orderid: orderId,
+            comment: comment
+        });
+
+        var message = common.createResponseMessage(null,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//update order payment
+orderrouter.post('/update-payment', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+        var orderId = security.decrypt(req.body.OrderId).split('_')[0];
+        var paymentId = security.decrypt(req.body.PaymentId).split('_')[0];
+
+        var result = await service.updateOrderPayment({
+            storeid: storeId,
+            orderid: orderId,
+            paymentId: paymentId
+        });
+
+        var message = common.createResponseMessage(null,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//remove order
+orderrouter.post('/remove', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+        var orderId = security.decrypt(req.body.OrderId).split('_')[0];
+
+        var result = await service.removeOrder({
             storeid: storeId,
             orderid: orderId
         });
@@ -212,6 +268,57 @@ orderrouter.post('/get-info', async (req, res, next) => {
         next(err);
     }
 });
+
+//get order info
+orderrouter.post('/get-info', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+        var orderId = security.decrypt(req.body.OrderId).split('_')[0];
+
+        var result = await service.getOrderInfo({
+            storeid: storeId,
+            orderid: orderId
+        });
+
+        var message = common.createResponseMessage(result.model.orderinfo,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//get order detail
+orderrouter.post('/get-detail', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+        var orderId = security.decrypt(req.body.OrderId).split('_')[0];
+
+        var result = await service.getOrderDetail({
+            storeid: storeId,
+            orderid: orderId
+        });
+
+        var message = common.createResponseMessage(result.model.orderinfo,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
 
 
 module.exports = orderrouter;

@@ -39,6 +39,7 @@
     <Compile Include="database\dbconnection.js" />
     <Compile Include="database\sqlcommand.catalog.js" />
     <Compile Include="database\sqlcommand.order.js" />
+    <Compile Include="database\sqlcommand.payment.js" />
     <Compile Include="database\sqlcommand.report.js" />
     <Compile Include="database\sqlcommand.store.js" />
     <Compile Include="database\sqlcommand.user.js" />
@@ -48,6 +49,7 @@
     <Compile Include="models\category\model.category.js" />
     <Compile Include="models\model.response.js" />
     <Compile Include="models\order\model.order.js" />
+    <Compile Include="models\payment\model.paymentMethod.js" />
     <Compile Include="models\product\model.product.js" />
     <Compile Include="models\store\model.storeinfo.js" />
     <Compile Include="models\user\model.userinfo.js" />
@@ -56,13 +58,16 @@
     <Compile Include="routes\api.public\route.api.catalog.js" />
     <Compile Include="routes\api.public\route.api.home.js" />
     <Compile Include="routes\api.public\route.api.order.js" />
+    <Compile Include="routes\api.public\route.api.payment.js" />
     <Compile Include="routes\api.public\route.api.report.js" />
     <Compile Include="routes\api.public\route.api.store.js" />
     <Compile Include="routes\api.public\route.api.user.js" />
     <Compile Include="server.js" />
     <Compile Include="services\service.auth.js" />
     <Compile Include="services\service.catalog.js" />
+    <Compile Include="services\service.cronjob.js" />
     <Compile Include="services\service.order.js" />
+    <Compile Include="services\service.payment.js" />
     <Compile Include="services\service.report.js" />
     <Compile Include="services\service.security.js" />
     <Compile Include="services\service.store.js" />
@@ -89,6 +94,7 @@
     <Folder Include="models\" />
     <Folder Include="models\auth\" />
     <Folder Include="models\category\" />
+    <Folder Include="models\payment\" />
     <Folder Include="models\order\" />
     <Folder Include="models\product\" />
     <Folder Include="models\store\" />

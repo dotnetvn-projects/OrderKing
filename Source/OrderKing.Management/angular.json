@@ -27,9 +27,32 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/assets/themes/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css",
+              "src/assets/themes/bower_components/datatable-responsive/responsive.dataTables.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/themes/bower_components/jquery/dist/jquery.min.js",
+              "src/assets/themes/bower_components/bootstrap/dist/js/bootstrap.min.js",
+              "src/assets/themes/plugins/iCheck/icheck.min.js",
+              "src/assets/themes/plugins/input-mask/jquery.inputmask.js",
+              "src/assets/themes/plugins/input-mask/jquery.inputmask.date.extensions.js",
+              "src/assets/themes/plugins/input-mask/jquery.inputmask.extensions.js",
+              "src/assets/themes/bower_components/fastclick/lib/fastclick.js",
+              "src/assets/themes/dist/js/adminlte.min.js",
+              "src/assets/themes/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js",
+              "src/assets/themes/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js",
+              "src/assets/themes/plugins/jvectormap/jquery-jvectormap-world-mill-en.js",
+              "src/assets/themes/bower_components/jquery-slimscroll/jquery.slimscroll.min.js",
+              "src/assets/themes/bower_components/chart.js/Chart.js",
+              "src/assets/themes/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
+              "src/assets/themes/bower_components/datatables.net/js/jquery.dataTables.min.js",
+              "src/assets/themes/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js",
+              "src/assets/themes/bower_components/datatable-responsive/dataTables.responsive.min.js",
+              "src/assets/main.js",
+              "src/assets/plugins/jspdf.min.js",
+              "src/assets/plugins/html2canvas.min.js"
+            ]
           },
           "configurations": {
             "production": {

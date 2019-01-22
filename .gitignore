@@ -259,3 +259,5 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+Source/OrderKing.Server/logs/.18cdbcea9831d65c114cbc0258ccc14c76c57355-audit.json
+Source/OrderKing.Server/logs/.18cdbcea9831d65c114cbc0258ccc14c76c57355-audit.json

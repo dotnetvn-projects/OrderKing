@@ -20,11 +20,14 @@ exports.getStoreInfoByAccessToken = async (accessToken) => {
         response.model.responsecode = status.common.suscesscode;
         response.model.storeinfo =
             {
+                storeid: security.encrypt(result.recordset[0].Id + '_' + security.serverKey()),
                 storename: result.recordset[0].StoreName,
                 email: result.recordset[0].Email,
                 address: result.recordset[0].StoreAddress,
                 phone: result.recordset[0].StorePhone,
-                slogan: result.recordset[0].Slogan
+                slogan: result.recordset[0].Slogan,
+                manager: result.recordset[0].Manager,
+                createddate: moment(result.recordset[0].CreatedDate).format('DD/MM/YYYY')
             };
     }
     return response;
@@ -38,6 +41,7 @@ exports.updateStoreInfo = async (storeInfo, storeId) => {
     const pool = await poolPromise;
     const result = await pool.request()
         .input('StoreName', sql.NVarChar, storeInfo.storename)
+        .input('Email', sql.NVarChar, storeInfo.email)
         .input('StoreAddress', sql.NVarChar, storeInfo.address)
         .input('StorePhone', sql.NVarChar, storeInfo.phone)
         .input('Slogan', sql.NVarChar, storeInfo.slogan)
@@ -47,7 +51,9 @@ exports.updateStoreInfo = async (storeInfo, storeId) => {
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
-        response.model.storeinfo = storeInfo;
+        response.model.storeinfo = {
+            storeid: security.encrypt(storeId + '_' + security.serverKey())
+        };
     }
     return response;
 };
@@ -120,19 +126,36 @@ exports.getStoreIdByAccessToken = async (accessToken) => {
 };
 
 //get member in store
-exports.getMemberInStore = async (storeId) => {
+exports.getMemberInStore = async (storeId, currentAccountId) => {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
 
     const pool = await poolPromise;
     const result = await pool.request()
         .input('StoreId', sql.BigInt, storeId)
+        .input('AccountId', sql.BigInt, currentAccountId)
         .query(storeSqlCmd.getMemberInStore);
 
     if (result.recordset.length > 0) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
-        response.model.storeinfo = result.recordset;
+        var members = [];
+        result.recordset.forEach(function (value) {
+            members.push({
+                memberid: security.encrypt(value.MemberId + '_'+ security.serverKey()),
+                storename: value.StoreName,
+                accountname: value.AccountName,
+                fullname: value.FullName,
+                email: value.Email,
+                phonenumber: value.PhoneNumber,
+                address: value.Address,
+                address2: value.Address2,
+                identityCard: value.IdentityCard,
+                isactived: value.IsActived,
+                createddate: moment(value.CreatedDate).format('DD/MM/YYYY')
+            });
+        });
+        response.model.storeinfo = members;
     }
     return response;
 };
@@ -174,7 +197,7 @@ exports.getLogo = async (accessToken) => {
     const pool = await poolPromise;
     const result = await pool.request()
         .input("AccessToken", sql.NVarChar, accessToken)
-        .query(userSqlCmd.getStoreLogo);
+        .query(storeSqlCmd.getStoreLogo);
 
     if (result.recordset.length > 0) {
         response.model.statusmessage = status.common.suscess;

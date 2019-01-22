@@ -12,12 +12,12 @@ const format = require('string-format');
 //generate order code
 function generateOrderCode(id) {
     if (id < 10) {
-        return 'DH00' + id;
+        return 'DH-#00' + id;
     } else if (id < 100 && id > 9) {
-        return 'DH0' + id;
+        return 'DH-#0' + id;
     }
     else {
-        return 'DH' + id;
+        return 'DH-#' + id;
     }
 }
 
@@ -33,24 +33,26 @@ exports.getOrderListByStore = async (storeId) => {
         .input('StoreId', sql.BigInt, storeId)
         .query(format(orderSqlCmd.getOrderListByStore, ' '));
 
-    if (result.recordset.length > 0) {
+    if (result.recordset.length >= 0) {
         var orders = [];
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
 
         result.recordset.forEach(function (value) {
             orders.push({
-                orderid: security.encrypt(value.Id),
+                orderid: security.encrypt(value.Id + '_' + security.serverKey()),
                 storename: value.StoreName,
                 ordercode: value.OrderCode,
                 seqnum: value.SeqNum,
                 totalprice: value.TotalPrice,
                 amount: value.TotalAmount,
-                createddate: value.CreatedDate,
-                printeddate: value.PrintedDate,
+                createddate: moment(value.CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
+                updateddate: moment(value.UpdatedDate).format('DD/MM/YYYY HH:mm:ss'),
                 orderstatus: value.OrderStatus,
                 selleraccount: value.SellerAccount,
-                seller: value.Seller
+                seller: value.Seller,
+                comment: value.Comment,
+                paymentmethod: value.PaymentMethod
             });
         });
 
@@ -76,17 +78,19 @@ exports.getOrderListBySellerId = async (sellerid) => {
 
         result.recordset.forEach(function (value) {
             orders.push({
-                orderid: security.encrypt(value.Id),
+                orderid: security.encrypt(value.Id + '_' + security.serverKey()),
                 storename: value.StoreName,
                 ordercode: value.OrderCode,
                 seqnum: value.SeqNum,
                 totalprice: value.TotalPrice,
                 amount: value.TotalAmount,
-                createddate: value.CreatedDate,
-                printeddate: value.PrintedDate,
+                createddate: moment(value.CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
+                updateddate: moment(value.UpdatedDate).format('DD/MM/YYYY HH:mm:ss'),
                 orderstatus: value.OrderStatus,
                 selleraccount: value.SellerAccount,
-                seller: value.Seller
+                seller: value.Seller,
+                commemt: value.Comment,
+                paymentmethod: value.PaymentMethod
             });
         });
 
@@ -104,22 +108,53 @@ exports.searchOrderListByStore = async (searchPattern) => {
     var searchString = '';
     var startdate = null;
     var enddate = null;
-    if (searchPattern.ordercode !== undefined
-        && (searchPattern.ordercode !== '' && searchPattern.ordercode !== null)) {
-        searchString += 'AND OrderCode = @OrderCode ';
-        startdate = new Date(searchPattern.startdate);
+
+    if (searchPattern.ordercode !== undefined && searchPattern.ordercode !== '' && searchPattern.ordercode !== null) {
+        searchString += 'AND OrderCode = @OrderCode ';       
     }
-    if (searchPattern.startdate !== undefined
-        && (searchPattern.startdate !== '' && searchPattern.startdate !==null)) {
-        searchString += 'AND (CreatedDate BETWEEN @StartDate AND @EndDate) ';
-        enddate = new Date(searchPattern.enddate);
+    if ((searchPattern.startdate !== undefined && searchPattern.startdate !== '' && searchPattern.startdate !== null)
+        &&
+        (searchPattern.enddate !== undefined && searchPattern.enddate !== '' && searchPattern.enddate !== null)) {
+        searchString += 'AND ([Order].CreatedDate BETWEEN @StartDate AND @EndDate) ';
+
+        var startDay = searchPattern.startdate.split('/')[0];
+        var startMonth = searchPattern.startdate.split('/')[1];
+        var startYear = searchPattern.startdate.split('/')[2];
+        var endDay = searchPattern.enddate.split('/')[0];
+        var endMonth = searchPattern.enddate.split('/')[1];
+        var endYear = searchPattern.enddate.split('/')[2];
+
+        startdate = new Date(moment({ y: startYear, m: startMonth, d: startDay }).format('YYYY-MM-DD HH:mm:ss'));
+        enddate = new Date(moment({ y: endYear, m: endMonth, d: endDay }).format('YYYY-MM-DD HH:mm:ss'));
+
+    } else if ((searchPattern.startdate !== undefined && searchPattern.startdate !== '' && searchPattern.startdate !== null)
+        &&
+        (searchPattern.enddate === undefined || searchPattern.enddate !== '' || searchPattern.enddate !== null)) {
+        searchString += 'AND [Order].CreatedDate >= @StartDate ';
+
+        startDay = searchPattern.startdate.split('/')[0];
+        startMonth = searchPattern.startdate.split('/')[1];
+        startYear = searchPattern.startdate.split('/')[2];
+
+        startdate = new Date(moment({ y: startYear, m: startMonth, d: startDay }).format('YYYY-MM-DD HH:mm:ss'));
+
+    } else if((searchPattern.enddate !== undefined && searchPattern.enddate !== '' && searchPattern.enddate !== null)
+        &&
+        (searchPattern.startdate === undefined || searchPattern.startdate !== '' || searchPattern.startdate !== null)) {
+        searchString += 'AND [Order].CreatedDate <= @EndDate ';
+
+        endDay = searchPattern.enddate.split('/')[0];
+        endMonth = searchPattern.enddate.split('/')[1];
+        endYear = searchPattern.enddate.split('/')[2];
+
+        enddate = new Date(moment({ y: endYear, m: endMonth, d: endDay }).format('YYYY-MM-DD HH:mm:ss'));
     }
-    if (searchPattern.status !== undefined
-        && (searchPattern.status !== '' && searchPattern.status !== null)) {
+
+    if (searchPattern.status !== undefined && searchPattern.status !== '' && searchPattern.status !== null
+        && searchPattern.status !== '0') {
         searchString += 'AND OrderStatus = @Status ';
     }
-    if (searchPattern.seller !== undefined
-        && (searchPattern.seller !== '' && searchPattern.seller !== null)) {
+    if (searchPattern.seller !== undefined && searchPattern.seller !== '' && searchPattern.seller !== null) {
         searchString += "AND (Account.AccountName LIKE '%@Seller%' OR UserProfile.FullName LIKE '%@Seller%' ";
     }
 
@@ -127,30 +162,65 @@ exports.searchOrderListByStore = async (searchPattern) => {
     const result = await pool.request()
         .input('StoreId', sql.BigInt, searchPattern.storeid)
         .input('OrderCode', sql.NVarChar, searchPattern.ordercode)
-        .input('StartDate', sql.NVarChar, startdate)
-        .input('EndDate', sql.NVarChar, enddate)
+        .input('StartDate', sql.DateTime, startdate)
+        .input('EndDate', sql.DateTime, enddate)
         .input('Status', sql.NVarChar, searchPattern.status)
         .input('Seller', sql.NVarChar, searchPattern.seller)
         .query(format(query, searchString));
 
-    if (result.recordset.length > 0) {
+    if (result.recordset.length >= 0) {
         var orders = [];
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
 
         result.recordset.forEach(function (value) {
             orders.push({
-                orderid: security.encrypt(value.Id),
+                orderid: security.encrypt(value.Id + '_' + security.serverKey()),
                 storename: value.StoreName,
                 ordercode: value.OrderCode,
                 seqnum: value.SeqNum,
                 totalprice: value.TotalPrice,
                 amount: value.TotalAmount,
-                createddate: value.CreatedDate,
-                printeddate: value.PrintedDate,
+                createddate: moment(value.CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
+                updateddate: moment(value.UpdatedDate).format('DD/MM/YYYY HH:mm:ss'),
                 orderstatus: value.OrderStatus,
                 selleraccount: value.SellerAccount,
-                seller: value.Seller
+                seller: value.Seller,
+                commemt: value.Comment,
+                paymentmethod: value.PaymentMethod
+            });
+        });
+
+        response.model.orderinfo = orders;
+    }
+    return response;
+};
+
+
+//get orders detail
+exports.getOrderDetail = async (info) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('StoreId', sql.BigInt, info.storeid)
+        .input('OrderId', sql.BigInt, info.orderid)
+        .query(orderSqlCmd.getOrderDetail);
+
+    if (result.recordset.length >= 0) {
+        var orders = [];
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+
+        result.recordset.forEach(function (value) {
+            orders.push({
+                id: security.encrypt(value.Id + '_' + security.serverKey()),
+                productname: value.ProductName,
+                productcode: value.ProductCode,
+                amount: value.Amount,
+                price: value.Price,
+                total: value.Total
             });
         });
 
@@ -175,6 +245,7 @@ exports.createNewOrder = async (orderInfo) => {
         .input('SeqNum', sql.NVarChar, seqNum)
         .input('SellerId', sql.NVarChar, orderInfo.sellerid)
         .input('StoreId', sql.NVarChar, orderInfo.storeid)
+        .input('PaymentId', sql.Int, orderInfo.paymentId)
         .input('TotalPrice', sql.Int, orderInfo.price)
         .input('TotalAmount', sql.Int, orderInfo.amount)
         .input('OrderStatus', sql.NVarChar, statusValue.orderStatus.NotCompleted)
@@ -193,7 +264,7 @@ exports.createNewOrder = async (orderInfo) => {
             .query(orderSqlCmd.updateOrderCode);
 
         response.model.orderinfo = {
-            code: orderCode, orderid: orderId
+            code: orderCode, orderid: security.encrypt(orderId + '_' + security.serverKey())
         };
     }
 
@@ -216,7 +287,7 @@ exports.createOrderDetail = async (orderDetailInfo) => {
     if (result.recordset.length > 0) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
-        response.model.orderinfo = result.recordset[0].OrderDetailId;
+        response.model.orderinfo = security.encrypt(result.recordset[0].OrderDetailId + '_' + security.serverKey());
     }
 
     return response;
@@ -237,7 +308,68 @@ exports.updateOrderStatus = async (statusInfo) => {
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
-        response.model.orderinfo = statusInfo.orderid;
+        response.model.orderinfo = security.encrypt(statusInfo.orderid + '_' + security.serverKey());
+    }
+
+    return response;
+};
+
+//update order comment
+exports.updateOrderComment = async (info) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('OrderId', sql.BigInt, info.orderid)
+        .input('StoreId', sql.BigInt, info.storeid)
+        .input('Comment', sql.NVarChar, info.comment)
+        .query(orderSqlCmd.updateOrderComment);
+
+    if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        response.model.orderinfo = security.encrypt(info.orderid + '_' + security.serverKey());
+    }
+
+    return response;
+};
+
+//update order payment
+exports.updateOrderPayment = async (info) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('OrderId', sql.BigInt, info.orderid)
+        .input('StoreId', sql.BigInt, info.storeid)
+        .input('PaymentId', sql.Int, info.paymentId)
+        .query(orderSqlCmd.updateOrderPayment);
+
+    if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        response.model.orderinfo = security.encrypt(info.orderid + '_' + security.serverKey());
+    }
+
+    return response;
+};
+
+//remove order
+exports.removeOrder = async (info) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('OrderId', sql.BigInt, info.orderid)
+        .input('StoreId', sql.BigInt, info.storeid)
+        .query(orderSqlCmd.removeOrder);
+
+    if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
     }
 
     return response;
@@ -254,21 +386,23 @@ exports.getOrderInfo = async (orderInfo) => {
         .input('OrderId', sql.BigInt, orderInfo.orderid)
         .query(orderSqlCmd.getOrderInfo);
 
-    if (result.recordset.length > 0) {
+    if (result.recordset.length >= 0) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
         response.model.orderinfo = {
-            orderid: security.encrypt(result.recordset[0].Id),
+            orderid: security.encrypt(result.recordset[0].Id + '_' + security.serverKey()),
             storename: result.recordset[0].StoreName,
             ordercode: result.recordset[0].OrderCode,
             seqnum: result.recordset[0].SeqNum,
             totalprice: result.recordset[0].TotalPrice,
             amount: result.recordset[0].TotalAmount,
-            createddate: result.recordset[0].CreatedDate,
-            printeddate: result.recordset[0].PrintedDate,
+            createddate: moment(result.recordset[0].CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
+            updateddate: moment(result.recordset[0].UpdatedDate).format('DD/MM/YYYY HH:mm:ss'),
             orderstatus: result.recordset[0].OrderStatus,
             selleraccount: result.recordset[0].SellerAccount,
-            seller: result.recordset[0].Seller
+            seller: result.recordset[0].Seller,
+            commemt: result.recordset[0].Comment,
+            paymentmethod: result.recordset[0].PaymentMethod
         };
     }
     return response;

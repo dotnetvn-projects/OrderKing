@@ -5,6 +5,64 @@ const security = require('../services/service.security');
 const userSqlCmd = require('../database/sqlcommand.user');
 const moment = require('moment');
 
+//check user has already existed or not
+exports.CheckExistAccount = async function (accountName) {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+    response.model.userinfo = 'false';
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('AccountName', sql.NVarChar, accountName.toUpperCase())
+        .query(userSqlCmd.CheckExistAccount);
+
+    if (result.recordset.length > 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        response.model.userinfo = 'true';
+    }
+    return response;
+};
+
+//check email has already existed or not
+exports.CheckExistEmail = async function (email) {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+    response.model.userinfo = 'false';
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('Email', sql.NVarChar, email.toUpperCase())
+        .query(userSqlCmd.CheckExistEmail);
+
+    if (result.recordset.length > 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        response.model.userinfo = 'true';
+    }
+    return response;
+};
+
+//check phone number has already existed or not
+exports.CheckExistPhoneNumber = async function (phoneNumber) {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+    response.model.userinfo = 'false';
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('PhoneNumber', sql.NVarChar, phoneNumber.toUpperCase())
+        .query(userSqlCmd.CheckExistPhone);
+
+    if (result.recordset.length > 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        response.model.userinfo = 'true';
+    }
+    return response;
+};
+
+
 //get user info uses token
 exports.getUserInfoByAccessToken = async function (accessToken) {
     response.model.statusmessage = status.common.failed;
@@ -26,7 +84,37 @@ exports.getUserInfoByAccessToken = async function (accessToken) {
                 phonenumber: result.recordset[0].PhoneNumber,
                 address: result.recordset[0].Address,
                 address2: result.recordset[0].Address2,
-                identitycard: result.recordset[0].IdentityCard
+                identitycard: result.recordset[0].IdentityCard,
+                createddate: result.recordset[0].CreatedDate
+            };
+    }
+    return response;
+};
+
+//get user info uses id
+exports.getUserInfoById = async function (accountId) {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('AccountId', sql.BigInt, accountId)
+        .query(userSqlCmd.getUserInfoById);
+
+    if (result.recordset.length > 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        response.model.userinfo =
+            {
+                accountname: result.recordset[0].AccountName,
+                fullname: result.recordset[0].FullName,
+                email: result.recordset[0].Email,
+                phonenumber: result.recordset[0].PhoneNumber,
+                address: result.recordset[0].Address,
+                address2: result.recordset[0].Address2,
+                identitycard: result.recordset[0].IdentityCard,
+                isactived: result.recordset[0].IsActived,
+                createddate: moment(result.recordset[0].CreatedDate).format('DD/MM/YYYY')
             };
     }
     return response;
@@ -182,14 +270,14 @@ exports.createNewAccount = async (info) => {
     return response;
 };
 
-//get account by account id
-exports.lockAccount = async (account) => {
+//lock member
+exports.lockAccount = async (accountId) => {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
 
     const pool = await poolPromise;
     const result = await pool.request()
-        .input("AccountName", sql.NVarChar, account)
+        .input("AccountId", sql.BigInt, accountId)
         .query(userSqlCmd.lockMember);
 
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
@@ -198,6 +286,24 @@ exports.lockAccount = async (account) => {
     }
     return response;
 };
+
+//unlock member
+exports.unLockAccount = async (accountId) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input("AccountId", sql.BigInt, accountId)
+        .query(userSqlCmd.unLockMember);
+
+    if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+    }
+    return response;
+};
+
 
 //get avatar
 exports.getAvatar = async (accountId) => {

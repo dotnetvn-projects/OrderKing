@@ -1,7 +1,9 @@
 'use strict';
 var express = require('express');
 var errorCatcher = require('./middlewares/middleware.error.catcher');
+var cors = require('cors');
 var validateRequest = require('./middlewares/middleware.request.validate');
+var cronJob = require('./services/service.cronjob');
 var bodyParser = require('body-parser');
 
 var app = express();
@@ -14,14 +16,15 @@ var orderApi = require('./routes/api.public/route.api.order');
 var reportApi = require('./routes/api.public/route.api.report');
 var storeApi = require('./routes/api.public/route.api.store');
 var userApi = require('./routes/api.public/route.api.user');
+var paymentApi = require('./routes/api.public/route.api.payment');
 
 //apply default middleware for body message format
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 //in development mode, please comment out validateRequest middleware
-//app.use(validateRequest.setmiddleware);
-
+app.use(validateRequest.setmiddleware);
 
 //route api
 app.use('/', homeApi);
@@ -31,12 +34,14 @@ app.use('/api/public/order', orderApi);
 app.use('/api/public/report', reportApi);
 app.use('/api/public/store', storeApi);
 app.use('/api/public/user', userApi);
+app.use('/api/public/payment', paymentApi);
 
 //in development mode, please comment out errorCatcher middleware
 app.use(errorCatcher.setmiddleware);
 
 //Start listening connection from remote client
 app.listen(port, function () {
+    cronJob.updateTokenStatusJob();
     console.log("server is started !, host : http://localhost:" + port);
     console.log("Press Ctrl + C to stop server !");
 });

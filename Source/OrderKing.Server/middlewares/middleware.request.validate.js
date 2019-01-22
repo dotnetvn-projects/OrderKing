@@ -7,15 +7,34 @@ const apiConfig = require('../resources/resource.api.config');
 const authenSqlCmd = require('../database/sqlcommand.auth');
 const sessionLoginHandler = require('../eventHandlers/event.handler.sessionlogin');
 
+function allowPassValidate(req) {
+    return req.url.indexOf('auth-user') >= 0
+        || req.url.indexOf('auth-manager') >= 0
+        || req.url.indexOf('product-img') >= 0
+        || req.url.indexOf('cate-img') >= 0
+        || req.url.indexOf('auth-token-status') >= 0
+        || req.url.indexOf('store-logo') >= 0
+        || req.url.indexOf('user-avatar') >= 0
+        || req.url.indexOf('change-category-image') >= 0
+        || req.url.indexOf('change-product-image') >= 0
+        || req.url.indexOf('edit-member-avatar') >= 0
+        || req.url.indexOf('update-store-logo') >= 0;
+}
+
+
 //filter request
 function isAcceptedRequest(req) {
     var isvalid = false;
-    var referrer = req.headers.referer;
+
+    if (allowPassValidate(req)) {
+        return true;
+    }
+    var appname = req.headers.appname;
     var apikey = req.headers.apikey;
 
-    if (apikey === apiConfig.seller.apikey && referrer === apiConfig.seller.referrer
-        || apikey === apiConfig.manager.apikey && referrer === apiConfig.manager.referrer
-        || apikey === apiConfig.system.apikey && referrer === apiConfig.system.referrer) {
+    if (apikey === apiConfig.seller.apikey && appname === apiConfig.seller.appname
+        || apikey === apiConfig.manager.apikey && appname === apiConfig.manager.appname
+        || apikey === apiConfig.system.apikey && appname === apiConfig.system.appname) {
         isvalid = true;
     }
     return isvalid;
@@ -33,12 +52,17 @@ var validateRequest = async function (req, res, next) {
         }
         else {
             var valid = true;
-            var accessToken = req.body.AccessToken;
-            if (req.url.indexOf('auth-user') === -1 && req.url.indexOf('product-img') === -1
-                    && req.url.indexOf('cate-img') === -1) {
+            var accessToken = '';
+            if (req.method === 'POST') {
+                accessToken = req.body.AccessToken;
+            }
+            else {
+                accessToken = req.query.access_token;
+            }
+            if (allowPassValidate(req) === false) {
                 if (accessToken === undefined || accessToken === '') {
                     logHandler.fire('error', format('ip [{0}] {1} ', ip, 'has sent a request without accesstoken'));
-                    common.sendInvalidRequest(res);
+                    common.sendUnauthorizedRequest(res);
                     valid = false;
                 }
                 else {
@@ -52,7 +76,7 @@ var validateRequest = async function (req, res, next) {
 
                     if (result.recordset.length <=0 || tokenInfo.account !== accountName) {
                         logHandler.fire('error', format('ip [{0}] {1} ', ip, 'has sent the request with fake accesstoken'));
-                        common.sendBadRequest(res);
+                        common.sendUnauthorizedRequest(res);
                     }
                     else {
                         //check token expired
@@ -63,7 +87,7 @@ var validateRequest = async function (req, res, next) {
                             //make session login expired
                             sessionLoginHandler.fire('makeExpired', accessToken);
                             valid = false;
-                            common.sendTokenExpired(res);
+                            common.sendUnauthorizedRequest(res);
                         }
                         else {
                             sessionLoginHandler.fire('updateLastAccessTime', accessToken);

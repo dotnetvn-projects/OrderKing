@@ -1,0 +1,43 @@
+<div class="login-box">
+  <div class="login-logo">
+    <a><b>Order King</b> - Đăng Nhập</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Đăng nhập để bắt đầu phiên làm việc mới</p>
+
+    <form>
+      <div class="form-group has-feedback">
+        <input [(ngModel)]="LoginInfo.AccountName" [ngModelOptions]="{standalone: true}" type="text" class="form-control" placeholder="Tên đăng nhập">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input [(ngModel)]="LoginInfo.Password" [ngModelOptions]="{standalone: true}" type="password" class="form-control" placeholder="Mật khẩu">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+          <div (click)="onCheckboxchange()" class="checkbox icheck">
+            <label>
+              <input  [(ngModel)]="LoginInfo.RemeberMe" [ngModelOptions]="{standalone: true}" type="checkbox"> Ghi nhớ tài khoản
+            </label>
+          </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button class="btn btn-primary btn-block btn-flat" (click)="login()">Đăng nhập</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+
+    <div class="social-auth-links text-center">
+      <p class='login-error-mess'>{{ErrorMessage}}</p>
+    </div>
+
+    <a href="#"><i class='fa fa-hand-o-right'></i> Quên mật khẩu ?</a><br>
+    <p class='login-footer'><b>Order King</b> - Hệ thống bán hàng tiện ích cho cửa hàng vừa và nhỏ</p>
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->

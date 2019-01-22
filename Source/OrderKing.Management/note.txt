@@ -1,0 +1,7 @@
+1. generate compoment: ng g c name --skip-import
+2: generate component without spec file: ng g c name --skip-import --nospec
+3. aler lib : https://sweetalert2.github.io/
+4. excel: https://medium.com/@madhavmahesh/exporting-an-excel-file-in-angular-927756ac9857
+5. pdf: jspdf.min.js, html2canvas.min.js
+
+https://www.ngdevelop.tech/export-to-excel-in-angular-6/

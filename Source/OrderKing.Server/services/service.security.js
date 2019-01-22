@@ -17,6 +17,11 @@ function decrypt(data) {
     return crypto.decrypt(data);
 }
 
+//get server key
+function serverKey() {
+    return crypto.serverKey();
+}
+
 //check current access token has store owner right or not
 async function isStoreOwner(accessToken) {
     const pool = await poolPromise;
@@ -30,5 +35,6 @@ async function isStoreOwner(accessToken) {
 exports.encrypt = encrypt;
 exports.decrypt = decrypt;
 exports.generateHash = generateHash;
+exports.serverKey = serverKey;
 exports.isStoreOwner = isStoreOwner;
 

@@ -16,6 +16,10 @@ exports.parseTokenInfo = function (accessToken) {
     return result;
 };
 
+exports.isNumber = function (num) {
+    return /^-{0,1}\d+$/.test(num); 
+};
+
 //send invalid request
 exports.sendInvalidRequest = function sendInvalidRequest(res) {
     res.status(status.invalidRequest.code);
@@ -65,7 +69,7 @@ exports.sendTokenExpired = function sendTokenExpired(res) {
 };
 
 //create response message for client
-exports.createResponseMessage = (data,statusCode, statusMessage) => {
+exports.createResponseMessage = (data, statusCode, statusMessage) => {
     var message = response.model;
     message.responsecode = statusCode;
     message.statusmessage = statusMessage;

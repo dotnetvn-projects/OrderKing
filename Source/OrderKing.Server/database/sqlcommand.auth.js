@@ -1,4 +1,3 @@
-//var extension = require('../common/extension');
 
 var defineProperty = function define(name, value) {
     Object.defineProperty(exports, name, {
@@ -10,11 +9,17 @@ var defineProperty = function define(name, value) {
 
 //get user's hash key
 defineProperty('getHashKey',
-    'SELECT HashKey FROM Account WHERE AccountName = @AccountName');
+    'SELECT IsActived, HashKey FROM Account WHERE AccountName = @AccountName');
 
-//get user's hash key
+//login for user
 defineProperty('login',
     'SELECT AccountName, Id FROM Account WHERE AccountName = @AccountName AND Password = @Password');
+
+//login for manager
+defineProperty('loginManager',
+    `SELECT Account.AccountName, Account.Id FROM Account
+     INNER JOIN Store ON Store.OwnerId = Account.Id
+     WHERE AccountName = @AccountName AND Password = @Password`);
 
 //get login session
 defineProperty('queryLoginSession',
@@ -37,3 +42,9 @@ defineProperty('updateLastAccessTimeLoginSession', 'UPDATE LoginSession SET Last
 
 //update expired date
 defineProperty('updateExpiredDateLoginSession', 'UPDATE LoginSession SET AccessTokenExpired = GETDATE(), IsExpired = 1 WHERE AccessToken = @AccessToken');
+
+//get the expiration of token
+defineProperty('getTokenExpiration', 'SELECT AccessToken, AccessTokenExpired FROM LoginSession WHERE AccessToken = @AccessToken');
+
+//get all tokens are not expired
+defineProperty('getAllTokenNotExpired', 'SELECT AccessTokenExpired, AccessToken FROM LoginSession WHERE IsExpired = 0');

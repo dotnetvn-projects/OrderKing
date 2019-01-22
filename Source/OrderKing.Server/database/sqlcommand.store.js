@@ -7,10 +7,11 @@ var defineProperty = function define(name, value) {
 
 //get store info by access token
 defineProperty('getStoreInfoByAccessToken',
-    `SELECT Store.StoreName, Store.Email, Store.StoreAddress, Store.StorePhone, Store.Slogan
+    `SELECT Store.Id, Store.CreatedDate, UserProfile.FullName AS Manager, Store.StoreName, Store.Email, Store.StoreAddress, Store.StorePhone, Store.Slogan
      FROM LoginSession
      INNER JOIN StoreMember ON LoginSession.AccountId = StoreMember.AccountId
      INNER JOIN Store ON Store.Id = StoreMember.StoreId
+     INNER JOIN UserProfile ON UserProfile.AccountId = Store.OwnerId
      WHERE LoginSession.IsExpired = 0 AND LoginSession.AccessToken = @AccessToken `);
 
 //get store logo by access token
@@ -34,6 +35,7 @@ defineProperty('updateStoreInfo', `
     UPDATE Store
     SET StoreName = @StoreName,
         StoreAddress = @StoreAddress,
+        Email = @Email,
         StorePhone = @StorePhone,
         Slogan = @Slogan
     WHERE Id = @StoreId`);
@@ -52,13 +54,14 @@ defineProperty('updateLogo',
 
 //get member in store
 defineProperty('getMemberInStore', `
-    SELECT Store.StoreName, Account.AccountName, UserProfile.FullName,
+    SELECT Account.Id AS MemberId, Store.StoreName, Account.AccountName, UserProfile.FullName,
            UserProfile.Email, UserProfile.PhoneNumber, UserProfile.[Address],
-	       UserProfile.[Address2], UserProfile.IdentityCard 
+	       UserProfile.[Address2], UserProfile.IdentityCard, Account.CreatedDate, Account.IsActived
          FROM Store INNER JOIN StoreMember ON Store.Id = StoreMember.StoreId
          INNER JOIN Account ON StoreMember.AccountId = Account.Id
 	     INNER JOIN UserProfile ON Account.Id = UserProfile.AccountId
-         WHERE Store.Id = @StoreId
+         WHERE Store.Id = @StoreId AND Account.Id <> @AccountId
+         ORDER BY Account.IsActived DESC, Account.CreatedDate DESC
 `);
 
 //create new store

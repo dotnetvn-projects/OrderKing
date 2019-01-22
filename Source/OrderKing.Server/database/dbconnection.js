@@ -14,6 +14,9 @@ function getConfig() {
             max: 500,
             min: 0,
             idleTimeoutMillis: 30000
+        },
+        options: {
+            useUTC: false
         }
     };
     return config;
