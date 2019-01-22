@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 const routes: Routes = [
   {
     path: 'auth',
-    loadChildren: './main/auth/auth.module#AuthModule'
+    loadChildren: './presentation/main/auth/auth.module#AuthModule'
   }
 ];
 
