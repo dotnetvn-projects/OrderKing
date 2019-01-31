@@ -7,8 +7,7 @@ import { CategoryService } from 'src/app/service/category.service';
 import { DialogService } from 'src/app/service/dialog.service';
 import { Router } from '@angular/router';
 import { AppMessage } from 'src/app/framework/framework.app.messages';
-import { ExcelService } from 'src/app/service/export.exel.service';
-import { ExcelService2 } from 'src/app/service/export.excel.service2';
+import { ExcelService } from 'src/app/service/export.excel.service';
 import { ExportExcelModel } from 'src/app/model/export.excel.model';
 import { StoreService } from 'src/app/service/store.service';
 
@@ -22,8 +21,7 @@ export class CategoryComponent extends BaseComponent {
   private tableId = 'table-category';
 
   constructor(private titleService: Title, private dialogService: DialogService,
-    private router: Router, private categoryService: CategoryService,
-     private excelService: ExcelService, private excelService2: ExcelService2,
+    private router: Router, private categoryService: CategoryService, private excelService: ExcelService,
      injector: Injector, private storeService: StoreService ) {
     super(injector);
  }
@@ -36,11 +34,8 @@ export class CategoryComponent extends BaseComponent {
    });
  }
 
+  // ** export excel */
  async exportExcel() {
-   const column = [];
-   column.push('da');
-   column.push('dr');
-   // this.excelService.exportAsExcelFile([''], 'danh-muc', column);
    const headers =  ['STT', 'Tên danh mục', 'Số lượng mặt hàng', 'Ngày tạo'];
    const data = [];
 
@@ -53,9 +48,9 @@ export class CategoryComponent extends BaseComponent {
    excelModel.FileName =  'danh-muc' + '_export_' + new Date().getTime() + '.xlsx';
    excelModel.Logo = await this.storeService.getStoreLogoBaseByToken();
    excelModel.Headers = headers;
-   excelModel.Title = 'Danh sách danh mục trong cửa hàng';
-   excelModel.ColumnWidths = [5, 40, 30, 15];
-   this.excelService2.generateExcel(excelModel);
+   excelModel.Title = 'Danh mục mặt hàng';
+   excelModel.ColumnWidths = [5, 40, 25, 15];
+   this.excelService.generateExcel(excelModel);
  }
 
  // ** remove category */

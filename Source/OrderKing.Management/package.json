@@ -10,7 +10,7 @@
     "e2e": "ng e2e"
   },
   "private": true,
-  "dependencies": {
+  "dependnpm auencies": {
     "@angular/animations": "~7.0.0",
     "@angular/common": "~7.0.0",
     "@angular/compiler": "~7.0.0",
@@ -31,7 +31,6 @@
     "popper.js": "^1.14.6",
     "rxjs": "~6.3.3",
     "sweetalert2": "^7.33.1",
-    "xlsx": "^0.14.1",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {

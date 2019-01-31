@@ -7,7 +7,7 @@ import { DatePipe } from '@angular/common';
 @Injectable({
   providedIn: 'root'
 })
-export class ExcelService2 {
+export class ExcelService {
   constructor(private datePipe: DatePipe) {
   }
 
@@ -26,7 +26,7 @@ export class ExcelService2 {
     titleRow.font = { name: 'Comic Sans MS', family: 4, size: 16, underline: 'double', bold: true };
     worksheet.addRow([]);
 
-    worksheet.addRow(['Ngày xuất : ' + this.datePipe.transform(new Date(), 'medium')]);
+    worksheet.addRow(['Ngày xuất file : ' + this.datePipe.transform(new Date(), 'medium')]);
 
     // Add Image
     const logo = workbook.addImage({
@@ -34,7 +34,7 @@ export class ExcelService2 {
       extension: 'jpeg',
     });
 
-    worksheet.addImage(logo, 'E1:F3');
+    // worksheet.addImage(logo, 'E1:F3');
     worksheet.mergeCells('A1:D2');
 
     // Blank Row

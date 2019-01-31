@@ -9,6 +9,9 @@ import { AppMessage } from 'src/app/framework/framework.app.messages';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
 import { CategoryModel } from 'src/app/model/category.model';
 import { CategoryService } from 'src/app/service/category.service';
+import { ExportExcelModel } from 'src/app/model/export.excel.model';
+import { StoreService } from 'src/app/service/store.service';
+import { ExcelService } from 'src/app/service/export.excel.service';
 
 @Component({
   selector: 'app-product',
@@ -22,7 +25,8 @@ export class ProductComponent extends BaseComponent {
   SelectedCategoryId: string;
 
   constructor(private titleService: Title, private dialogService: DialogService,
-    private router: Router, private categoryService: CategoryService, private productService: ProductService, injector: Injector) {
+    private router: Router, private categoryService: CategoryService, private storeService: StoreService,
+    private productService: ProductService, private excelService: ExcelService, injector: Injector) {
     super(injector);
   }
 
@@ -34,6 +38,27 @@ export class ProductComponent extends BaseComponent {
     });
     this.CategoryList = await this.categoryService.getSelectedList();
     this.SelectedCategoryId = this.CategoryList[0].Id;
+  }
+
+  // ** export excel */
+  async exportExcel() {
+    const headers =  ['STT', 'Mã mặt hàng', 'Tên mặt hàng', 'Danh mục', 'Đơn giá', 'Tồn kho', 'Mô tả', 'Ngày tạo'];
+    const data = [];
+
+    for (let i = 0 ; i < this.ProductList.length ; i++) {
+     data.push([(i + 1), this.ProductList[i].ProductCode, this.ProductList[i].ProductName, this.ProductList[i].CategoryName,
+                         this.ProductList[i].Price, this.ProductList[i].InStock,
+                         this.ProductList[i].Description, this.ProductList[i].CreatedDate]);
+    }
+
+    const excelModel = new ExportExcelModel();
+    excelModel.Data = data;
+    excelModel.FileName =  'mat-hang' + '_export_' + new Date().getTime() + '.xlsx';
+    excelModel.Logo = await this.storeService.getStoreLogoBaseByToken();
+    excelModel.Headers = headers;
+    excelModel.Title = 'Danh sách mặt hàng';
+    excelModel.ColumnWidths = [5, 20, 40, 20, 15, 15, 40, 20];
+    this.excelService.generateExcel(excelModel);
   }
 
   // ** remove product */
