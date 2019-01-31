@@ -33,6 +33,32 @@ export class OrderDetailComponent extends BaseComponent {
     this.orderService.fetchOrderDetailList(this.orderId);
   }
 
+    // // ** export excel */
+    // async exportExcel() {
+    //   const headers =  ['STT', 'Họ và tên', 'Điện thoại', 'Địa chỉ thường trú',
+    //                    'Địa chỉ tạm trú', 'Số CMND', 'Email' , 'Ngày tạo', 'Trạng thái'];
+    //   const data = [];
+
+    //   for (let i = 0 ; i < this.StaffList.length ; i++) {
+    //    let status = 'Kích hoạt';
+    //    if (!this.StaffList[i].IsActived) {
+    //       status = 'Khóa';
+    //    }
+    //    data.push([(i + 1), this.StaffList[i].FullName, this.StaffList[i].PhoneNumber,
+    //          this.StaffList[i].Address, this.StaffList[i].Address2, this.StaffList[i].IdentityCard,
+    //          this.StaffList[i].Email, this.StaffList[i].CreatedDate, status]);
+    //   }
+
+    //   const excelModel = new ExportExcelModel();
+    //   excelModel.Data = data;
+    //   excelModel.FileName =  'nhan-vien' + '_export_' + new Date().getTime() + '.xlsx';
+    //   excelModel.Logo = await this.storeService.getStoreLogoBaseByToken();
+    //   excelModel.Headers = headers;
+    //   excelModel.Title = 'Danh sách nhân viên';
+    //   excelModel.ColumnWidths = [5, 30, 20, 40, 40, 20, 25, 15, 15];
+    //   this.excelService.generateExcel(excelModel);
+    // }
+
   // ** update order */
  async updateOrder() {
     let result = await this.orderService.updateOrderStatus(this.OrderInfo);
