@@ -7,6 +7,7 @@ export class  AppSettings {
   public static TOKEN_KEY = 'order-king-token';
   public static AUTH_KEY = 'order-king-auth';
   public static MANAGE_USERINFO_KEY = 'order-king-manage-userinfo';
+  public static USERINFO_FLAG = 'order-king-user-info-flag';
 
   // response message
   public static RESPONSE_MESSAGE = {

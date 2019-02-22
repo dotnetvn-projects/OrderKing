@@ -22,7 +22,7 @@ authrouter.post('/auth-token-status', async function (req, res, next) {
 
         var result = await service.checkExpiredToken(accesstoken);
 
-        var message = common.createResponseMessage({ isexpired: result.model.responsecode === 200 },
+        var message = common.createResponseMessage({ isexpired: result.model.responsecode !== 200 },
             result.model.responsecode, result.model.statusmessage);
 
         res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });

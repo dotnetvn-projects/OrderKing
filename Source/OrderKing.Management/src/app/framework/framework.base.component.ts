@@ -28,6 +28,7 @@ export class BaseComponent implements OnInit {
 
   // reload page
   reload() {
+// tslint:disable-next-line: deprecation
     window.location.reload(true);
   }
 

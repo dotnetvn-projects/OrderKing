@@ -59,6 +59,7 @@ export class LoginComponent implements OnInit {
       this.ErrorMessage = 'Tài khoản hoặc mật khẩu không đúng !';
     } else {
       this.userService.fetchUserInfo();
+      sessionStorage.setItem(AppSettings.USERINFO_FLAG, 'true');
       this.router.navigate(['dashboard']);
     }
   }

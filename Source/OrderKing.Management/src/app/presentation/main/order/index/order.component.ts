@@ -8,6 +8,9 @@ import { OrderService } from 'src/app/service/order.service';
 import { OrderModel } from 'src/app/model/order.model';
 import { OrderFilterModel } from 'src/app/model/order.filter.model';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
+import { ExportExcelModel } from 'src/app/model/export.excel.model';
+import { ExcelService } from 'src/app/service/export.excel.service';
+import { StoreService } from 'src/app/service/store.service';
 
 @Component({
   selector: 'app-order',
@@ -20,7 +23,8 @@ export class OrderComponent extends BaseComponent {
   OrderFilter: OrderFilterModel = new OrderFilterModel();
 
   constructor(private titleService: Title, private orderService: OrderService, injector: Injector,
-    private dialogService: DialogService, private router: Router) {
+    private dialogService: DialogService, private excelService: ExcelService,
+    private storeService: StoreService, private router: Router) {
     super(injector);
   }
 
@@ -31,6 +35,29 @@ export class OrderComponent extends BaseComponent {
       this.applyDataTable(this.tableId);
      });
   }
+
+  // ** export excel */
+  async exportExcel() {
+    const headers =  ['STT', 'Mã ĐH', 'Nhân viên lập đơn', 'Số lượng',
+                      'Tổng tiền' , 'PT Thanh toán', 'Ngày tạo', 'Ngày cập nhật', 'Trang thái'];
+    const data = [];
+
+    for (let i = 0 ; i < this.OrderList.length ; i++) {
+      data.push([(i + 1), this.OrderList[i].OrderCode, this.OrderList[i].Seller,
+            this.OrderList[i].Amount, this.OrderList[i].TotalPrice, this.OrderList[i].PaymentMethod,
+            this.OrderList[i].CreatedDate, this.OrderList[i].UpdatedDate, this.OrderList[i].getOrderStatusString()]);
+    }
+
+    const excelModel = new ExportExcelModel();
+    excelModel.Data = data;
+    excelModel.FileName =  'don-hang' + '_export_' + new Date().getTime() + '.xlsx';
+    excelModel.Logo = await this.storeService.getStoreLogoBaseByToken();
+    excelModel.Headers = headers;
+    excelModel.Title = 'Danh sách đơn hàng';
+    excelModel.ColumnWidths = [5, 20, 40, 20, 20, 30, 20, 20, 20];
+    this.excelService.generateExcel(excelModel);
+  }
+
 
   // ** search order list */
   filterData() {

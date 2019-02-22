@@ -4,6 +4,7 @@ import { WebClientService } from '../service/webclient.service';
 import { Dictionary } from '../framework/objectextension/framework.dictionary';
 import { ApiResultModel } from '../model/api.result.model';
 import { AppSettings } from '../framework/framework.app.setting';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class AuthService {
   private logoutUrl = 'auth/remove-auth';
   private checkTokenUrl = 'auth/auth-token-status';
 
-  constructor(private webClient: WebClientService ) {}
+  constructor(private webClient: WebClientService, private userService: UserService) {}
 
   // login
   async login(loginInfo: LoginModel) {
@@ -57,6 +58,7 @@ export class AuthService {
     sessionStorage.removeItem(AppSettings.TOKEN_KEY);
     localStorage.removeItem(AppSettings.AUTH_KEY);
     sessionStorage.removeItem(AppSettings.MANAGE_USERINFO_KEY);
+    sessionStorage.removeItem(AppSettings.USERINFO_FLAG);
   }
 
   // check token expiration
@@ -69,11 +71,19 @@ export class AuthService {
           result = true;
       } else {
           const isExpired = data.Result.isexpired;
-          if (isExpired === 'true') {
-            return true;
+          if (isExpired === true) {
+            result = true;
           }
       }
     });
+
+    if (!result) {
+      // refetch user info in case it doesn't exist
+      const hasUserInfo = sessionStorage.getItem(AppSettings.USERINFO_FLAG);
+      if (hasUserInfo !== 'true') {
+        this.userService.fetchUserInfo();
+      }
+    }
     return result;
   }
 
