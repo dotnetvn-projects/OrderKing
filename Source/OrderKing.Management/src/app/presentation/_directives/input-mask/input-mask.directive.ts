@@ -1,4 +1,4 @@
-import { AfterViewInit, EventEmitter, Output, Input, ElementRef, Renderer, Directive } from '@angular/core';
+import { AfterViewInit, EventEmitter, Output, Input, ElementRef, Renderer2, Directive } from '@angular/core';
 declare var $;
 
 @Directive({
@@ -11,7 +11,7 @@ export class InputMaskDirective implements AfterViewInit {
     // tslint:disable-next-line:no-input-rename
     @Input('mask') mask: string;
 
-    constructor(private el: ElementRef, private renderer: Renderer) {
+    constructor(private el: ElementRef, private renderer: Renderer2) {
 
     }
 
