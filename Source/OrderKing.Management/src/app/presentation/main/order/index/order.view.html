@@ -17,11 +17,11 @@
                       <input type="text" (input)="orderCodeTextChange()" name="code" [(ngModel)]="OrderFilter.OrderCode" class="form-control order-code" size="10" placeholder="mã ĐH" >
                     </div>
                   <div class="col-sm-3 col-md-2">
-                    <input type="text" name="fromdate" appInputMask [mask]="'dd/mm/yyyy'" data-inputmask="'alias': 'datetime'"
+                    <input type="text" name="fromdate" appInputDateMask
                                  [(ngModel)]="OrderFilter.FromDate" class="form-control order-fromdate" size="10" placeholder="Từ ngày" >
                   </div>
                   <div class="col-sm-3 col-md-2">
-                      <input type="text" name="todate" appInputMask [mask]="'dd/mm/yyyy'" data-inputmask="'alias': 'datetime'"
+                      <input type="text" name="todate" appInputDateMask
                                  [(ngModel)]="OrderFilter.ToDate" class="form-control order-todate" size="10" placeholder="Đến ngày" >
                   </div>
                   <div class="col-sm-3 col-md-2">

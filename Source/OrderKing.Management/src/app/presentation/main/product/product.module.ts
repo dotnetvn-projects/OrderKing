@@ -6,6 +6,8 @@ import {  ProductComponent } from './index/product.component';
 import {  ProductActionComponent } from './action/product.action.component';
 import { ProductRoutes } from '../../../routing/product.routing';
 import { UiComponentModule } from '../../_uicomponents/uicomponent.module';
+import { DirectiveModule } from '../../_directives/directive.module';
+import { PipeModule } from '../../_pipes/pipe.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,9 @@ import { UiComponentModule } from '../../_uicomponents/uicomponent.module';
   imports: [
     RouterModule.forChild(ProductRoutes),
     UiComponentModule,
-    CommonModule, FormsModule
+    CommonModule, FormsModule,
+    DirectiveModule,
+    PipeModule
   ],
   providers: [],
   bootstrap: [ProductComponent]

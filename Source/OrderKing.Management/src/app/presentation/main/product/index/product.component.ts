@@ -12,6 +12,7 @@ import { CategoryService } from 'src/app/service/category.service';
 import { ExportExcelModel } from 'src/app/model/export.excel.model';
 import { StoreService } from 'src/app/service/store.service';
 import { ExcelService } from 'src/app/service/export.excel.service';
+import { CurrencyPipe } from '../../../_pipes/currency/currency-pipe';
 
 @Component({
   selector: 'app-product',
@@ -23,6 +24,7 @@ export class ProductComponent extends BaseComponent {
   private tableId = 'table-product';
   CategoryList: CategoryModel[];
   SelectedCategoryId: string;
+  private currencyPipe: CurrencyPipe;
 
   constructor(private titleService: Title, private dialogService: DialogService,
     private router: Router, private categoryService: CategoryService, private storeService: StoreService,
@@ -47,7 +49,7 @@ export class ProductComponent extends BaseComponent {
 
     for (let i = 0 ; i < this.ProductList.length ; i++) {
      data.push([(i + 1), this.ProductList[i].ProductCode, this.ProductList[i].ProductName, this.ProductList[i].CategoryName,
-                         this.ProductList[i].Price, this.ProductList[i].InStock,
+                         this.currencyPipe.transform(this.ProductList[i].Price, 0), this.ProductList[i].InStock,
                          this.ProductList[i].Description, this.ProductList[i].CreatedDate]);
     }
 

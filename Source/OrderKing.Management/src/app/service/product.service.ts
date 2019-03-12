@@ -187,6 +187,10 @@ export class ProductService {
           info.productInfo.InStock = data.Result.instock;
           info.productInfo.Price = data.Result.price;
           info.productInfo.ProductCode = data.Result.code;
+
+          if (info.productInfo.Description === 'null') {
+            info.productInfo.Description = '';
+          }
         }
       } else if (data.ResponseCode === AppSettings.RESPONSE_CODE.UNAUTHORIZED) {
         info.result = AppSettings.RESPONSE_MESSAGE.UNAUTHORIZED;

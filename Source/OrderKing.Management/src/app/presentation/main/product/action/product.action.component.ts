@@ -10,12 +10,14 @@ import { DialogService } from 'src/app/service/dialog.service';
 import { AppMessage } from 'src/app/framework/framework.app.messages';
 import { CategoryModel } from 'src/app/model/category.model';
 import { CategoryService } from 'src/app/service/category.service';
+declare var $;
 
 @Component({
   selector: 'app-action-product',
   templateUrl: './product.action.view.html',
   styleUrls: ['./product.action.style.scss']
 })
+
 export class ProductActionComponent extends BaseComponent {
   ProductInfo: ProductModel = new ProductModel();
   CategoryList: CategoryModel[];
@@ -32,8 +34,7 @@ export class ProductActionComponent extends BaseComponent {
     private categoryService: CategoryService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    injector: Injector
-  ) {
+    injector: Injector) {
     super(injector);
     this.ProductInfo.CreatedDate = Converter.ConvertCurrentDateToString();
   }
@@ -139,6 +140,10 @@ export class ProductActionComponent extends BaseComponent {
   }
 
   // **********************UI Updating***********************
+
+  onPriceChange(price) {
+    this.ProductInfo.Price = Number(price.replace('₫', '').replace(',', ''));
+  }
 
   categorySelectChange(event) {
     this.ProductInfo.CategoryId = event.currentTarget.value;

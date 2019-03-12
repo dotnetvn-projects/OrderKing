@@ -1,15 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MustMatchDirective } from './must-match/must-match.directive';
-import { InputMaskDirective } from './input-mask/input-mask.directive';
+import { InputDateMaskDirective } from './input-mask/input-date-mask.directive';
+import { InputCurrencyMaskDirective } from './input-mask/input-currency-mask-directive';
 
 
 @NgModule({
   imports: [ CommonModule ],
   declarations: [
-    InputMaskDirective,
-    MustMatchDirective
+    InputDateMaskDirective,
+    MustMatchDirective,
+    InputCurrencyMaskDirective
   ],
-   exports: [MustMatchDirective, InputMaskDirective]
+   exports: [MustMatchDirective, InputDateMaskDirective, InputCurrencyMaskDirective]
 })
 export class DirectiveModule { }

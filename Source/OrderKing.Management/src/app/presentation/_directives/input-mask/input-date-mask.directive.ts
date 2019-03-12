@@ -2,14 +2,14 @@ import { AfterViewInit, EventEmitter, Output, Input, ElementRef, Renderer2, Dire
 declare var $;
 
 @Directive({
-    selector: '[appInputMask]',
+    selector: '[appInputDateMask]',
 })
 
-export class InputMaskDirective implements AfterViewInit {
+export class InputDateMaskDirective implements AfterViewInit {
 
     @Output() ngModelChange: EventEmitter<any> = new EventEmitter(false);
     // tslint:disable-next-line:no-input-rename
-    @Input('mask') mask: string;
+    // @Input('mask') mask: string;
 
     constructor(private el: ElementRef, private renderer: Renderer2) {
 
@@ -19,7 +19,8 @@ export class InputMaskDirective implements AfterViewInit {
     const el = <HTMLInputElement>this.el.nativeElement;
     $(el).inputmask(
       {
-        'alias': this.mask,
+        // 'alias': this.mask,
+        'alias': 'dd/mm/yyyy',
         'oncomplete': () => {
           this.ngModelChange.emit(el.value);
         },

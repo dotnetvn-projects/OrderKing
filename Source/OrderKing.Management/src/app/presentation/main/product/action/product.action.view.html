@@ -47,8 +47,8 @@
             <label for="inputPrice" class="col-sm-2 control-label">Đơn giá</label>
 
             <div class="col-sm-5">
-              <input type="number" [(ngModel)]="ProductInfo.Price" name="price" #price="ngModel" [ngClass]="{ 'is-invalid': f.submitted && price.invalid }"
-                required min="0" max = "99999999" class="form-control" id="inputPrice" placeholder="Đơn giá">
+              <input type="text" [(ngModel)]="ProductInfo.Price" name="price" #price="ngModel" [ngClass]="{ 'is-invalid': f.submitted && price.invalid }"
+                      required min="0" max = "99999999" class="form-control" id="inputPrice" placeholder="Đơn giá" appInputCurrencyMask (ngModelChange)="onPriceChange($event)" >
                 <span class="users-list-date">Lưu ý: vui lòng nhập số nguyên, nhập 25000 nếu đơn giá là 25 nghìn</span>
               <div *ngIf="f.submitted && price.invalid" class="invalid-feedback">
                 <div *ngIf="price?.errors.required"><i class="fa fa-warning text-red"></i> Đơn giá không hợp lệ !</div>
