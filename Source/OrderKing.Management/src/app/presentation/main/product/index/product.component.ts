@@ -24,7 +24,7 @@ export class ProductComponent extends BaseComponent {
   private tableId = 'table-product';
   CategoryList: CategoryModel[];
   SelectedCategoryId: string;
-  private currencyPipe: CurrencyPipe;
+  private currencyPipe: CurrencyPipe = new CurrencyPipe();
 
   constructor(private titleService: Title, private dialogService: DialogService,
     private router: Router, private categoryService: CategoryService, private storeService: StoreService,

@@ -8,6 +8,7 @@ import { PrintOrderComponent } from './print/order.print.component';
 import { UiComponentModule } from '../../_uicomponents/uicomponent.module';
 import { OrderRoutes } from '../../../routing/order.routing';
 import { DirectiveModule } from '../../_directives/directive.module';
+import { PipeModule } from '../../_pipes/pipe.module';
 
 
 @NgModule({
@@ -18,7 +19,7 @@ import { DirectiveModule } from '../../_directives/directive.module';
   ],
   imports: [
     RouterModule.forChild(OrderRoutes),
-    CommonModule, FormsModule, UiComponentModule, DirectiveModule
+    CommonModule, FormsModule, UiComponentModule, DirectiveModule, PipeModule
   ],
   providers: [],
   bootstrap: [OrderComponent]

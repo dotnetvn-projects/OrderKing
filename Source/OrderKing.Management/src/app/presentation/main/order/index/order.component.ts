@@ -11,6 +11,7 @@ import { AppSettings } from 'src/app/framework/framework.app.setting';
 import { ExportExcelModel } from 'src/app/model/export.excel.model';
 import { ExcelService } from 'src/app/service/export.excel.service';
 import { StoreService } from 'src/app/service/store.service';
+import { CurrencyPipe } from '../../../_pipes/currency/currency-pipe';
 
 @Component({
   selector: 'app-order',
@@ -21,6 +22,7 @@ export class OrderComponent extends BaseComponent {
   OrderList: OrderModel[];
   private tableId = 'table-order';
   OrderFilter: OrderFilterModel = new OrderFilterModel();
+  private currencyPipe: CurrencyPipe = new CurrencyPipe();
 
   constructor(private titleService: Title, private orderService: OrderService, injector: Injector,
     private dialogService: DialogService, private excelService: ExcelService,
@@ -44,7 +46,7 @@ export class OrderComponent extends BaseComponent {
 
     for (let i = 0 ; i < this.OrderList.length ; i++) {
       data.push([(i + 1), this.OrderList[i].OrderCode, this.OrderList[i].Seller,
-            this.OrderList[i].Amount, this.OrderList[i].TotalPrice, this.OrderList[i].PaymentMethod,
+            this.OrderList[i].Amount,  this.currencyPipe.transform(this.OrderList[i].TotalPrice, 0), this.OrderList[i].PaymentMethod,
             this.OrderList[i].CreatedDate, this.OrderList[i].UpdatedDate, this.OrderList[i].getOrderStatusString()]);
     }
 
@@ -54,7 +56,7 @@ export class OrderComponent extends BaseComponent {
     excelModel.Logo = await this.storeService.getStoreLogoBaseByToken();
     excelModel.Headers = headers;
     excelModel.Title = 'Danh sách đơn hàng';
-    excelModel.ColumnWidths = [5, 20, 40, 20, 20, 30, 20, 20, 20];
+    excelModel.ColumnWidths = [5, 20, 40, 10, 20, 30, 20, 20, 20];
     this.excelService.generateExcel(excelModel);
   }
 
