@@ -18,7 +18,7 @@ export class OrderFilterModel {
 
   defaultSearchDate() {
     let date = new Date();
-    date.setDate(date.getDate() - 30);
+    date.setFullYear(date.getFullYear() - 1);
     this.FromDate = date.getDate() + '/' +  (date.getMonth() + 1) + '/' + date.getFullYear();
     date = new Date();
     this.ToDate = date.getDate() + '/' +  (date.getMonth() + 1) + '/' + date.getFullYear();

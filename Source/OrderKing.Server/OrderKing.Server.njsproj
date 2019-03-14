@@ -51,6 +51,7 @@
     <Compile Include="models\order\model.order.js" />
     <Compile Include="models\payment\model.paymentMethod.js" />
     <Compile Include="models\product\model.product.js" />
+    <Compile Include="models\report\model.report.js" />
     <Compile Include="models\store\model.storeinfo.js" />
     <Compile Include="models\user\model.userinfo.js" />
     <Compile Include="resources\resource.api.status.js" />
@@ -94,6 +95,7 @@
     <Folder Include="models\" />
     <Folder Include="models\auth\" />
     <Folder Include="models\category\" />
+    <Folder Include="models\report\" />
     <Folder Include="models\payment\" />
     <Folder Include="models\order\" />
     <Folder Include="models\product\" />

@@ -6,10 +6,8 @@
   <ol class="breadcrumb">
     <li>
       <a [routerLink]="['dashboard']"
-        ><i class="fa fa-dashboard"></i> Dashboard</a
-      >
+        ><i class="fa fa-dashboard"></i> Dashboard</a>
     </li>
-    <li class="active">Here</li>
   </ol>
 </section>
 <section class="content container-fluid">
@@ -20,13 +18,13 @@
           <div class="col-lg-3 col-xs-6">
             <div class="small-box bg-aqua">
               <div class="inner">
-                <h3>150</h3>
+                <h3>{{ SummaryReport.TotalOrder }}</h3>
                 <p>Đơn hàng</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <a href="#" class="small-box-footer"
+              <a [routerLink]="['/don-hang']" class="small-box-footer"
                 >Xem tất cả <i class="fa fa-arrow-circle-right"></i
               ></a>
             </div>
@@ -34,13 +32,13 @@
           <div class="col-lg-3 col-xs-6">
             <div class="small-box bg-green">
               <div class="inner">
-                <h3>14</h3>
+                <h3>{{ SummaryReport.TotalNewOrder }}</h3>
                 <p>Đơn hàng mới</p>
               </div>
               <div class="icon">
                 <i class="fa fa-rocket"></i>
               </div>
-              <a href="#" class="small-box-footer"
+              <a [routerLink]="['/don-hang']" class="small-box-footer"
                 >Xem tất cả <i class="fa fa-arrow-circle-right"></i
               ></a>
             </div>
@@ -48,13 +46,13 @@
           <div class="col-lg-3 col-xs-6">
             <div class="small-box bg-blue">
               <div class="inner">
-                <h3>145</h3>
+                <h3>{{ SummaryReport.TotalProduct }}</h3>
                 <p>Mặt hàng</p>
               </div>
               <div class="icon">
                 <i class="fa fa-tag"></i>
               </div>
-              <a href="#" class="small-box-footer"
+              <a [routerLink]="['/mat-hang']" class="small-box-footer"
                 >Xem tất cả <i class="fa fa-arrow-circle-right"></i
               ></a>
             </div>
@@ -62,13 +60,13 @@
           <div class="col-lg-3 col-xs-6">
             <div class="small-box bg-yellow">
               <div class="inner">
-                <h3>145.000.000</h3>
+                <h3>{{ SummaryReport.TotalRevenue | currency:'VND':true}}</h3>
                 <p>Tổng doanh thu</p>
               </div>
               <div class="icon">
                 <i class="fa fa-money"></i>
               </div>
-              <a href="#" class="small-box-footer"
+              <a [routerLink]="['/bao-cao/doanh-thu']" class="small-box-footer"
                 >Xem báo cáo <i class="fa fa-arrow-circle-right"></i
               ></a>
             </div>

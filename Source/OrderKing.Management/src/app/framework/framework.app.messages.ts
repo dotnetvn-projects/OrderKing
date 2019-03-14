@@ -25,6 +25,7 @@ export class AppMessage {
   // title message
   public static APP_TITLE_MESSAGE = {
     LOGIN: 'Order King - Đăng nhập hệ thống',
+    DASHBOARD: 'Order King - Dashboard',
     STAFF: 'Order King - Danh sách nhân viên',
     STAFF_CREATE: 'Order King - Tạo mới nhân viên',
     STAFF_UPDATE: 'Order King - Chỉnh sửa thông tin nhân viên',
