@@ -32,9 +32,9 @@ defineProperty('ProductSoldInDay', `
      FROM [ORDER] 
      INNER JOIN [ORDERDETAIL] ON [ORDERDETAIL].OrderId = [ORDER].Id
      INNER JOIN PRODUCT ON [ORDERDETAIL].ProductId = [PRODUCT].ID
-     WHERE StoreId = @StoreId 
+     WHERE [ORDER].StoreId = @StoreId 
            AND MONTH([ORDER].CreatedDate) = MONTH(GETDATE())
            AND YEAR([ORDER].CreatedDate) = YEAR(GETDATE()) 
-           AND DAY([ORDER].CreatedDate) = DAY(GETDATE()))
+           AND DAY([ORDER].CreatedDate) = DAY(GETDATE())
      GROUP BY [PRODUCT].Id, [PRODUCT].Name 
 `);

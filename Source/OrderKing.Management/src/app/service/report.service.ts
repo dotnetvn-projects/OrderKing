@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { WebClientService } from './webclient.service';
 import { BehaviorSubject } from 'rxjs';
-import { CategoryModel } from '../model/category.model';
 import { Dictionary } from '../framework/objectextension/framework.dictionary';
 import { AppSettings } from '../framework/framework.app.setting';
 import { ApiResultModel } from '../model/api.result.model';
@@ -50,8 +49,8 @@ export class ReportService {
         if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
           data.Result.forEach(e => {
             const productInfo = new ProductReportModel();
-            productInfo.ProductName = e.Name;
-            productInfo.TotalSold = e.AmountSold;
+            productInfo.ProductName = e.ProductName;
+            productInfo.TotalSold = e.TotalSold;
             productInfo.Revenue = e.Revenue;
             resultData.push(productInfo);
            });

@@ -3,5 +3,6 @@
 3. aler lib : https://sweetalert2.github.io/
 4. excel: https://www.ngdevelop.tech/export-to-excel-in-angular-6/
 5. pdf: jspdf.min.js, html2canvas.min.js
+6. chartjs: https://www.chartjs.org/docs/latest/
 
 

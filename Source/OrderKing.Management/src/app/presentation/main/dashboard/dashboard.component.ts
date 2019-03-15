@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, Injector } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { BaseComponent } from 'src/app/framework/framework.base.component';
-import { UserService } from 'src/app/service/user.service';
 import { AppMessage } from 'src/app/framework/framework.app.messages';
 import { ReportService } from 'src/app/service/report.service';
 import { SummaryReportModel } from 'src/app/model/summary.report.model';
-declare var $;
+import { ProductReportModel } from 'src/app/model/product.report.model';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-dashborad',
@@ -15,7 +15,8 @@ declare var $;
 export class DashboardComponent extends BaseComponent {
   private tableId = 'table-top-sell';
   SummaryReport: SummaryReportModel = new SummaryReportModel();
-
+  ReportProductSoldDailyList: ProductReportModel[];
+  chart = [];
   constructor(private titleService: Title, injecttor: Injector, private reportService: ReportService) {
     super(injecttor);
   }
@@ -24,8 +25,10 @@ export class DashboardComponent extends BaseComponent {
     this.initChart();
   }
 
+  // subscribe object from service
   subscribeObject() {
     this.reportService.SummaryReport.subscribe(reportData => this.SummaryReport = reportData);
+    this.reportService.ProductReportDailyList.subscribe(reportData => this.ReportProductSoldDailyList = reportData);
   }
 
   onInit() {
@@ -35,47 +38,60 @@ export class DashboardComponent extends BaseComponent {
     this.loadProductSoldDaily();
   }
 
+  // load summary report
   loadSummaryReport() {
      this.reportService.loadSummaryReport();
   }
 
+  // load prooduct daily sold
   loadProductSoldDaily() {
-    this.applyDataTable(this.tableId);
+    this.reportService.fetchProductSoldDailyList(() => {
+      this.applyDataTable(this.tableId);
+    });
   }
 
   initChart() {
-    $(() => {
-      const bar_data = {
-        data: [
-          ['January', 10],
-          ['February', 8],
-          ['March', 4],
-          ['April', 13],
-          ['May', 17],
-          ['June', 9],
-          ['July', 30]
-        ],
-        color: '#3c8dbc'
-      };
 
-      $.plot('#bar-chart', [bar_data], {
-        grid: {
-          borderWidth: 1,
-          borderColor: '#f3f3f3',
-          tickColor: '#f3f3f3'
-        },
-        series: {
-          bars: {
-            show: true,
-            barWidth: 0.5,
-            align: 'center'
+    this.chart = new Chart('chartContainer', {
+      type: 'line',
+      data: {
+        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
+                 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+        datasets: [
+          {
+            data: [10000, 100000, 12000000, 5000000, 6000000, 8000000,
+                   1200000, 1400000, 1200000 , 1200000 , 1200000 , 1200000],
+            borderColor: '#3cba9f',
+            fill: false
           }
+        ]
+      },
+      options: {
+        tooltips: {
+          callbacks: {
+              label: function(tooltipItem, data) {
+                  return 'dđ';
+              }
+          }
+      },
+        legend: {
+          display: false
         },
-        xaxis: {
-          mode: 'categories',
-          tickLength: 0
+        scales: {
+          xAxes: [{
+            display: true
+          }],
+          yAxes: [{
+            display: true,
+            ticks: {
+              beginAtZero: true,
+              callback: function(value, index, values) {
+                 return '$' + value;
+              }
+            }
+          }],
         }
-      });
+      }
     });
-  }
+   }
 }
