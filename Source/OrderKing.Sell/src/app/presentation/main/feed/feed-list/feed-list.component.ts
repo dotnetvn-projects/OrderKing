@@ -18,26 +18,23 @@ export class FeedListComponent implements OnInit {
   ngOnInit() {
     const feedList: BaseItemModel[] = [];
 
-    const product = new ProductItem({
-      thumbnailUrl: 'assets/photos/33.jpg',
-      description: 'Ambrosia có nghĩa là “thức ăn của các vị thần” trong thần thoại Hy Lạp cổ đại và được lựa chọn bởi Wilfrid Mennell và vợ, họ phát hiện ra cây táo Ambrosia gốc trong vườn tại',
-      name: 'Đào ngâm thuốc sáu tháng không hư',
-      id: '2353443435',
-      createdDate: '4/12/2018',
-      price: 100000,
-      contentType: ItemContentType.Product,
-      updatedDate: '4/12/2018',
-      url: '/product/detail/1'
-    });
+    const listProduct: BaseItemModel[] = [];
+    this.pageSize = this.pageSize === null || this.pageSize === undefined ? 20 : this.pageSize;
+    for (let i = 0; i < this.pageSize; i++) {
+      const product = new ProductItem({
+        thumbnailUrl: 'assets/photos/peach.png',
+        description: '',
+        name: 'Đào ngâm thuốc sáu tháng không hư',
+        id: '2353443435',
+        createdDate: '4/12/2018',
+        price: 100000,
+        url: '/product/detail/1',
+        updatedDate: '4/12/2018',
+      });
 
-    feedList.push(product);
-    feedList.push(product);
+      listProduct.push(product);
+    }
 
-    feedList.push(product);
-    feedList.push(product);
-
-    feedList.push(product);
-
-    this.feeds = [...feedList];
+    this.feeds = [...listProduct];
   }
 }

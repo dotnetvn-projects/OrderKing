@@ -1,5 +1,4 @@
 import { BaseItemModel } from '../base-item-model';
-import { ItemContentType } from '../../commons/enums/item-content-type';
 
 export class ProductItem extends BaseItemModel {
     constructor(args: ProductItem) {
@@ -7,6 +6,10 @@ export class ProductItem extends BaseItemModel {
 
         this.price = args.price;
         this.url = args.url;
+        this.thumbnailUrl = args.thumbnailUrl;
+        this.updatedDate = args.updatedDate;
+        this.createdDate= args.createdDate;
+        this.description=args.description;
     }
 
     url: string;
@@ -15,5 +18,4 @@ export class ProductItem extends BaseItemModel {
     thumbnailUrl: string;
     updatedDate: string;
     createdDate: string;
-    contentType: ItemContentType;
 }

@@ -10,11 +10,11 @@ const routes: Routes = [
   },
   {
     path: 'products',
-    loadChildren: './presentation/main/product/product-page/product-page.module#ProductPageModule'
+    loadChildren: './presentation/main/product/product-list/product-list.module#ProductListModule'
   },
   {
     path: '',
-    loadChildren: './presentation/main/feed/feed-page/feed-page.module#FeedPageModule'
+    loadChildren: './presentation/main/feed/feed-list/feed-list.module#FeedListModule'
   }
 ];
 
