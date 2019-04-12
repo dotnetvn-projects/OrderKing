@@ -3,7 +3,6 @@ const crypto = require('../common/crypto');
 const response = require('../models/model.response');
 const moment = require('moment');
 
-
 //get user info from accessToken
 exports.parseTokenInfo = function (accessToken) {
     var result = { account: '' };
@@ -18,6 +17,49 @@ exports.parseTokenInfo = function (accessToken) {
 
 exports.isNumber = function (num) {
     return /^-{0,1}\d+$/.test(num); 
+};
+
+exports.extractDateRange = function (startdate, enddate) {
+    var start = null;
+    var end = null;
+
+    if (startdate !== undefined && startdate !== '' && startdate !== null &&
+        enddate !== undefined && enddate !== '' && enddate !== null) {
+
+        var startDay = startdate.split('/')[0];
+        var startMonth = startdate.split('/')[1];
+        var startYear = startdate.split('/')[2];
+
+        var endDay = enddate.split('/')[0];
+        var endMonth = enddate.split('/')[1];
+        var endYear = enddate.split('/')[2];
+
+        start = new Date(moment({ year: startYear, month: startMonth - 1, day: startDay }).format('YYYY-MM-DD HH:mm:ss'));
+        end = new Date(moment({ year: endYear, month: endMonth - 1, day: endDay }).format('YYYY-MM-DD HH:mm:ss'));
+
+    } else if (startdate !== undefined && startdate !== '' && startdate !== null &&
+                enddate === undefined || enddate !== '' || enddate !== null) {
+   
+        startDay = startdate.split('/')[0];
+        startMonth = startdate.split('/')[1];
+        startYear = startdate.split('/')[2];
+
+        start = new Date(moment({ year: startYear, month: startMonth - 1, day: startDay }).format('YYYY-MM-DD HH:mm:ss'));
+
+    } else if (enddate !== undefined && enddate !== '' && enddate !== null
+                && startdate === undefined || startdate !== '' || startdate !== null) {
+
+        endDay = enddate.split('/')[0];
+        endMonth = enddate.split('/')[1];
+        endYear = enddate.split('/')[2];
+
+        end = new Date(moment({ year: endYear, month: endMonth - 1, day: endDay }).format('YYYY-MM-DD HH:mm:ss'));
+    }
+
+    return {
+        startDate: start,
+        endDate: end
+    };
 };
 
 //send invalid request

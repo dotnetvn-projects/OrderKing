@@ -8,7 +8,8 @@ const authenSqlCmd = require('../database/sqlcommand.auth');
 const sessionLoginHandler = require('../eventHandlers/event.handler.sessionlogin');
 
 function allowPassValidate(req) {
-    return req.url.indexOf('auth-user') >= 0
+    return req.url.indexOf('/') >= 0
+        || req.url.indexOf('auth-user') >= 0
         || req.url.indexOf('auth-manager') >= 0
         || req.url.indexOf('product-img') >= 0
         || req.url.indexOf('cate-img') >= 0
@@ -43,7 +44,7 @@ function isAcceptedRequest(req) {
 //filter request
 var validateRequest = async function (req, res, next) {
     try {
-        var ip = req.connection.remoteAddress;
+        var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         var accountName = '';
         var isAccepted = isAcceptedRequest(req);
         if (isAccepted === false) {

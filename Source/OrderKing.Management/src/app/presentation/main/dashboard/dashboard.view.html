@@ -38,7 +38,7 @@
               <div class="icon">
                 <i class="fa fa-rocket"></i>
               </div>
-              <a [routerLink]="['/don-hang']" class="small-box-footer"
+              <a [routerLink]="['/don-hang', 'new']" class="small-box-footer"
                 >Xem tất cả <i class="fa fa-arrow-circle-right"></i
               ></a>
             </div>
@@ -84,36 +84,32 @@
               <div class="box box-inner">
                   <div class="box-header">
                     <i class="fa fa-tag"></i>
-                    <h3 class="box-title">Các mặt hàng đã bán trong ngày</h3>
-                    <div class="box-tools">
-                      <ul class="pagination pagination-sm no-margin pull-right">
-                        <li><a href="#">«</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">»</a></li>
-                      </ul>
-                    </div>
+                    <h3 class="box-title">Các mặt hàng đã bán trong ngày ({{ ReportProductSoldDaily.TotalRecord }} mặt hàng)</h3>
+
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body">
                     <table class="table table-bordered">
                       <tbody>
                         <tr>
-                        <th style="width: 5px">#</th>
+                        <th style="width: 5px">#Mã</th>
                         <th style="width: 130px">Tên mặt hàng</th>
                         <th class="text-center" style="width: 15px">Số lượng</th>
-                        <th class="text-center" style="width: 40px">Doanh số</th>
+                        <th class="text-center" style="width: 40px">Doanh thu</th>
                       </tr>
-                      <tr *ngFor="let product of ReportProductSoldDailyList; let i = index">
-                        <td>{{ i+1 }}.</td>
+                      <tr *ngFor="let product of ReportProductSoldDaily.ProductList">
+                        <td>{{ product.ProductCode }}</td>
                         <td>{{ product.ProductName }}</td>
                         <td class="text-center">
                           {{ product.TotalSold }}
                         </td>
                         <td class="text-center"><span class="badge bg-red">{{ product.Revenue | currency:'VND':true  }}</span></td>
                       </tr>
-                    </tbody></table>
+                    </tbody>
+                  </table>
+                  <div class="proudct-paging box-tools">
+                      <ng-template #PagerContainer></ng-template>
+                  </div>
                   </div>
                 </div>
           </div>
@@ -122,16 +118,37 @@
                   <div class="box-header with-border">
                     <i class="fa fa-bar-chart-o"></i>
 
-                    <h3 class="box-title">Thống kế doanh thu trong năm</h3>
+                    <h3 class="box-title">Thống kế doanh thu trong năm {{ CurrentYear }}</h3>
                   </div>
                   <div class="box-body">
-                      <canvas style="height: 300px; padding: 0px; position: relative;" id="chartContainer">{{ chart }}</canvas>
+                      <canvas style="height: 300px; padding: 0px; position: relative;" id="chartContainer">{{ Chart }}</canvas>
                     <!-- <div id="chartContainer" style="height: 300px; padding: 0px; position: relative;"></div> -->
                   </div>
                 </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+          <div class="box box-widget widget-user-2">
+              <div class="widget-user-header bg-yellow">
+                <div class="widget-user-image">
+                  <img class="img-circle store-logo" [src]="StoreInfo.Image" alt="Logo">
+                </div>
+                <h3 class="widget-user-username">{{ StoreInfo.StoreName }}</h3>
+                <h5 class="widget-user-desc">{{ StoreInfo.Slogan }}</h5>
+              </div>
+            </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 text-center">
+      <h2 class="text-primary font-weight-bold">Bản quyền thuộc về <b>DOTNETVN GROUP</b>, mọi thông tin chi tiết xin vui lòng liên hệ  <br> dotnetvn.service@gmail.com</h2>
     </div>
   </div>
 </section>

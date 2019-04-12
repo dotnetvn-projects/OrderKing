@@ -16,7 +16,9 @@ export const MainRoutes = [
             { path: 'mat-hang', loadChildren: 'src/app/presentation/main/product/product.module#ProductModule' },
             { path: 'nhan-vien', loadChildren: 'src/app/presentation/main/staff/staff.module#StaffModule' },
             { path: 'cua-hang', loadChildren: 'src/app/presentation/main/store/store.module#StoreModule' },
-            { path: 'don-hang', loadChildren: 'src/app/presentation/main/order/order.module#OrderModule' }
+            { path: 'don-hang', loadChildren: 'src/app/presentation/main/order/order.module#OrderModule' },
+            { path: 'don-hang/:type', loadChildren: 'src/app/presentation/main/order/order.module#OrderModule' },
+            { path: 'bao-cao', loadChildren: 'src/app/presentation/main/report/report.module#ReportModule' }
         ],
         canActivate: [AuthGuard]
     },

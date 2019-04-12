@@ -3,7 +3,8 @@ export class AppMessage {
   public static APP_ERROR_MESSAGE = {
     BUSY: 'Hệ thống đang bận không thể xử lý, vui lòng thử lại !',
     SESSION_TIMEOUT: 'Phiên làm việc đã kết thức, vui lòng đăng nhập lại !',
-    SELECT_CATEGORY: 'Vui lòng chọn danh mục !'
+    SELECT_CATEGORY: 'Vui lòng chọn danh mục !',
+    WRONG_DATE_RANGE: 'Giá trị ngày không hợp lệ, kiểm tra lại vùng giá trị !'
   };
 
   // success message
@@ -39,7 +40,8 @@ export class AppMessage {
     STORE_UPDATE: 'Order King - Chỉnh sửa thông tin cửa hàng',
     ORDER: 'Order King - Danh sách đơn hàng',
     ORDER_DETAIL: 'Order King - Chi tiết đơn hàng',
-    ORDER_PRINT: 'Đơn hàng - '
+    ORDER_PRINT: 'Đơn hàng - ',
+    REPORT_REVENUE: 'Báo cáo doanh thu'
   };
 
   // Control content
@@ -51,6 +53,7 @@ export class AppMessage {
   // Dialog Title
   public static APP_DIALOG_TITLE = {
     CONFIRM: 'Xác nhận',
+    ERROR: 'Lỗi',
   };
 
   // Dialog message

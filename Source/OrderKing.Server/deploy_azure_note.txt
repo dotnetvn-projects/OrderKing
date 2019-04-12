@@ -1,0 +1,12 @@
+- vao o dia C copy node.exe ban 64 bit chep vao den bin de support run 64bit
+- tao file iisnode.yml voi content la: nodeProcessCommandLine: "D:\home\site\wwwroot\bin\node.exe"
+- de file iisnote.yml o root folder
+- tao webapp
+- chon plan
+
+1. truong hop publish tu visual studio
+   neu publish tu VS thi he thong se tu dong build va download node_modules khong can truy cap vao portal de cai lai node module
+
+2. truong hop upload thong qua fpt
+khi upload khong can upload thu muc node_modules
+login vao azure portal => cho web app mo "Advances tool" => cho go => CMD => go lenh npm install de cai lai node module

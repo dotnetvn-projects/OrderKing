@@ -2,16 +2,18 @@ import { Component, Injector } from '@angular/core';
 import { BaseComponent } from 'src/app/framework/framework.base.component';
 import { Title } from '@angular/platform-browser';
 import { DialogService } from 'src/app/service/dialog.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AppMessage } from 'src/app/framework/framework.app.messages';
 import { OrderService } from 'src/app/service/order.service';
-import { OrderModel } from 'src/app/model/order.model';
-import { OrderFilterModel } from 'src/app/model/order.filter.model';
+import { OrderModel } from 'src/app/model/order/order.model';
+import { OrderFilterModel } from 'src/app/model/order/order.filter.model';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
 import { ExportExcelModel } from 'src/app/model/export.excel.model';
 import { ExcelService } from 'src/app/service/export.excel.service';
 import { StoreService } from 'src/app/service/store.service';
 import { CurrencyPipe } from '../../../_pipes/currency/currency-pipe';
+import { Common } from 'src/app/framework/framework.common';
+import { Validator } from 'src/app/framework/framework.validate';
 
 @Component({
   selector: 'app-order',
@@ -23,16 +25,19 @@ export class OrderComponent extends BaseComponent {
   private tableId = 'table-order';
   OrderFilter: OrderFilterModel = new OrderFilterModel();
   private currencyPipe: CurrencyPipe = new CurrencyPipe();
+  private isNewOrder: Boolean = false;
+  DiffDays: Number;
 
   constructor(private titleService: Title, private orderService: OrderService, injector: Injector,
     private dialogService: DialogService, private excelService: ExcelService,
-    private storeService: StoreService, private router: Router) {
+    private storeService: StoreService, private router: Router, private activatedRoute: ActivatedRoute) {
     super(injector);
   }
 
   onInit() {
     this.titleService.setTitle(AppMessage.APP_TITLE_MESSAGE.ORDER);
     this.orderService.OrderList.subscribe(orderList => this.OrderList = orderList);
+    this.delectGetNewOrder();
     this.fetchOrderList(() => {
       this.applyDataTable(this.tableId);
      });
@@ -63,10 +68,15 @@ export class OrderComponent extends BaseComponent {
 
   // ** search order list */
   filterData() {
-    this.destroyDataTable(this.tableId);
-    this.fetchOrderList(() => {
-      this.applyDataTable(this.tableId);
-     });
+    if (Validator.isValidDateRange(this.OrderFilter.FromDate, this.OrderFilter.ToDate)) {
+      this.delectGetNewOrder();
+      this.fetchOrderList(() => {
+        this.destroyDataTable(this.tableId);
+        this.applyDataTable(this.tableId);
+       });
+    } else {
+         this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.WRONG_DATE_RANGE, null);
+    }
   }
 
   // ** remove order out of store*/
@@ -105,8 +115,24 @@ export class OrderComponent extends BaseComponent {
 
   // ** load order list and apply datatable js */
   private fetchOrderList(updateUI) {
-    this.orderService.fetchOrderList(this.OrderFilter, () => {
+    this.dialogService.showWaiting(() => {
+      this.orderService.fetchOrderList(this.OrderFilter, () => {
         updateUI();
+      });
     });
+  }
+
+  private delectGetNewOrder() {
+    // detect case that only get new orders
+    if (this.getParam('type', this.activatedRoute) === 'new') {
+      if (this.isNewOrder && this.OrderFilter.FromDate !== this.OrderFilter.ToDate) {
+        this.isNewOrder = false;
+      } else {
+        this.isNewOrder = true;
+        this.OrderFilter.setNewOrderFilter();
+      }
+    }
+
+    this.DiffDays = Common.getDiffDays(this.OrderFilter.FromDate, this.OrderFilter.ToDate);
   }
 }

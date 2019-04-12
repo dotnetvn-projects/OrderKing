@@ -23,4 +23,10 @@ export class OrderFilterModel {
     date = new Date();
     this.ToDate = date.getDate() + '/' +  (date.getMonth() + 1) + '/' + date.getFullYear();
   }
+
+  setNewOrderFilter() {
+    const date = new Date();
+    this.FromDate = date.getDate() + '/' +  (date.getMonth() + 1) + '/' + date.getFullYear();
+    this.ToDate = date.getDate() + '/' +  (date.getMonth() + 1) + '/' + date.getFullYear();
+  }
 }

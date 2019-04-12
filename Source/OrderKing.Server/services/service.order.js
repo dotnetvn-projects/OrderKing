@@ -110,12 +110,14 @@ exports.searchOrderListByStore = async (searchPattern) => {
     var enddate = null;
 
     if (searchPattern.ordercode !== undefined && searchPattern.ordercode !== '' && searchPattern.ordercode !== null) {
+
         searchString += 'AND OrderCode = @OrderCode ';       
     }
     if ((searchPattern.startdate !== undefined && searchPattern.startdate !== '' && searchPattern.startdate !== null)
         &&
         (searchPattern.enddate !== undefined && searchPattern.enddate !== '' && searchPattern.enddate !== null)) {
-        searchString += 'AND ([Order].CreatedDate BETWEEN @StartDate AND @EndDate) ';
+
+        searchString += 'AND (CAST([Order].CreatedDate AS DATE) BETWEEN CAST(@StartDate AS DATE) AND CAST(@EndDate AS DATE)) ';
 
         var startDay = searchPattern.startdate.split('/')[0];
         var startMonth = searchPattern.startdate.split('/')[1];
@@ -124,37 +126,41 @@ exports.searchOrderListByStore = async (searchPattern) => {
         var endMonth = searchPattern.enddate.split('/')[1];
         var endYear = searchPattern.enddate.split('/')[2];
 
-        startdate = new Date(moment({ y: startYear, m: startMonth, d: startDay }).format('YYYY-MM-DD HH:mm:ss'));
-        enddate = new Date(moment({ y: endYear, m: endMonth, d: endDay }).format('YYYY-MM-DD HH:mm:ss'));
+        startdate = new Date(moment({ year: startYear, month: startMonth - 1, day: startDay }).format('YYYY-MM-DD HH:mm:ss'));// new Date(startYear, startMonth, startDay);
+        enddate = new Date(moment({ year: endYear, month: endMonth - 1, day: endDay }).format('YYYY-MM-DD HH:mm:ss'));//new Date(endYear,endMonth, endDay);
 
     } else if ((searchPattern.startdate !== undefined && searchPattern.startdate !== '' && searchPattern.startdate !== null)
         &&
         (searchPattern.enddate === undefined || searchPattern.enddate !== '' || searchPattern.enddate !== null)) {
-        searchString += 'AND [Order].CreatedDate >= @StartDate ';
+
+        searchString += 'AND CAST([Order].CreatedDate AS DATE) >= CAST(@StartDate AS DATE) ';
 
         startDay = searchPattern.startdate.split('/')[0];
         startMonth = searchPattern.startdate.split('/')[1];
         startYear = searchPattern.startdate.split('/')[2];
 
-        startdate = new Date(moment({ y: startYear, m: startMonth, d: startDay }).format('YYYY-MM-DD HH:mm:ss'));
+        startdate = new Date(moment({ year: startYear, month: startMonth - 1, day: startDay }).format('YYYY-MM-DD HH:mm:ss'));//new Date(startYear, startMonth, startDay);
 
     } else if((searchPattern.enddate !== undefined && searchPattern.enddate !== '' && searchPattern.enddate !== null)
         &&
         (searchPattern.startdate === undefined || searchPattern.startdate !== '' || searchPattern.startdate !== null)) {
-        searchString += 'AND [Order].CreatedDate <= @EndDate ';
+
+        searchString += 'AND CAST([Order].CreatedDate AS DATE) <= CAST(@EndDate AS DATE) ';
 
         endDay = searchPattern.enddate.split('/')[0];
         endMonth = searchPattern.enddate.split('/')[1];
         endYear = searchPattern.enddate.split('/')[2];
 
-        enddate = new Date(moment({ y: endYear, m: endMonth, d: endDay }).format('YYYY-MM-DD HH:mm:ss'));
+        enddate = new Date(moment({ year: endYear, month: endMonth - 1, day: endDay }).format('YYYY-MM-DD HH:mm:ss'));// new Date(endYear, endMonth,  endDay);
     }
 
     if (searchPattern.status !== undefined && searchPattern.status !== '' && searchPattern.status !== null
         && searchPattern.status !== '0') {
+
         searchString += 'AND OrderStatus = @Status ';
     }
     if (searchPattern.seller !== undefined && searchPattern.seller !== '' && searchPattern.seller !== null) {
+
         searchString += "AND (Account.AccountName LIKE '%@Seller%' OR UserProfile.FullName LIKE '%@Seller%' ";
     }
 

@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutes } from '../../../routing/dashboard.routing';
+import { DirectiveModule } from '../../_directives/directive.module';
+import { PipeModule } from '../../_pipes/pipe.module';
+import { UiComponentModule } from '../../_uicomponents/uicomponent.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +14,7 @@ import { DashboardRoutes } from '../../../routing/dashboard.routing';
   ],
   imports: [
     RouterModule.forChild(DashboardRoutes),
-    CommonModule, FormsModule
+    CommonModule, FormsModule, DirectiveModule, PipeModule, UiComponentModule
   ],
   exports: [RouterModule],
   providers: [],

@@ -5,9 +5,9 @@ import { DialogService } from 'src/app/service/dialog.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppMessage } from 'src/app/framework/framework.app.messages';
 import { OrderService } from 'src/app/service/order.service';
-import { OrderModel } from 'src/app/model/order.model';
-import { OrderFilterModel } from 'src/app/model/order.filter.model';
-import { OrderDetailModel } from 'src/app/model/order.detail.model';
+import { OrderModel } from 'src/app/model/order/order.model';
+import { OrderFilterModel } from 'src/app/model/order/order.filter.model';
+import { OrderDetailModel } from 'src/app/model/order/order.detail.model';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
 
 declare var html2canvas: any;

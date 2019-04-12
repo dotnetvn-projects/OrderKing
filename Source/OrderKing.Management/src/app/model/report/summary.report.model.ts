@@ -1,4 +1,4 @@
-import { ModelBase } from './base.model';
+import { ModelBase } from '../base.model';
 
 export class SummaryReportModel extends ModelBase {
     TotalOrder: string;

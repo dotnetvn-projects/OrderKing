@@ -1,4 +1,4 @@
-import { ModelBase } from './base.model';
+import { ModelBase } from '../base.model';
 
 export class OrderModel extends ModelBase {
   StoreName: string;

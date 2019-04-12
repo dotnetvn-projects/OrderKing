@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { WebClientService } from './webclient.service';
 import { BehaviorSubject } from 'rxjs';
-import { OrderModel } from '../model/order.model';
+import { OrderModel } from '../model/order/order.model';
 import { Dictionary } from '../framework/objectextension/framework.dictionary';
 import { AppSettings } from '../framework/framework.app.setting';
 import { ApiResultModel } from '../model/api.result.model';
-import { OrderFilterModel } from '../model/order.filter.model';
-import { OrderDetailModel } from '../model/order.detail.model';
+import { OrderFilterModel } from '../model/order/order.filter.model';
+import { OrderDetailModel } from '../model/order/order.detail.model';
 
 @Injectable({
   providedIn: 'root'

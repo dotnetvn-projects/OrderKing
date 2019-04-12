@@ -1,0 +1,19 @@
+<ul *ngIf="Pager.Pages && Pager.Pages.length"
+  class="pagination {{ Css }}">
+  <li [ngClass]="{ disabled: Pager.CurrentPage === 1 }">
+    <a (click)="setPage(1, true)">«</a>
+  </li>
+  <li [ngClass]="{ disabled: Pager.CurrentPage === 1 }">
+    <a (click)="setPage(Pager.CurrentPage - 1, true)">&lt;</a>
+  </li>
+  <li *ngFor="let page of Pager.Pages"
+    [ngClass]="{ active: Pager.CurrentPage === page }">
+    <a (click)="setPage(page, true)">{{ page }}</a>
+  </li>
+  <li [ngClass]="{ disabled: Pager.CurrentPage === Pager.TotalPages }">
+    <a (click)="setPage(Pager.CurrentPage + 1, true)">&gt;</a>
+  </li>
+  <li [ngClass]="{ disabled: Pager.CurrentPage === Pager.TotalPages }">
+    <a (click)="setPage(Pager.TotalPages, true)">»</a>
+  </li>
+</ul>

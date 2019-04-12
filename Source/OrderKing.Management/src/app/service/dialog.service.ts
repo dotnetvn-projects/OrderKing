@@ -1,11 +1,25 @@
 import { Injectable } from '@angular/core';
 import swal from 'sweetalert2';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class DialogService {
+
+  constructor (private spinner: NgxSpinnerService) {
+
+  }
+
+
+  showWaiting(action) {
+    this.spinner.show();
+    action();
+    setTimeout(() => {
+      this.spinner.hide();
+  }, 1000);
+  }
 
   showError(message: string, action = null) {
     swal({

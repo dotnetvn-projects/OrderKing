@@ -39,6 +39,7 @@ app.use('/api/public/payment', paymentApi);
 //in development mode, please comment out errorCatcher middleware
 app.use(errorCatcher.setmiddleware);
 
+app.set('title', 'Order King Server v1.0');
 //Start listening connection from remote client
 app.listen(port, function () {
     cronJob.updateTokenStatusJob();

@@ -3,7 +3,8 @@ import { HttpHeaders, HttpParams } from '@angular/common/http';
 export class  AppSettings {
 
   // config api
-  public static API_ENDPOINT = 'http://localhost:1337/api/public/';
+  // public static API_ENDPOINT = 'http://localhost:1337/api/public/';
+  public static API_ENDPOINT = 'https://orderkingserverapi.azurewebsites.net/api/public/';
   public static TOKEN_KEY = 'order-king-token';
   public static AUTH_KEY = 'order-king-auth';
   public static MANAGE_USERINFO_KEY = 'order-king-manage-userinfo';
@@ -20,6 +21,12 @@ export class  AppSettings {
   public static RESPONSE_CODE = {
     SUCCESS: 200,
     UNAUTHORIZED: 401
+  };
+
+  public static SALE_TRENDING = {
+    UP: 0,
+    DOWN: 1,
+    SAME: 2
   };
 
   // default image

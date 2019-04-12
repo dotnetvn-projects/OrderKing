@@ -5,7 +5,8 @@
     <Name>OrderKing.Server</Name>
     <RootNamespace>OrderKing.Server</RootNamespace>
     <LastActiveSolutionConfig>Debug|Any CPU</LastActiveSolutionConfig>
-    <NameOfLastUsedPublishProfile>publish</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>OrderKingServerAPI - Web Deploy</NameOfLastUsedPublishProfile>
+    <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -21,7 +22,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
     <NodejsPort>1337</NodejsPort>
-    <StartWebBrowser>true</StartWebBrowser>
+    <StartWebBrowser>True</StartWebBrowser>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,10 +74,13 @@
     <Compile Include="services\service.security.js" />
     <Compile Include="services\service.store.js" />
     <Compile Include="services\service.user.js" />
+    <Content Include="deploy_azure_note.txt" />
     <Content Include="eventHandlers\event.handler.log.js" />
     <Content Include="eventHandlers\event.handler.sessionlogin.js" />
+    <Content Include="iisnode.yml" />
     <Content Include="libman.json" />
     <Content Include="middlewares\middleware.error.catcher.js" />
+    <None Include="OrderKingServerAPI - Web Deploy.pubxml" />
     <Content Include="ref.txt" />
     <Content Include="resources\images\default-product.png" />
     <Content Include="resources\images\no-avatar.png" />
@@ -88,6 +92,7 @@
     <Content Include="resources\resource.api.value.js" />
     <Content Include="routes\route.api.auth.js" />
     <Content Include="start.bat" />
+    <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="database\" />

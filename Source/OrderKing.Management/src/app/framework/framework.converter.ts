@@ -38,6 +38,6 @@ export class Converter {
 
     public static ConvertCurrentDateToString(): string {
         const currentDate = new Date();
-        return currentDate.getDate() + '/' + currentDate.getMonth() + '/' + currentDate.getFullYear();
+        return currentDate.getDate() + '/' +  (currentDate.getMonth() + 1) + '/' + currentDate.getFullYear();
     }
 }

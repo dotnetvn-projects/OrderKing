@@ -15,18 +15,23 @@ authrouter.get('/', function (req, res) {
 //auth user api
 authrouter.post('/auth-token-status', async function (req, res, next) {
     try {
-        var ip = req.connection.remoteAddress;
+        var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         logHandler.fire('info', format('ip [{0}] has requested for check token status', ip));
 
         var accesstoken = req.body.AccessToken;
 
-        var result = await service.checkExpiredToken(accesstoken);
+        if (accesstoken === '' && accesstoken === null && accesstoken === undefined) {
+            common.sendBadRequest();
+        }
+        else {
+            var result = await service.checkExpiredToken(accesstoken);
 
-        var message = common.createResponseMessage({ isexpired: result.model.responsecode !== 200 },
-            result.model.responsecode, result.model.statusmessage);
+            var message = common.createResponseMessage({ isexpired: result.model.responsecode !== 200 },
+                result.model.responsecode, result.model.statusmessage);
 
-        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(message));
+            res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(message));
+        }
     }
     catch (err) {
         next(err);
@@ -36,7 +41,7 @@ authrouter.post('/auth-token-status', async function (req, res, next) {
 //auth user api
 authrouter.post('/auth-user', async function (req, res, next) {
     try {
-        var ip = req.connection.remoteAddress;
+        var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         var userAgent = req.headers['user-agent'];
         logHandler.fire('info', format('ip [{0}] has requested for authentication', ip));
       
@@ -64,7 +69,7 @@ authrouter.post('/auth-user', async function (req, res, next) {
 //auth manager api
 authrouter.post('/auth-manager', async function (req, res, next) {
     try {
-        var ip = req.connection.remoteAddress;
+        var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         var userAgent = req.headers['user-agent'];
         logHandler.fire('info', format('ip [{0}] has requested for authentication', ip));
 
