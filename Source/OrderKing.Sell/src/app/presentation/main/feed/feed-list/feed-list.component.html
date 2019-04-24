@@ -1,22 +1,27 @@
 <div class="row">
-    <app-feed-item *ngFor="let feed of feeds" [feedItem]="feed" class="col-xs-12 col-sm-6 col-md-4 col-lg-3"></app-feed-item>
+    <div class="col-6 col-sm-6 col-md-7 col-lg-8 col-xl-8">
+        <div class="row">
+            <app-feed-item *ngFor="let feed of feeds" [feedItem]="feed" class="col-xs-12 col-sm-12 col-md-6 col-lg-4"></app-feed-item>
+        </div>
+    </div>
 </div>
 <!-- PAGING -->
-<div aria-label="...">
-    <ul class="pager">
-        <li>
-            <a href="#">
-                <i class="fas fa-angle-left"></i>
+<div class="paging-bar">
+    <ul class="pagination justify-content-center">
+        <li class="page-item">
+            <a class="page-link" href="#">
                 Trở Về
             </a>
         </li>
-        <li class="active">
-            <a href="#">1</a>
+        <li class="page-item active">
+            <a class="page-link" href="#">1</a>
         </li>
-        <li>
-            <a href="#">
+        <li class="page-item">
+            <a class="page-link" href="#">2</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">
                 Xem Tiếp
-                <i class="fas fa-angle-right"></i>
             </a>
         </li>
     </ul>
