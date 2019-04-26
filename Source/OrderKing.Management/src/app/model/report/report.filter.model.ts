@@ -1,11 +1,15 @@
 export class ReportFilterModel {
   FromDate: string;
   ToDate: string;
+  Type: string;
+  Top: number;
   PageSize: number;
   PageNumber: number;
 
   constructor () {
     this.defaultSearchDate();
+    this.PageNumber = 1;
+    this.PageSize = 10;
   }
 
   defaultSearchDate() {

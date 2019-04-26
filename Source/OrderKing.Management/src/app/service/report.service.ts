@@ -7,10 +7,11 @@ import { ApiResultModel } from '../model/api.result.model';
 import { ProductReportModel } from '../model/report/product.report.model';
 import { SummaryReportModel } from '../model/report/summary.report.model';
 import { MonthRevenueReportModel } from '../model/report/month.revenue.report.model';
-import { ProductDailySoldReportModel } from '../model/report/product.dailysold.report.model';
+import { ProductSoldReportModel } from '../model/report/product.sold.report.model';
 import { RevenueReportModel } from '../model/report/revenue.report.model';
 import { SaleReportModel } from '../model/report/sale.report.model';
 import { ReportFilterModel } from '../model/report/report.filter.model';
+import { SaleDetailReportModel } from '../model/report/sale.detail.report.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,22 +23,31 @@ export class ReportService {
   private getMonthRevenueReportUrl = 'report/get-monthly-revenue-year';
   private getRevenueReportUrl = 'report/get-revenue-report';
   private getSaleReporWithDateRangetUrl = 'report/get-sale-report-date-range';
+  private getProductSoldReporWithDateRangetUrl = 'report/get-product-sold-report-date-range';
+  private getTopProductBestSellUrl = 'report/get-product-best-sell';
 
 
-  private productReportDailyListSource = new BehaviorSubject<ProductDailySoldReportModel>(new ProductDailySoldReportModel());
-  ProductReportDailyList = this.productReportDailyListSource.asObservable();
+  private productReportDailySource = new BehaviorSubject<ProductSoldReportModel>(new ProductSoldReportModel());
+  ProductReportProductDailySold = this.productReportDailySource.asObservable();
+
+  private productReportSoldSource = new BehaviorSubject<ProductSoldReportModel>(new ProductSoldReportModel());
+  ProductReportSold = this.productReportSoldSource.asObservable();
+
+  private topProductBestSellReportSource = new BehaviorSubject<ProductSoldReportModel>(new ProductSoldReportModel());
+  TopProductBestSellReport = this.topProductBestSellReportSource.asObservable();
+
 
   private summaryReportSource = new BehaviorSubject<SummaryReportModel>(new SummaryReportModel());
   SummaryReport = this.summaryReportSource.asObservable();
 
-  private MonthRevenueReportSource = new BehaviorSubject<MonthRevenueReportModel>(new MonthRevenueReportModel());
-  MonthRevenueReport = this.MonthRevenueReportSource.asObservable();
+  private monthRevenueReportSource = new BehaviorSubject<MonthRevenueReportModel>(new MonthRevenueReportModel());
+  MonthRevenueReport = this.monthRevenueReportSource.asObservable();
 
-  private RevenueReportSource = new BehaviorSubject<RevenueReportModel>(new RevenueReportModel());
-  RevenueReport = this.RevenueReportSource.asObservable();
+  private revenueReportSource = new BehaviorSubject<RevenueReportModel>(new RevenueReportModel());
+  RevenueReport = this.revenueReportSource.asObservable();
 
-  private saleReportListSource = new BehaviorSubject<Array<SaleReportModel>>(new Array<SaleReportModel>());
-  SaleReportList = this.saleReportListSource.asObservable();
+  private saleReporSource = new BehaviorSubject<SaleReportModel>(new SaleReportModel());
+  SaleReport = this.saleReporSource.asObservable();
 
   constructor(private webClient: WebClientService) {
 
@@ -81,7 +91,7 @@ export class ReportService {
              resultData.October = data.Result.October;
              resultData.November = data.Result.November;
              resultData.December = data.Result.December;
-             this.MonthRevenueReportSource.next(resultData);
+             this.monthRevenueReportSource.next(resultData);
              updateUI();
           }
       });
@@ -93,7 +103,7 @@ export class ReportService {
     params.put('PageSize', pageSize);
     params.put('PageNumber', page);
     this.webClient.doPost(AppSettings.API_ENDPOINT + this.getProductSoldDailyUrl, params, (data: ApiResultModel) => {
-        const resultData = new ProductDailySoldReportModel();
+        const resultData = new ProductSoldReportModel();
         if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
           resultData.ProductList = new Array<ProductReportModel>();
           data.Result.forEach(e => {
@@ -105,7 +115,7 @@ export class ReportService {
             resultData.ProductList.push(productInfo);
             resultData.TotalRecord = e.TotalRecord;
            });
-           this.productReportDailyListSource.next(resultData);
+           this.productReportDailySource.next(resultData);
            if (updateUI !== null) {
              updateUI();
           }
@@ -123,13 +133,12 @@ export class ReportService {
            resultData.WeeklyRevenue = data.Result.WeeklyRevenue;
            resultData.MonthlyRevenue = data.Result.MonthlyRevenue;
            resultData.YearlyRevenue = data.Result.YearlyRevenue;
-           this.RevenueReportSource.next(resultData);
-
+           this.revenueReportSource.next(resultData);
         }
     });
   }
 
-  // ** get sale report with date range*/
+  // ** get sale report by date range*/
   loadSaleReport(filter: ReportFilterModel, updateUI) {
     const params = new Dictionary<string, any>();
     params.put('StartDate', filter.FromDate);
@@ -137,35 +146,36 @@ export class ReportService {
     params.put('PageSize', filter.PageSize);
     params.put('PageNumber', filter.PageNumber);
     this.webClient.doPost(AppSettings.API_ENDPOINT + this.getSaleReporWithDateRangetUrl, params, (data: ApiResultModel) => {
-        const resultData = new Array<SaleReportModel>();
+        const resultData = new SaleReportModel();
         if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+          resultData.SaleReportList = new Array<SaleDetailReportModel>();
           data.Result.forEach(e => {
-            const saleReportModel = new SaleReportModel();
-            saleReportModel.CreateDate = e.CreateDate;
-            saleReportModel.TotalOrder = e.TotalOrder;
-            saleReportModel.TotalSold = e.TotalSold;
-            saleReportModel.TotalRevenue = e.TotalRevenue;
-
-            resultData.push(saleReportModel);
+            const saleDetailReportModel = new SaleDetailReportModel();
+            saleDetailReportModel.CreatedDate = e.CreatedDate;
+            saleDetailReportModel.TotalOrder = e.TotalOrder;
+            saleDetailReportModel.TotalSold = e.TotalSold;
+            saleDetailReportModel.TotalRevenue = e.TotalRevenue;
+            resultData.TotalRecord = e.TotalRecord;
+            resultData.SaleReportList.push(saleDetailReportModel);
           });
 
-          for ( let i = 1 ; i < resultData.length ; i++) {
-             const j = i - 1;
-             const currentItem = resultData[i];
-             const previousItem = resultData[j];
-             const currentRevenue = Number(currentItem.TotalSold);
-             const previousRevenue = Number(previousItem.TotalSold);
+          for ( let i = 0 ; i < resultData.SaleReportList.length - 1 ; i++) {
+             const j = i + 1;
+             const currentItem = resultData.SaleReportList[i];
+             const previousItem = resultData.SaleReportList[j];
+             const currentRevenue = Number(currentItem.TotalRevenue);
+             const previousRevenue = Number(previousItem.TotalRevenue);
 
              if (currentRevenue === previousRevenue) {
-              currentItem.Trend = AppSettings.SALE_TRENDING.SAME;
+              resultData.SaleReportList[i].Trend = AppSettings.SALE_TRENDING.SAME;
              } else if (currentRevenue > previousRevenue) {
-               currentItem.Trend = AppSettings.SALE_TRENDING.UP;
+              resultData.SaleReportList[i].Trend = AppSettings.SALE_TRENDING.UP;
              } else {
-              currentItem.Trend = AppSettings.SALE_TRENDING.DOWN;
+              resultData.SaleReportList[i].Trend = AppSettings.SALE_TRENDING.DOWN;
              }
           }
 
-          this.saleReportListSource.next(resultData);
+          this.saleReporSource.next(resultData);
           if (updateUI !== null) {
             updateUI();
           }
@@ -173,4 +183,67 @@ export class ReportService {
       }
     );
   }
+
+    // ** get product sold report by date range*/
+    loadProductSoldReport(filter: ReportFilterModel, updateUI) {
+      const params = new Dictionary<string, any>();
+      params.put('StartDate', filter.FromDate);
+      params.put('EndDate', filter.ToDate);
+      params.put('PageSize', filter.PageSize);
+      params.put('PageNumber', filter.PageNumber);
+      this.webClient.doPost(AppSettings.API_ENDPOINT + this.getProductSoldReporWithDateRangetUrl, params, (data: ApiResultModel) => {
+          const resultData = new ProductSoldReportModel();
+          if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+            resultData.ProductList = new Array<ProductReportModel>();
+            data.Result.forEach(e => {
+              const productReport = new ProductReportModel();
+              productReport.Id = e.ProductId;
+              productReport.ProductCode = e.ProductCode;
+              productReport.ProductName = e.ProductName;
+              productReport.TotalSold = e.TotalSold;
+              productReport.Revenue = e.TotalRevenue;
+              resultData.TotalRecord = e.TotalRecord;
+              resultData.ProductList.push(productReport);
+            });
+
+            this.productReportSoldSource.next(resultData);
+            if (updateUI !== null) {
+              updateUI();
+            }
+          }
+        }
+      );
+    }
+
+
+
+    // ** get top product best selling **/
+    loadProductBestSellingReport(filter: ReportFilterModel, updateUI) {
+      const params = new Dictionary<string, any>();
+      params.put('Type', filter.Type);
+      params.put('Top', filter.Top);
+
+      this.webClient.doPost(AppSettings.API_ENDPOINT + this.getTopProductBestSellUrl, params, (data: ApiResultModel) => {
+          const resultData = new ProductSoldReportModel();
+          if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
+            resultData.ProductList = new Array<ProductReportModel>();
+            data.Result.forEach(e => {
+              const productReport = new ProductReportModel();
+              productReport.Id = e.ProductId;
+              productReport.ProductCode = e.ProductCode;
+              productReport.ProductName = e.ProductName;
+              productReport.TotalSold = e.TotalSold;
+              productReport.Revenue = e.TotalRevenue;
+              resultData.TotalRecord = e.TotalRecord;
+              resultData.ProductList.push(productReport);
+            });
+
+            this.topProductBestSellReportSource.next(resultData);
+            if (updateUI !== null) {
+              updateUI();
+            }
+          }
+        }
+      );
+    }
 }

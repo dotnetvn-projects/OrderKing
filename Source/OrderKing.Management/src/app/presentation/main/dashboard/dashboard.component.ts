@@ -7,7 +7,7 @@ import { SummaryReportModel } from 'src/app/model/report/summary.report.model';
 import { Chart } from 'chart.js';
 import { MonthRevenueReportModel } from 'src/app/model/report/month.revenue.report.model';
 import { CurrencyPipe } from '../../_pipes/currency/currency-pipe';
-import { ProductDailySoldReportModel } from 'src/app/model/report/product.dailysold.report.model';
+import { ProductSoldReportModel } from 'src/app/model/report/product.sold.report.model';
 import { PaginationComponent } from '../../_uicomponents/pagination/pagination.component';
 import { StoreModel } from 'src/app/model/store.model';
 import { StoreService } from 'src/app/service/store.service';
@@ -21,7 +21,7 @@ export class DashboardComponent extends BaseComponent {
   private tableId = 'table-top-sell';
   CurrentYear: number = new Date().getFullYear();
   SummaryReport: SummaryReportModel = new SummaryReportModel();
-  ReportProductSoldDaily: ProductDailySoldReportModel;
+  ReportProductSoldDaily: ProductSoldReportModel;
   MonthRevenueReport: MonthRevenueReportModel = new MonthRevenueReportModel();
   Chart = [];
   StoreInfo: StoreModel;
@@ -43,7 +43,7 @@ export class DashboardComponent extends BaseComponent {
   subscribeObject() {
     this.storeService.StoreInfo.subscribe(store => this.StoreInfo = store);
     this.reportService.SummaryReport.subscribe(reportData => this.SummaryReport = reportData);
-    this.reportService.ProductReportDailyList.subscribe(reportData => this.ReportProductSoldDaily = reportData);
+    this.reportService.ProductReportProductDailySold.subscribe(reportData => this.ReportProductSoldDaily = reportData);
     this.reportService.MonthRevenueReport.subscribe(reportData => this.MonthRevenueReport = reportData);
   }
 

@@ -3,8 +3,8 @@ import { HttpHeaders, HttpParams } from '@angular/common/http';
 export class  AppSettings {
 
   // config api
-  // public static API_ENDPOINT = 'http://localhost:1337/api/public/';
-  public static API_ENDPOINT = 'https://orderkingserverapi.azurewebsites.net/api/public/';
+   public static API_ENDPOINT = 'http://localhost:1337/api/public/';
+  // public static API_ENDPOINT = 'https://orderkingserverapi.azurewebsites.net/api/public/';
   public static TOKEN_KEY = 'order-king-token';
   public static AUTH_KEY = 'order-king-auth';
   public static MANAGE_USERINFO_KEY = 'order-king-manage-userinfo';

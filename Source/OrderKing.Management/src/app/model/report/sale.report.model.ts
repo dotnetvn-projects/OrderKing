@@ -1,14 +1,12 @@
 import { ModelBase } from '../base.model';
+import { SaleDetailReportModel } from './sale.detail.report.model';
 
 export class SaleReportModel extends ModelBase {
-    CreateDate: string;
-    TotalOrder: number;
-    TotalSold: number;
-    TotalRevenue: number;
-    Trend: number; // 0 up, 1 down, 2 same
+    SaleReportList: SaleDetailReportModel[];
+    TotalRecord: number;
 
     constructor () {
       super();
-      this.Trend = 2;
+      this.TotalRecord = 0;
     }
 }

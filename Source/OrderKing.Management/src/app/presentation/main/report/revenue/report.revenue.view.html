@@ -40,82 +40,110 @@
       </div>
     </div>
   </div>
+
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header with-border">
           <div class="row">
-              <div class="col-md-3"><h3 class="box-title">Danh thu bán hàng theo ngày</h3></div>
-              <div class="col-sm-3 col-md-2">
-                  <input type="text" name="fromdate" appInputDateMask
-                               [(ngModel)]="ReportFilter.FromDate" class="form-control order-fromdate" size="10" placeholder="Từ ngày" >
-                </div>
-                <div class="col-sm-3 col-md-2">
-                    <input type="text" name="todate" appInputDateMask
-                               [(ngModel)]="ReportFilter.ToDate" class="form-control order-todate" size="10" placeholder="Đến ngày" >
-                </div>
+              <div class="col-md-3"><h3 class="box-title"><i class="text-blue fa fa-line-chart"></i> Danh thu bán hàng theo ngày</h3></div>
+          </div>
+          <div class="row search-tool">
+            <div class="col-sm-3 col-md-2">
+              <input type="text" name="fromdate" appInputDateMask
+                           [(ngModel)]="SaleReportFilter.FromDate" class="form-control order-fromdate" size="10" placeholder="Từ ngày" >
+            </div>
+            <div class="col-sm-3 col-md-2">
+                <input type="text" name="todate" appInputDateMask
+                           [(ngModel)]="SaleReportFilter.ToDate" class="form-control order-todate" size="10" placeholder="Đến ngày" >
+            </div>
+            <div class="col-sm-3 col-md-2">
+              <button (click)="loadSaleReport()" class="btn btn-default btn-sm"><i class="fa fa-filter"></i> Lọc</button>
+          </div>
           </div>
         </div>
         <div class="box-body">
           <table class="table table-bordered">
-            <tbody><tr>
+            <tbody>
+            <tr>
               <th style="width: 10px">#</th>
-              <th>Task</th>
-              <th>Progress</th>
-              <th style="width: 40px">Label</th>
+              <th class="text-center">Ngày bán</th>
+              <th class="text-center">Tổng số đơn hàng</th>
+              <th class="text-center">Tổng mặt hàng đã bán</th>
+              <th class="text-center">Tổng mặt doanh thu</th>
+              <th class="text-center">Xu hướng</th>
             </tr>
-            <tr>
-              <td>1.</td>
-              <td>Update software</td>
-              <td>
-                <div class="progress progress-xs">
-                  <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                </div>
+            <tr *ngFor="let sale of SaleReport.SaleReportList; let i = index">
+              <td class="text-center">{{ i + 1 }}.</td>
+              <td class="text-center">{{ sale.CreatedDate }}</td>
+              <td class="text-center">{{ sale.TotalOrder }} đơn hàng</td>
+              <td class="text-center">{{ sale.TotalSold }} mặt hàng </td>
+              <td class="text-center">
+                  <span title="Tăng" *ngIf="sale.Trend == 0" class="label badge label-success text-money">{{ sale.TotalRevenue | currency:'VND':true }}</span>
+                  <span title="Giảm" *ngIf="sale.Trend == 1" class="label badge label-danger text-money">{{ sale.TotalRevenue | currency:'VND':true }}</span>
+                  <span title="Bão hòa" *ngIf="sale.Trend == 2" class="label badge label-warning text-money">{{ sale.TotalRevenue | currency:'VND':true }}</span>
               </td>
-              <td><span class="badge bg-red">55%</span></td>
-            </tr>
-            <tr>
-              <td>2.</td>
-              <td>Clean database</td>
-              <td>
-                <div class="progress progress-xs">
-                  <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
-                </div>
-              </td>
-              <td><span class="badge bg-yellow">70%</span></td>
-            </tr>
-            <tr>
-              <td>3.</td>
-              <td>Cron job running</td>
-              <td>
-                <div class="progress progress-xs progress-striped active">
-                  <div class="progress-bar progress-bar-primary" style="width: 30%"></div>
-                </div>
-              </td>
-              <td><span class="badge bg-light-blue">30%</span></td>
-            </tr>
-            <tr>
-              <td>4.</td>
-              <td>Fix and squish bugs</td>
-              <td>
-                <div class="progress progress-xs progress-striped active">
-                  <div class="progress-bar progress-bar-success" style="width: 90%"></div>
-                </div>
-              </td>
-              <td><span class="badge bg-green">90%</span></td>
+              <td class="text-center">
+                  <span title="Tăng" *ngIf="sale.Trend == 0" class="label label-success"><i class="fa fa-level-up"></i></span>
+                  <span title="Giảm" *ngIf="sale.Trend == 1" class="label label-danger"><i class="fa fa-level-down"></i></span>
+                  <span title="Bão hòa" *ngIf="sale.Trend == 2" class="label label-warning"><i class="fa fa-arrows-h"></i></span>
+                </td>
             </tr>
           </tbody></table>
         </div>
         <div class="box-footer clearfix">
-          <ul class="pagination pagination-sm no-margin pull-right">
-            <li><a href="#">«</a></li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">»</a></li>
-          </ul>
+            <ng-template #SaleReportPagerContainer></ng-template>
         </div>
       </div>
     </div>
   </div>
+
+  <div class="row">
+      <div class="col-xs-12">
+        <div class="box box-success">
+          <div class="box-header with-border">
+            <div class="row">
+                <div class="col-md-3"><h3 class="box-title"><i class="text-success fa fa-line-chart"></i> Doanh thu theo mặt hàng</h3></div>
+            </div>
+            <div class="row search-tool">
+              <div class="col-sm-3 col-md-2">
+                <input type="text" name="fromdate" appInputDateMask
+                             [(ngModel)]="ProductSoldReportFilter.FromDate" class="form-control order-fromdate" size="10" placeholder="Từ ngày" >
+              </div>
+              <div class="col-sm-3 col-md-2">
+                  <input type="text" name="todate" appInputDateMask
+                             [(ngModel)]="ProductSoldReportFilter.ToDate" class="form-control order-todate" size="10" placeholder="Đến ngày" >
+              </div>
+              <div class="col-sm-3 col-md-2">
+                <button (click)="loadProductSoldReport()" class="btn btn-default btn-sm"><i class="fa fa-filter"></i> Lọc</button>
+            </div>
+            </div>
+          </div>
+          <div class="box-body">
+            <table class="table table-bordered">
+              <tbody>
+              <tr>
+                <th style="width: 10px">#</th>
+                <th style="width: 100px" class="text-center">Mã mặt hàng</th>
+                <th class="text-center">Tên mặt hàng</th>
+                <th class="text-center">Tổng mặt hàng đã bán</th>
+                <th class="text-center">Tổng doanh thu</th>
+              </tr>
+              <tr *ngFor="let report of ProductSoldReport.ProductList; let i = index">
+                <td class="text-center">{{ i + 1 }}.</td>
+                <td class="text-center">{{ report.ProductCode }}</td>
+                <td>{{ report.ProductName }}</td>
+                <td class="text-center">{{ report.TotalSold }} mặt hàng </td>
+                <td class="text-center">
+                    <span class="label badge label-success text-money">{{ report.Revenue | currency:'VND':true }}</span>
+                </td>
+              </tr>
+            </tbody></table>
+          </div>
+          <div class="box-footer clearfix">
+              <ng-template #ProductSoldReportPagerContainer></ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
 </section>

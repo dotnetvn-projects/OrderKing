@@ -113,18 +113,7 @@
                 <li routerLinkActive="active"><a [routerLink]="['']"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
                 <li routerLinkActive="active" ><a [routerLink]="['/danh-muc']"><i class="glyphicon glyphicon-book"></i> <span>Quản lý danh mục</span></a></li>
                 <li routerLinkActive="active" ><a [routerLink]="['/mat-hang']"><i class="fa  fa-tasks"></i> <span>Quản lý mặt hàng</span></a></li>
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-university"></i> <span>Cửa hàng</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li routerLinkActive="active"><a [routerLink]="['/nhan-vien']"><i class="fa fa-users"></i> Quản lý nhân viên</a></li>
-                        <li routerLinkActive="active"><a [routerLink]="['/cua-hang']"><i class="fa fa-home"></i> Thông tin cửa hàng</a></li>
-                        <li routerLinkActive="active"><a [routerLink]="['/don-hang']"><i class="fa fa-newspaper-o"></i> Quản lý đơn hàng</a></li>
-                    </ul>
-                </li>
+                <li routerLinkActive="active"><a [routerLink]="['/don-hang']"><i class="fa fa-newspaper-o"></i> Quản lý đơn hàng</a></li>
                 <li class="treeview">
                     <a href="#"><i class="fa fa-bar-chart"></i> <span>Báo cáo / thống kê</span>
                         <span class="pull-right-container">
@@ -136,6 +125,17 @@
                         <li><a href="#"><i class="fa fa-rocket"></i> Sản phẩm bán chạy</a></li>
                     </ul>
                 </li>
+                <li class="treeview">
+                  <a href="#"><i class="fa fa-university"></i> <span>Cửa hàng</span>
+                      <span class="pull-right-container">
+                          <i class="fa fa-angle-left pull-right"></i>
+                      </span>
+                  </a>
+                  <ul class="treeview-menu">
+                      <li routerLinkActive="active"><a [routerLink]="['/nhan-vien']"><i class="fa fa-users"></i> Quản lý nhân viên</a></li>
+                      <li routerLinkActive="active"><a [routerLink]="['/cua-hang']"><i class="fa fa-home"></i> Thông tin cửa hàng</a></li>
+                  </ul>
+              </li>
                 <li><a href="#"><i class="fa fa-eye"></i> <span>Theo dõi hoạt động</span></a></li>
                 <li><a href="#"><i class="fa fa-commenting"></i> <span>Thông báo</span></a></li>
             </ul>

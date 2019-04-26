@@ -102,7 +102,7 @@ reportrouter.post('/get-revenue-report', async (req, res, next) => {
     }
 });
 
-// get sale report with date range
+// get sale report by date range
 reportrouter.post('/get-sale-report-date-range', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
@@ -118,6 +118,62 @@ reportrouter.post('/get-sale-report-date-range', async (req, res, next) => {
         };
 
         var result = await service.getSaleReportWithDateRagne(reportData);
+
+        var message = common.createResponseMessage(result.model.data,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+// get product sold report by date range
+reportrouter.post('/get-product-sold-report-date-range', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+
+        var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+
+        var reportData = {
+            storeId: storeId,
+            startDate: req.body.StartDate,
+            endDate: req.body.EndDate,
+            pageSize: req.body.PageSize,
+            pageNumber: req.body.PageNumber
+        };
+
+        var result = await service.getProductSoldReportWithDateRagne(reportData);
+
+        var message = common.createResponseMessage(result.model.data,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+// get prouduct best selling list
+reportrouter.post('/get-product-best-sell', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+
+        var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+
+        var reportData = {
+            storeId: storeId,
+            top: req.body.Top,
+            type: req.body.Type
+        };
+
+        var result = await service.getTopBestSelling(reportData);
 
         var message = common.createResponseMessage(result.model.data,
             result.model.responsecode,

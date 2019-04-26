@@ -106,7 +106,7 @@ DECLARE @Monthly BIGINT =
    FROM [ORDER]
    WHERE StoreId = @StoreId
      AND [ORDER].OrderStatus = 1
-     AND MONTH(CreatedDate) = MONTH(GETDATE()))
+     AND MONTH(CreatedDate) = MONTH(GETDATE()) AND YEAR(CreatedDate) = YEAR(GETDATE()))
 
 DECLARE @Yearly BIGINT =
   (SELECT CASE
@@ -124,11 +124,24 @@ SELECT @Daily AS DailyRevenue,
        @Yearly AS YearlyRevenue
 `);
 
-// get sale report along with date range
+// get sale report by date range
 defineProperty('getSaleReportWithDateRagne', `
-    SELECT CAST([ORDER].CreatedDate AS DATE) AS CreatedDate, COUNT([ORDER].Id) AS TotalOrder, 
-           SUM(OrderDetail.Amount) AS Totalsold, SUM([ORDER].TotalPrice) AS TotalRevenue 
-    FROM [ORDER] INNER JOIN OrderDetail ON OrderDetail.OrderId = [ORDER].Id
+    DECLARE @TotalRecord INT = (SELECT COUNT(Temp.CreatedDate)
+     FROM (
+            SELECT CAST([ORDER].CreatedDate AS DATE) AS CreatedDate
+            FROM [ORDER] INNER JOIN OrderDetail ON OrderDetail.OrderId = [ORDER].Id
+            WHERE [ORDER].StoreId = @StoreId AND [ORDER].OrderStatus = 1 AND {0}
+            GROUP BY CAST([ORDER].CreatedDate AS DATE)) AS Temp
+          );
+
+    SELECT CAST([ORDER].CreatedDate AS DATE) AS CreatedDate,
+           COUNT([ORDER].Id) AS TotalOrder, 
+           SUM(Temp.Amount) AS TotalSold,
+           SUM([ORDER].TotalPrice) AS TotalRevenue, @TotalRecord AS TotalRecord
+    FROM [ORDER] INNER JOIN (SELECT [ORDER].Id, SUM(OrderDetail.Amount) AS Amount FROM [ORDER] 
+	                         INNER JOIN  OrderDetail ON OrderDetail.OrderId = [ORDER].Id 
+							 WHERE [ORDER].OrderStatus = 1
+							 GROUP BY [ORDER].Id) AS Temp ON Temp.Id = [ORDER].Id
     WHERE [ORDER].StoreId = @StoreId AND [ORDER].OrderStatus = 1 AND {0}
     GROUP BY CAST([ORDER].CreatedDate AS DATE)
     ORDER BY CAST([ORDER].CreatedDate AS DATE) DESC
@@ -136,14 +149,35 @@ defineProperty('getSaleReportWithDateRagne', `
     FETCH NEXT @PageSize ROWS ONLY;
 `);
 
-// get product report along with date
-defineProperty('ProductReportWithDate', `
-    SELECT Product.Id, Product.Name, SUM(OrderDetail.Amount) TotalSold,
-       SUM(OrderDetail.Amount * OrderDetail.Price) AS TotalRevenue 
-    FROM [ORDER] o INNER JOIN ORDERDetail ON OrderDetail.Orderid = o.id
-    INNER JOIN Product ON OrderDetail.ProductId = Product.id
-    WHERE o.StoreId = @StoreId AND o.OrderStatus = 1
-          AND o.CreatedDate BETWEEN CAST(@StartDate AS DATE) AND CAST(@EndDate AS DATE)
-    GROUP BY  Product.Id, Product.Name
+// get product report by date range
+defineProperty('ProductSoldReportWithDate', `
+     DECLARE @TotalRecord INT = (SELECT COUNT(Temp.ProductId)
+        FROM (
+            SELECT Product.Id AS ProductId
+            FROM [ORDER] INNER JOIN ORDERDetail ON OrderDetail.OrderId = [ORDER].Id
+            INNER JOIN Product ON OrderDetail.ProductId = Product.Id
+            WHERE [ORDER].StoreId = @StoreId AND [ORDER].OrderStatus = 1 AND {0}
+            GROUP BY Product.Id) AS Temp
+          );
+
+    SELECT Product.Id, Product.Code, Product.Name, SUM(OrderDetail.Amount) TotalSold,
+           SUM(OrderDetail.Amount * OrderDetail.Price) AS TotalRevenue, @TotalRecord AS TotalRecord
+    FROM [ORDER] INNER JOIN ORDERDetail ON OrderDetail.OrderId = [ORDER].Id
+    INNER JOIN Product ON OrderDetail.ProductId = Product.Id
+    WHERE [ORDER].StoreId = @StoreId AND [ORDER].OrderStatus = 1 AND {0}
+    GROUP BY Product.Id, Product.Code, Product.Name
+    ORDER BY SUM(OrderDetail.Amount) DESC
+    OFFSET @PageSize * (@PageNumber - 1) ROWS
+    FETCH NEXT @PageSize ROWS ONLY;
+`);
+
+// get product best sell list
+defineProperty('TopBestProductSelling', `
+    SELECT TOP(@Top) Product.Id, Product.Code, Product.Name, SUM(OrderDetail.Amount) TotalSold,
+           SUM(OrderDetail.Amount * OrderDetail.Price) AS TotalRevenue
+    FROM [ORDER] INNER JOIN ORDERDetail ON OrderDetail.OrderId = [ORDER].Id
+    INNER JOIN Product ON OrderDetail.ProductId = Product.Id
+    WHERE [ORDER].StoreId = @StoreId AND [ORDER].OrderStatus = 1 AND {0}
+    GROUP BY Product.Id, Product.Code, Product.Name
     ORDER BY SUM(OrderDetail.Amount) DESC
 `);

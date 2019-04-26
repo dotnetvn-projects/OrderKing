@@ -5,6 +5,7 @@ const security = require('../services/service.security');
 const reportSqlCmd = require('../database/sqlcommand.report');
 const moment = require('moment');
 const common = require('../common/common');
+const format = require('string-format');
 
 // get summary report
 exports.getSummaryReport = async (storeId) => {
@@ -123,7 +124,7 @@ exports.getRevenueReport = async (reportData) => {
 exports.getSaleReportWithDateRagne = async (reportData) => {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
-    const dateRange = common.extractDateRange(reportData.StartDate, reportData.EndDate);
+    const dateRange = common.extractDateRange(reportData.startDate, reportData.endDate);
     var query = reportSqlCmd.getSaleReportWithDateRagne;
 
     var searchString = '';
@@ -138,8 +139,10 @@ exports.getSaleReportWithDateRagne = async (reportData) => {
     const pool = await poolPromise;
     const result = await pool.request()
         .input('StoreId', sql.BigInt, reportData.storeId)
-        .input('StartDate', sql.DateTime, startdate)
-        .input('EndDate', sql.DateTime, enddate)
+        .input('StartDate', sql.DateTime, dateRange.startDate)
+        .input('EndDate', sql.DateTime, dateRange.endDate)
+        .input('PageSize', sql.BigInt, reportData.pageSize)
+        .input('PageNumber', sql.BigInt, reportData.pageNumber)
         .query(format(query, searchString));
 
     if (result.recordset.length >= 0) {
@@ -151,8 +154,103 @@ exports.getSaleReportWithDateRagne = async (reportData) => {
             report.push({
                 CreatedDate: moment(value.CreatedDate).format('DD/MM/YYYY'),
                 TotalOrder: value.TotalOrder,
-                Totalsold: value.Totalsold,
-                TotalRevenue: value.TotalRevenue
+                TotalSold: value.TotalSold,
+                TotalRevenue: value.TotalRevenue,
+                TotalRecord: value.TotalRecord
+            });
+        });
+
+        response.model.data = report;
+    }
+    return response;
+};
+
+// get product sold report
+exports.getProductSoldReportWithDateRagne = async (reportData) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+    const dateRange = common.extractDateRange(reportData.startDate, reportData.endDate);
+    var query = reportSqlCmd.ProductSoldReportWithDate;
+
+    var searchString = '';
+    if (dateRange.startDate !== null && dateRange.endDate !== null) {
+        searchString += '(CAST([ORDER].CreatedDate AS DATE) BETWEEN CAST(@StartDate AS DATE) AND CAST(@EndDate AS DATE)) ';
+    } else if (dateRange.startDate !== null && dateRange.endDate === null) {
+        searchString += 'CAST([ORDER].CreatedDate AS DATE) >= CAST(@StartDate AS DATE) ';
+    } else if (dateRange.endDate !== null && dateRange.startDate === null) {
+        searchString += 'CAST([ORDER].CreatedDate AS DATE) <= CAST(@EndDate AS DATE) ';
+    }
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('StoreId', sql.BigInt, reportData.storeId)
+        .input('StartDate', sql.DateTime, dateRange.startDate)
+        .input('EndDate', sql.DateTime, dateRange.endDate)
+        .input('PageSize', sql.BigInt, reportData.pageSize)
+        .input('PageNumber', sql.BigInt, reportData.pageNumber)
+        .query(format(query, searchString));
+
+    if (result.recordset.length >= 0) {
+        var report = [];
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+
+        result.recordset.forEach(function (value) {
+            report.push({
+                ProductId: security.encrypt(value.Id + '_' + security.serverKey()),
+                ProductName: value.Name,
+                ProductCode: value.Code,
+                TotalSold: value.TotalSold,
+                TotalRevenue: value.TotalRevenue,
+                TotalRecord: value.TotalRecord
+            });
+        });
+
+        response.model.data = report;
+    }
+    return response;
+};
+
+// get best product selling list
+exports.getTopBestSelling = async (reportData) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+    var query = reportSqlCmd.TopBestProductSelling;
+
+    var searchString = '';
+
+    if (reportData.type === "Day") {
+        searchString = 'CAST([Order].CreatedDate AS DATE) = CAST(GETDATE() AS DATE))';
+    } else if (reportData.type === "Week") {
+        searchString = 'CAST([Order].CreatedDate AS DATE) BETWEEN DATEADD(DAY, -7, GETDATE()) AND DATEADD(DAY, 1, GETDATE())';
+    } else if (reportData.type === "Month") {
+        searchString = 'MONTH([Order].CreatedDate) = MONTH(GETDATE()) AND YEAR([Order].CreatedDate) = YEAR(GETDATE())';
+    } else if (reportData.type === "Year") {
+        searchString = 'YEAR([Order].CreatedDate) = YEAR(GETDATE())';
+    } else {
+        searchString = '1=1';
+    }
+
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('StoreId', sql.BigInt, reportData.storeId)
+        .input('Top', sql.Int, reportData.top)
+        .query(format(query, searchString));
+
+    if (result.recordset.length >= 0) {
+        var report = [];
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+
+        result.recordset.forEach(function (value) {
+            report.push({
+                ProductId: security.encrypt(value.Id + '_' + security.serverKey()),
+                ProductName: value.Name,
+                ProductCode: value.Code,
+                TotalSold: value.TotalSold,
+                TotalRevenue: value.TotalRevenue,
+                TotalRecord: value.TotalRecord
             });
         });
 
