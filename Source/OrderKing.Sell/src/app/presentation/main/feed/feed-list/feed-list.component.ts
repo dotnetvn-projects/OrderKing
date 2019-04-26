@@ -5,6 +5,7 @@ import { ItemContentType } from '../../../shared/commons/enums/item-content-type
 
 @Component({
   selector: 'app-feed-list',
+  styleUrls: ["./feed-list.component.css"],
   templateUrl: './feed-list.component.html'
 })
 export class FeedListComponent implements OnInit {

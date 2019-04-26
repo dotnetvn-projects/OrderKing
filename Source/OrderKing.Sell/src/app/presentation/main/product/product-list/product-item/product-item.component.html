@@ -1,16 +1,16 @@
 <div class="product-item panel box-shadow-panel">
-    <a class="thumbnail top-radius" routerLink="/product/detail/1">
+    <a class="thumbnail" routerLink="/product/detail/1">
         <img class="top-radius" src="{{product.thumbnailUrl}}" alt="">
     </a>
     <div class="panel-body">
         <h2 class="module-title">
             <a routerLink="/product/detail/1">{{product.name}}</a>
         </h2>
-        <p class="price">{{product.price}} vnđ</p>
+        <p class="text-warning price">{{product.price}} vnđ</p>
     </div>
     <div class="panel-footer">
-        <button class="btn btn-success">
-            +
+        <button class="btn btn-outline-dark btn-book">
+            + Chọn
         </button>
     </div>
 </div>
