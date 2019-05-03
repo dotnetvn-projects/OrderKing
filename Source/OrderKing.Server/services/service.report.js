@@ -220,7 +220,7 @@ exports.getTopBestSelling = async (reportData) => {
     var searchString = '';
 
     if (reportData.type === "Day") {
-        searchString = 'CAST([Order].CreatedDate AS DATE) = CAST(GETDATE() AS DATE))';
+        searchString = 'CAST([Order].CreatedDate AS DATE) = CAST(GETDATE() AS DATE)';
     } else if (reportData.type === "Week") {
         searchString = 'CAST([Order].CreatedDate AS DATE) BETWEEN DATEADD(DAY, -7, GETDATE()) AND DATEADD(DAY, 1, GETDATE())';
     } else if (reportData.type === "Month") {

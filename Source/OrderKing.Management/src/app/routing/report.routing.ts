@@ -4,5 +4,5 @@ import { AuthGuard } from '../framework/framework.auth.guard';
 
 export const ReportRoutes = [
     { path: 'doanh-thu-ban-hang', component: ReportRevenueComponent , canActivate: [AuthGuard] },
-    { path: 'san-pham-ban-chay', component: ReportProductComponent , canActivate: [AuthGuard] }
+    { path: 'mat-hang-ban-chay', component: ReportProductComponent , canActivate: [AuthGuard] }
 ];

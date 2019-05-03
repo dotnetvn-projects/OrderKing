@@ -36,7 +36,6 @@ export class ReportService {
   private topProductBestSellReportSource = new BehaviorSubject<ProductSoldReportModel>(new ProductSoldReportModel());
   TopProductBestSellReport = this.topProductBestSellReportSource.asObservable();
 
-
   private summaryReportSource = new BehaviorSubject<SummaryReportModel>(new SummaryReportModel());
   SummaryReport = this.summaryReportSource.asObservable();
 
@@ -234,7 +233,6 @@ export class ReportService {
               productReport.ProductName = e.ProductName;
               productReport.TotalSold = e.TotalSold;
               productReport.Revenue = e.TotalRevenue;
-              resultData.TotalRecord = e.TotalRecord;
               resultData.ProductList.push(productReport);
             });
 

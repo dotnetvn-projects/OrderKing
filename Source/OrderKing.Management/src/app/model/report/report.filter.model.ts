@@ -5,11 +5,15 @@ export class ReportFilterModel {
   Top: number;
   PageSize: number;
   PageNumber: number;
+  TopList: Array<number>;
 
   constructor () {
     this.defaultSearchDate();
     this.PageNumber = 1;
     this.PageSize = 10;
+    this.Top = 20;
+    this.TopList = [5, 10, 20, 30, 40, 50];
+    this.Type = '';
   }
 
   defaultSearchDate() {
