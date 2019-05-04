@@ -1,8 +1,13 @@
 <div class="row">
     <div class="col-6 col-sm-6 col-md-7 col-lg-8 col-xl-8">
-        <div class="row">
-            <app-feed-item *ngFor="let feed of feeds" [feedItem]="feed" class="col-xs-12 col-sm-12 col-md-6 col-lg-4"></app-feed-item>
+        <div class="feed-list">
+            <div class="row">
+               <app-feed-item *ngFor="let feed of feeds" [feedItem]="feed" class="col-xs-12 col-sm-12 col-md-6 col-lg-4"></app-feed-item>
+            </div>
         </div>
+    </div>
+    <div class="col-6 col-sm-6 col-md-5 col-lg-4 col-xl-4">
+        <app-order-detail></app-order-detail>
     </div>
 </div>
 <!-- PAGING -->

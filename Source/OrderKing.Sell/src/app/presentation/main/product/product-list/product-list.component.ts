@@ -22,7 +22,7 @@ export class ProductListComponent implements OnInit {
         thumbnailUrl: 'assets/photos/peach.png',
         description: '',
         name: 'Đào ngâm thuốc sáu tháng không hư',
-        id: '2353443435',
+        id: i.toString(),
         createdDate: '4/12/2018',
         price: 100000,
         url: '/product/detail/1',
