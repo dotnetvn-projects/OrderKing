@@ -36,6 +36,7 @@
     <Compile Include="common\image.process.js" />
     <Compile Include="common\io.js" />
     <Compile Include="common\logger.js" />
+    <Compile Include="database\sqlcommand.audit.js" />
     <Compile Include="database\sqlcommand.auth.js" />
     <Compile Include="database\dbconnection.js" />
     <Compile Include="database\sqlcommand.catalog.js" />
@@ -44,6 +45,7 @@
     <Compile Include="database\sqlcommand.report.js" />
     <Compile Include="database\sqlcommand.store.js" />
     <Compile Include="database\sqlcommand.user.js" />
+    <Compile Include="eventHandlers\event.handler.audit.js" />
     <Compile Include="eventHandlers\event.handler.email.js" />
     <Compile Include="middlewares\middleware.request.validate.js" />
     <Compile Include="models\auth\model.auth.js" />
@@ -65,6 +67,7 @@
     <Compile Include="routes\api.public\route.api.store.js" />
     <Compile Include="routes\api.public\route.api.user.js" />
     <Compile Include="server.js" />
+    <Compile Include="services\service.audit.js" />
     <Compile Include="services\service.auth.js" />
     <Compile Include="services\service.catalog.js" />
     <Compile Include="services\service.cronjob.js" />

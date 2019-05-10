@@ -18,6 +18,8 @@ export class ReportProductComponent extends BaseComponent {
   TopProductBestSellReport: ProductSoldReportModel = new ProductSoldReportModel();
   TopProductSellReportFilter: ReportFilterModel = new ReportFilterModel();
 
+  TopFourProductBestSellReport: ProductSoldReportModel = new ProductSoldReportModel();
+  TopFourProductSellReportFilter: ReportFilterModel = new ReportFilterModel();
 
   constructor(
     private titleService: Title,
@@ -30,6 +32,7 @@ export class ReportProductComponent extends BaseComponent {
   // subscribe object from service
   subscribeObject() {
     this.reportService.TopProductBestSellReport.subscribe(data => this.TopProductBestSellReport = data);
+    this.reportService.TopFourProductBestSellReport.subscribe(data => this.TopFourProductBestSellReport = data);
   }
 
   // init component
@@ -37,10 +40,17 @@ export class ReportProductComponent extends BaseComponent {
     this.titleService.setTitle(AppMessage.APP_TITLE_MESSAGE.REPORT_REVENUE);
     this.subscribeObject();
     this.loadTopProductBestSell();
+    this.loadTopFourProductBestSell();
   }
 
   // load all top report
   loadTopProductBestSell() {
-     this.reportService.loadProductBestSellingReport(this.TopProductSellReportFilter, null);
+     this.reportService.loadProductBestSellingReport(this.TopProductSellReportFilter, false, null);
   }
+
+   // load top four
+   loadTopFourProductBestSell() {
+    this.TopFourProductSellReportFilter.Top = 4;
+    this.reportService.loadProductBestSellingReport(this.TopFourProductSellReportFilter, true, null);
+ }
 }

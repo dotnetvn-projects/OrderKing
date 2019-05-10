@@ -36,6 +36,9 @@ export class ReportService {
   private topProductBestSellReportSource = new BehaviorSubject<ProductSoldReportModel>(new ProductSoldReportModel());
   TopProductBestSellReport = this.topProductBestSellReportSource.asObservable();
 
+  private topFourProductBestSellReportSource = new BehaviorSubject<ProductSoldReportModel>(new ProductSoldReportModel());
+  TopFourProductBestSellReport = this.topFourProductBestSellReportSource.asObservable();
+
   private summaryReportSource = new BehaviorSubject<SummaryReportModel>(new SummaryReportModel());
   SummaryReport = this.summaryReportSource.asObservable();
 
@@ -217,7 +220,7 @@ export class ReportService {
 
 
     // ** get top product best selling **/
-    loadProductBestSellingReport(filter: ReportFilterModel, updateUI) {
+    loadProductBestSellingReport(filter: ReportFilterModel, isGetTop4: boolean, updateUI) {
       const params = new Dictionary<string, any>();
       params.put('Type', filter.Type);
       params.put('Top', filter.Top);
@@ -236,7 +239,12 @@ export class ReportService {
               resultData.ProductList.push(productReport);
             });
 
-            this.topProductBestSellReportSource.next(resultData);
+            if (isGetTop4 === true) {
+                this.topFourProductBestSellReportSource.next(resultData);
+            } else {
+                this.topProductBestSellReportSource.next(resultData);
+            }
+
             if (updateUI !== null) {
               updateUI();
             }
