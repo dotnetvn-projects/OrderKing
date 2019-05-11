@@ -28,7 +28,7 @@ export class FeedListComponent implements OnInit {
         name: 'Đào ngâm thuốc sáu tháng không hư',
         id: i.toString(),
         createdDate: '4/12/2018',
-        price: 100000,
+        price: 8*(i+1)*1000,
         url: '/product/detail/1',
         updatedDate: '4/12/2018',
       });

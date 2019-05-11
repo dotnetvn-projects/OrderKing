@@ -1,0 +1,22 @@
+<li class="order-item">
+    <div class="row">
+        <div class="col-3 col-sm-4 col-md-3 col-lg-3">
+            <img class="top-radius thumbnail" src={{order.productImageUrl}} alt="">
+        </div>
+        <div class="col-9 col-sm-8 col-md-9 col-lg-9">
+            <h4 class="title">{{order.productName}}</h4>
+            <div class="info">
+                <span>
+                    <label>Số lượng:</label> {{order.quantity}}
+                </span>
+                <span>
+                    <label>Đơn giá:</label> {{order.price}}
+                </span>
+                <span>
+                    <label>Tổng giá:</label> {{order.totalPrice}}
+                </span>
+            </div>
+        </div>
+    </div>
+</li>
+
