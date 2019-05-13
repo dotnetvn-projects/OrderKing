@@ -1,1 +1,14 @@
 <h5 class="title">Đơn hàng</h5>
+
+<ul class="list-unstyled">
+    <app-order-item *ngFor="let orderItem of orders" [order]="orderItem"></app-order-item>
+</ul>
+
+<div class="detail-info">
+    <span>Đã đặt <b>{{totalProduct}} sản phẩm</b> với tổng giá <b>{{totalPrice}} vnđ</b></span>
+</div>
+
+<div class="footer text-center">
+    <button class="btn btn-secondary">Làm Lại</button>
+    <button class="btn btn-success">Thanh Toán</button>
+</div>

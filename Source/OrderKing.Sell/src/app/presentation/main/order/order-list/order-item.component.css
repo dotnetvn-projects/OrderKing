@@ -1,0 +1,35 @@
+.thumbnail{
+    max-width: 100%;
+    border-radius: 4px;
+}
+
+.order-item{
+    margin-bottom: 8px;
+    background: #f9f9f9;
+    border: 1px solid #F0F0F0;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.title{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.info{
+    font-size: 14px;
+}
+
+.info span{
+    margin-right: 15px;
+    color: #333;
+    font-weight: 600;
+}
+
+.info span:last-child{
+    margin-right: 0;
+}
+
+.info label{
+    color: #666;
+}
