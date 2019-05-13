@@ -1,32 +1,34 @@
 const { poolPromise, sql } = require('../database/dbconnection');
-const moment = require('moment');
-const authenSqlCmd = require('../database/sqlcommand.audit');
+const auditSqlCmd = require('../database/sqlcommand.audit');
+const userService = require('../services/service.user');
 var events = require('events');
 
 var eventEmitter = new events.EventEmitter();
 
-eventEmitter.on('insertAudit', async (accountId, ip, userAgent, referrer,
-    accountToken, expireddate) => {
-    //insert an record to sessionlogin table
-    var now = new Date(moment().format('YYYY-MM-DD HH:mm:ss'));
-    var expired = new Date(expireddate);
+eventEmitter.on('insertAudit', async (storeId, accessToken, content) => {
+    var accountId = await userService.getAccountIdByAccessToken(accessToken);
     const pool = await poolPromise;
     const result = await pool.request()
-        .input('AccountId', sql.Int, accountId)
-        .input('Ip', sql.NVarChar, ip)
-        .input('UsetAgent', sql.NVarChar, userAgent)
-        .input('Referrer', sql.NVarChar, referrer)
-        .input('LoginTime', sql.DateTime, now)
-        .input('LastAccessTime', sql.DateTime, now)
-        .input('AccessToken', sql.NVarChar, accountToken)
-        .input('AccessTokenExpired', sql.DateTime, expired)
-        .query(authenSqlCmd.insertLoginSession);
-
+        .input('StoreId', sql.BigInt, storeId)
+        .input('AccountId', sql.BigInt, accountId)
+        .input('AuditContent', sql.NVarChar, content)
+        .query(auditSqlCmd.insertAudit);
     console.log(result.rowsAffected[0]);
 });
 
-var action = function (accountId, ip, userAgent, referrer, accountToken, expireddate) {
-    eventEmitter.emit(insertAudit, accountId, ip, userAgent, referrer, accountToken, expireddate);
+eventEmitter.on('deleteAudit', async (auditId) => {
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('Id', sql.BigInt, auditId)
+        .input('AccountId', sql.Int, accountId)
+        .input('AuditContent', sql.NVarChar, content)
+        .query(auditSqlCmd.deleteAudit);
+    console.log(result.rowsAffected[0]);
+});
+
+var action = function (type, storeId, accessToken, content, auditId) {
+    eventEmitter.emit(type, storeId, accessToken, content, auditId);
 };
 
 exports.fire = action;

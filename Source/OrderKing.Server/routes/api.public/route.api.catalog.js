@@ -24,6 +24,7 @@ catalogrouter.post('/create-category', async (req, res, next) => {
             var category = {
                 storeId: storeId,
                 name: req.body.Name,
+                accessToken: accessToken,
                 image:null
             };
 
@@ -58,7 +59,8 @@ catalogrouter.post('/change-category-image', multipartMiddleware, async (req, re
             var result = await service.updateCatagoryImage({
                 image: imageData,
                 id: categoryId,
-                storeId: storeId
+                storeId: storeId,
+                accessToken: accessToken
             });
 
             io.deleteFile(req.files.CateImage.path);
@@ -92,7 +94,8 @@ catalogrouter.post('/update-category', async (req, res, next) => {
             var category = {
                 storeId: storeId,
                 name: req.body.Name,
-                id: cateId
+                id: cateId,
+                accessToken: accessToken
             };
 
             var result = await service.updateCatagory(category);
@@ -125,7 +128,8 @@ catalogrouter.post('/delete-category', async (req, res, next) => {
 
             var category = {
                 storeId: storeId,
-                id: cateId
+                id: cateId,
+                accessToken: accessToken
             };
             var result = await service.deactivateCategory(category);
 
@@ -148,7 +152,11 @@ catalogrouter.post('/category-list', async (req, res, next) => {
         var accessToken = req.body.AccessToken;
         var storeId = await storeService.getStoreIdByAccessToken(accessToken);
 
-        var result = await service.getCategoryInStore(storeId);
+        var category = {
+            storeId: storeId,
+            accessToken: accessToken
+        }; 
+        var result = await service.getCategoryInStore(category);
 
         var message = common.createResponseMessage(result.model.category,
             result.model.responsecode,
@@ -166,8 +174,16 @@ catalogrouter.post('/category-list', async (req, res, next) => {
 catalogrouter.post('/category-info', async (req, res, next) => {
     try {
         var cateId = security.decrypt(req.body.Id).split('_')[0];
+        var accessToken = req.body.AccessToken;
+        var storeId = await storeService.getStoreIdByAccessToken(accessToken);
 
-        var result = await service.getCategoryById(cateId);
+        var category = {
+            id: cateId,
+            storeId: storeId,
+            accessToken: accessToken
+        }; 
+
+        var result = await service.getCategoryById(category);
 
         var message = common.createResponseMessage(result.model.category,
             result.model.responsecode,
@@ -199,7 +215,8 @@ catalogrouter.post('/create-product', async (req, res, next) => {
                 inStock: req.body.InStock,
                 categoryId: security.decrypt(req.body.CategoryId).split('_')[0],
                 price: req.body.Price,
-                image: null
+                image: null,
+                accessToken: accessToken
             };     
 
             product.image = io.readFileToBinary('./resources/images/default-product.png');            
@@ -240,7 +257,8 @@ catalogrouter.post('/update-product', async (req, res, next) => {
                 description: req.body.Description,
                 categoryId: cateId,
                 price: req.body.Price,
-                id: productId
+                id: productId,
+                accessToken: accessToken
             };
 
             var result = await service.updateProduct(product);
@@ -271,7 +289,8 @@ catalogrouter.post('/change-product-image', multipartMiddleware, async (req, res
             var result = await service.updateProductImage({
                 image: imageData,
                 id: productId,
-                storeId: storeId
+                storeId: storeId,
+                accessToken: accessToken
             });
 
             io.deleteFile(req.files.ProductImage.path);
@@ -304,7 +323,8 @@ catalogrouter.post('/delete-product', async (req, res, next) => {
 
             var product = {
                 storeId: storeId,
-                id: productId
+                id: productId,
+                accessToken: accessToken
             };
 
             var result = await service.deactivateProduct(product);

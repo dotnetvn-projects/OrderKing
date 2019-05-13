@@ -5,6 +5,7 @@ const status = require('../resources/resource.api.status');
 const { poolPromise, sql } = require('../database/dbconnection');
 const security = require('../services/service.security');
 const moment = require('moment');
+const auditHandler = require('../eventHandlers/event.handler.audit');
 
 //generate product code
 function generateProductCode(id) {
@@ -37,6 +38,9 @@ exports.createCatagory = async (categoryobject) => {
             categoryid: security.encrypt(result.recordset[0].CategoryId + '_' + security.serverKey()),
             categoryname: categoryobject.name
         };
+
+        auditHandler.fire("insertAudit", categoryobject.storeId,
+            categoryobject.accessToken, "T?o danh m?c " + categoryobject.name.toUpperCase());
     }
 
     return categoryResponse;
@@ -61,6 +65,9 @@ exports.updateCatagory = async (categoryobject) => {
             categoryid: security.encrypt(categoryobject.id + '_' + security.serverKey()),
             categoryname: categoryobject.name
         };
+
+        auditHandler.fire("insertAudit", categoryobject.storeId,
+            categoryobject.accessToken, "C?p nh?t danh m?c " + categoryobject.name.toUpperCase());
     }
 
     return categoryResponse;
@@ -81,6 +88,10 @@ exports.updateCatagoryImage = async (categoryobject) => {
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
         categoryResponse.model.statusmessage = status.common.suscess;
         categoryResponse.model.responsecode = status.common.suscesscode;
+
+        var cate = await module.exports.getCategoryById({ id: categoryobject.id }, false);
+        auditHandler.fire("insertAudit", categoryobject.storeId,
+            categoryobject.accessToken, "C?p nh?t ?nh cho danh m?c " + cate.categoryname.toUpperCase());
     }
 
     return categoryResponse;
@@ -100,19 +111,23 @@ exports.deactivateCategory = async (categoryobject) => {
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
         categoryResponse.model.statusmessage = status.common.suscess;
         categoryResponse.model.responsecode = status.common.suscesscode;
+
+        var cate = await module.exports.getCategoryById({ id: categoryobject.id }, false);
+        auditHandler.fire("insertAudit", categoryobject.storeId,
+            categoryobject.accessToken, "X?a danh m?c " + cate.categoryname.toUpperCase());
     }
 
     return categoryResponse;
 };
 
 //get category list in store
-exports.getCategoryInStore = async (storeId) => {
+exports.getCategoryInStore = async (categoryobject) => {
     categoryResponse.model.statusmessage = status.common.failed;
     categoryResponse.model.responsecode = status.common.failedcode;
 
     const pool = await poolPromise;
     var result = await pool.request()
-        .input('StoreId', sql.BigInt, storeId)
+        .input('StoreId', sql.BigInt, categoryobject.storeId)
         .query(catalogSqlCmd.getCategoryInStore);
 
     if (result.recordset.length > 0) {
@@ -129,19 +144,22 @@ exports.getCategoryInStore = async (storeId) => {
         });
 
         categoryResponse.model.category = categories;
+
+        auditHandler.fire("insertAudit", categoryobject.storeId,
+            categoryobject.accessToken, "?? truy v?n danh s?ch danh m?c t? c?a h?ng");
     }
 
     return categoryResponse;
 };
 
 //get category in store by Id
-exports.getCategoryById = async (id) => {
+exports.getCategoryById = async (categoryobject, allowLog = true) => {
     categoryResponse.model.statusmessage = status.common.failed;
     categoryResponse.model.responsecode = status.common.failedcode;
 
     const pool = await poolPromise;
     var result = await pool.request()
-        .input('Id', sql.BigInt, id)
+        .input('Id', sql.BigInt, categoryobject.id)
         .query(catalogSqlCmd.getCategoryById);
 
     if (result.recordset.length > 0) {
@@ -152,6 +170,11 @@ exports.getCategoryById = async (id) => {
             categoryname: result.recordset[0].Name,
             createddate: moment(result.recordset[0].CreatedDate).format('DD/MM/YYYY')
         };
+
+        if (allowLog) {
+            auditHandler.fire("insertAudit", categoryobject.storeId,
+                categoryobject.accessToken, "?? truy v?n danh m?c " + result.recordset[0].Name.toUpperCase());
+        }
     }
 
     return categoryResponse;
@@ -191,6 +214,9 @@ exports.createProduct = async (productobject) => {
             description: productobject.description,
             price: productobject.price
         };
+
+        auditHandler.fire("insertAudit", productobject.storeId,
+            productobject.accessToken, "T?o m?i m?t m?t h?ng " + productobject.name.toUpperCase());
     }
 
     return productResponse;
@@ -211,6 +237,10 @@ exports.updateProductImage = async (productobject) => {
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
         categoryResponse.model.statusmessage = status.common.suscess;
         categoryResponse.model.responsecode = status.common.suscesscode;
+
+        var pro = await module.exports.getProductInStoreById({ id: productobject.id, storeId: productobject.storeId }, false);
+        auditHandler.fire("insertAudit", productobject.storeId,
+            productobject.accessToken, "C?p nh?t h?nh ?nh c?a m?t h?ng " + pro.productname.toUpperCase());
     }
 
     return categoryResponse;
@@ -242,21 +272,24 @@ exports.updateProduct = async (productobject) => {
             description: productobject.description,
             price: productobject.price
         };
+
+        auditHandler.fire("insertAudit", productobject.storeId,
+            productobject.accessToken, "C?p nh?t th?ng tin m?t h?ng " + productobject.name.toUpperCase());
     }
 
     return productResponse;
 };
 
 //deactive category
-exports.deactivateCategory = async (categoryObject) => {
+exports.deactivateProduct = async (productObject) => {
     productResponse.model.statusmessage = status.common.failed;
     productResponse.model.responsecode = status.common.failedcode;
 
     const pool = await poolPromise;
     const result = await pool.request()
-        .input('Id', sql.BigInt, categoryObject.id)
-        .input('StoreId', sql.BigInt, categoryObject.storeId)
-        .query(catalogSqlCmd.deactivateCategory);
+        .input('Id', sql.BigInt, productObject.id)
+        .input('StoreId', sql.BigInt, productObject.storeId)
+        .query(catalogSqlCmd.deactiveProduct);
 
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
         productResponse.model.statusmessage = status.common.suscess;
@@ -265,7 +298,6 @@ exports.deactivateCategory = async (categoryObject) => {
 
     return productResponse;
 };
-
 
 //get product list in store
 exports.getProductsInStore = async (storeId) => {
@@ -341,7 +373,7 @@ exports.getProductsInStoreByCate = async (productobject) => {
 };
 
 //get product in store by id
-exports.getProductInStoreById = async (productobject) => {
+exports.getProductInStoreById = async (productobject, allowLog = true) => {
     productResponse.model.statusmessage = status.common.failed;
     productResponse.model.responsecode = status.common.failedcode;
 
