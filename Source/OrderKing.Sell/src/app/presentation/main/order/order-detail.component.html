@@ -1,7 +1,8 @@
 <h5 class="title">Đơn hàng</h5>
 
 <ul class="list-unstyled">
-    <app-order-item *ngFor="let orderItem of orders" [order]="orderItem" (onRemoved)="removeOrder($event)"></app-order-item>
+    <app-order-item *ngFor="let orderItem of orders" [order]="orderItem" (onRemoved)="removeOrder($event)"
+    (onQuantityDecreased)="decreaseQuantity($event)"></app-order-item>
 </ul>
 
 <div class="detail-info">

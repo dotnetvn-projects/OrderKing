@@ -13,6 +13,7 @@ export class OrderItemComponent implements OnInit {
   faTimes = faTimes;
   faArrowAltCircleDown = faArrowAltCircleDown;
   @Output() onRemoved: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onQuantityDecreased: EventEmitter<any> = new EventEmitter<any>();
   
   constructor() {
 
@@ -26,8 +27,9 @@ export class OrderItemComponent implements OnInit {
     if(this.order.quantity > 1){
       this.order.quantity -= 1;
       this.order.totalPrice -= this.order.price;
+      this.onQuantityDecreased.emit(this.order);
     }
-    else{
+    else {
       this.remove();
     }
   }

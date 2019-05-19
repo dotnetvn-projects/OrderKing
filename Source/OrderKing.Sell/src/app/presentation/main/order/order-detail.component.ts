@@ -69,10 +69,20 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
       return value.productId !== order.productId;
     });
 
+    this.totalPrice -= order.totalPrice;
+    this.totalProduct -= order.quantity;
+
     this.orders = [...productOrders];
+  }
+
+  decreaseQuantity(order: OrderItem){
+    this.totalPrice -= order.price;
+    this.totalProduct -= 1;
   }
 
   clear(){
     this.orders = [];
+    this.totalPrice = 0;
+    this.totalProduct = 0;
   }
 }
