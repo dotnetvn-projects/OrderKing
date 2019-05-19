@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { OrderDetailComponent } from './order-detail.component';
 import { OrderItemComponent } from './order-list/order-item.component';
 import { CoreModule } from '../../core/core.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -9,7 +10,8 @@ import { CoreModule } from '../../core/core.module';
     OrderItemComponent
   ],
   imports: [
-    CoreModule
+    CoreModule,
+    FontAwesomeModule
   ],
   exports: [
     OrderDetailComponent,

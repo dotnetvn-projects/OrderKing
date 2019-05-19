@@ -62,4 +62,17 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
     // prevent memory leak when component destroyed
     this.subscription.unsubscribe();
   }
+
+  removeOrder(order: OrderItem){
+    let productOrders: OrderItem[] = [];
+    productOrders = this.orders.filter(function(value, index, arr){
+      return value.productId !== order.productId;
+    });
+
+    this.orders = [...productOrders];
+  }
+
+  clear(){
+    this.orders = [];
+  }
 }

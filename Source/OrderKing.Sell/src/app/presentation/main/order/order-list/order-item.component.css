@@ -1,6 +1,7 @@
 .thumbnail{
     max-width: 100%;
     border-radius: 4px;
+    margin-right: 5px;
 }
 
 .order-item{
@@ -11,9 +12,13 @@
     border-radius: 4px;
 }
 
+.product-detail{
+    padding-left: 8px;
+}
+
 .title{
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .info{
@@ -21,7 +26,7 @@
 }
 
 .info span{
-    margin-right: 15px;
+    margin-right: 8px;
     color: #333;
     font-weight: 600;
 }
@@ -32,4 +37,13 @@
 
 .info label{
     color: #666;
+}
+
+.tools .btn{
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.tools .btn:last-child{
+    margin-bottom: 0;
 }

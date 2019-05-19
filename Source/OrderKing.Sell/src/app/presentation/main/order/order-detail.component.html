@@ -1,7 +1,7 @@
 <h5 class="title">Đơn hàng</h5>
 
 <ul class="list-unstyled">
-    <app-order-item *ngFor="let orderItem of orders" [order]="orderItem"></app-order-item>
+    <app-order-item *ngFor="let orderItem of orders" [order]="orderItem" (onRemoved)="removeOrder($event)"></app-order-item>
 </ul>
 
 <div class="detail-info">
@@ -9,6 +9,6 @@
 </div>
 
 <div class="footer text-center">
-    <button class="btn btn-secondary">Làm Lại</button>
+    <button class="btn btn-secondary" (click)="clear()">Làm Lại</button>
     <button class="btn btn-success">Thanh Toán</button>
 </div>
