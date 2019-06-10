@@ -5,21 +5,20 @@ const { poolPromise, sql } = require('../database/dbconnection');
 const security = require('../services/service.security');
 const moment = require('moment');
 const format = require('string-format');
-const auditHandler = require('../eventHandlers/event.handler.audit');
+const common = require('../common/common');
 
 //delete audit
-exports.deleteAudit = async (auditData) => {
-    var data = auditData.split(',');
-    var auditId = "";
-    for (var i = 0; i < data.length; i++) {
-        var id = security.decrypt(data[i]).split('_')[0];
-        if (auditId !== "") {
-            auditId = auditid + ", " + id;
-        } else {
-            auditId = id;
-        }
-    }
-    auditHandler.fire("deleteAudit", auditId); 
+exports.deleteAudit = async (auditId) => {
+
+    var id = security.decrypt(auditId[i]).split('_')[0];
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('Id', sql.NVarChar, id)
+        .query(auditSqlCmd.deleteAudit);
+
+    response.model.statusmessage = status.common.suscess;
+    response.model.responsecode = status.common.suscesscode;
+    response.model.audit = true;
 };
 
 //get audit list in store
@@ -42,8 +41,8 @@ exports.getAuditList = async (auditData) => {
         .input('StoreId', sql.BigInt, auditData.storeId)
         .input('PageSize', sql.Int, auditData.pageSize)
         .input('PageNumber', sql.Int, auditData.pageNumber)
-        .input('StartDate', sql.DateTime, startDate)
-        .input('EndDate', sql.DateTime, endDate)
+        .input('StartDate', sql.DateTime, dateRange.startDate)
+        .input('EndDate', sql.DateTime, dateRange.endDate)
         .query(format(query, searchString));
 
     if (result.recordset.length > 0) {
@@ -52,10 +51,11 @@ exports.getAuditList = async (auditData) => {
         var audits = [];
         result.recordset.forEach(function (value) {
             audits.push({
-                auditId: security.encrypt(value.Id + '_' + security.serverKey()),
-                staffName: value.StaffName,
-                auditContent: value.AuditContent,
-                createdDate: moment(value.CreatedDate).format('DD/MM/YYYY')
+                AuditId: security.encrypt(value.Id + '_' + security.serverKey()),
+                StaffName: value.StaffName,
+                AuditContent: value.AuditContent,
+                CreatedDate: moment(value.CreatedDate).format('DD/MM/YYYY'),
+                TotalRecord: value.TotalRecord
             });
         });
 

@@ -1,10 +1,11 @@
-const categoryResponse = require('../models/category/model.category');
+﻿const categoryResponse = require('../models/category/model.category');
 const productResponse = require('../models/product/model.product');
 const catalogSqlCmd = require('../database/sqlcommand.catalog');
 const status = require('../resources/resource.api.status');
 const { poolPromise, sql } = require('../database/dbconnection');
 const security = require('../services/service.security');
 const moment = require('moment');
+const format = require('string-format');
 const auditHandler = require('../eventHandlers/event.handler.audit');
 
 //generate product code
@@ -40,7 +41,7 @@ exports.createCatagory = async (categoryobject) => {
         };
 
         auditHandler.fire("insertAudit", categoryobject.storeId,
-            categoryobject.accessToken, "T?o danh m?c " + categoryobject.name.toUpperCase());
+            categoryobject.accessToken, "Tạo danh mục" + categoryobject.name.toUpperCase());
     }
 
     return categoryResponse;
@@ -67,7 +68,7 @@ exports.updateCatagory = async (categoryobject) => {
         };
 
         auditHandler.fire("insertAudit", categoryobject.storeId,
-            categoryobject.accessToken, "C?p nh?t danh m?c " + categoryobject.name.toUpperCase());
+            categoryobject.accessToken, "Cập nhật danh mục " + categoryobject.name.toUpperCase());
     }
 
     return categoryResponse;
@@ -91,7 +92,7 @@ exports.updateCatagoryImage = async (categoryobject) => {
 
         var cate = await module.exports.getCategoryById({ id: categoryobject.id }, false);
         auditHandler.fire("insertAudit", categoryobject.storeId,
-            categoryobject.accessToken, "C?p nh?t ?nh cho danh m?c " + cate.categoryname.toUpperCase());
+            categoryobject.accessToken, "Cập nhật ảnh cho danh mục " + cate.categoryname.toUpperCase());
     }
 
     return categoryResponse;
@@ -101,6 +102,8 @@ exports.updateCatagoryImage = async (categoryobject) => {
 exports.deactivateCategory = async (categoryobject) => {
     categoryResponse.model.statusmessage = status.common.failed;
     categoryResponse.model.responsecode = status.common.failedcode;
+
+    var cate = await module.exports.getCategoryById({ id: categoryobject.id }, false);
 
     const pool = await poolPromise;
     const result = await pool.request()
@@ -112,9 +115,9 @@ exports.deactivateCategory = async (categoryobject) => {
         categoryResponse.model.statusmessage = status.common.suscess;
         categoryResponse.model.responsecode = status.common.suscesscode;
 
-        var cate = await module.exports.getCategoryById({ id: categoryobject.id }, false);
+        
         auditHandler.fire("insertAudit", categoryobject.storeId,
-            categoryobject.accessToken, "X?a danh m?c " + cate.categoryname.toUpperCase());
+            categoryobject.accessToken, "Xóa danh mục " + cate.categoryname.toUpperCase());
     }
 
     return categoryResponse;
@@ -146,7 +149,7 @@ exports.getCategoryInStore = async (categoryobject) => {
         categoryResponse.model.category = categories;
 
         auditHandler.fire("insertAudit", categoryobject.storeId,
-            categoryobject.accessToken, "?? truy v?n danh s?ch danh m?c t? c?a h?ng");
+            categoryobject.accessToken, "Truy vấn danh sách danh mục từ cửa hàng");
     }
 
     return categoryResponse;
@@ -173,7 +176,7 @@ exports.getCategoryById = async (categoryobject, allowLog = true) => {
 
         if (allowLog) {
             auditHandler.fire("insertAudit", categoryobject.storeId,
-                categoryobject.accessToken, "?? truy v?n danh m?c " + result.recordset[0].Name.toUpperCase());
+                categoryobject.accessToken, "Truy vấn danh mục " + result.recordset[0].Name.toUpperCase());
         }
     }
 
@@ -216,7 +219,7 @@ exports.createProduct = async (productobject) => {
         };
 
         auditHandler.fire("insertAudit", productobject.storeId,
-            productobject.accessToken, "T?o m?i m?t m?t h?ng " + productobject.name.toUpperCase());
+            productobject.accessToken, "Tạo mới mặt hàng " + productobject.name.toUpperCase());
     }
 
     return productResponse;
@@ -240,18 +243,17 @@ exports.updateProductImage = async (productobject) => {
 
         var pro = await module.exports.getProductInStoreById({ id: productobject.id, storeId: productobject.storeId }, false);
         auditHandler.fire("insertAudit", productobject.storeId,
-            productobject.accessToken, "C?p nh?t h?nh ?nh c?a m?t h?ng " + pro.productname.toUpperCase());
+            productobject.accessToken, "Cập nhật hình ảnh của mặt hàng " + pro.productname.toUpperCase());
     }
 
     return categoryResponse;
 };
 
-
 //update product
 exports.updateProduct = async (productobject) => {
     productResponse.model.statusmessage = status.common.failed;
     productResponse.model.responsecode = status.common.failedcode;
-
+  
     const pool = await poolPromise;
     const result = await pool.request()
         .input('StoreId', sql.BigInt, productobject.storeId)
@@ -274,16 +276,17 @@ exports.updateProduct = async (productobject) => {
         };
 
         auditHandler.fire("insertAudit", productobject.storeId,
-            productobject.accessToken, "C?p nh?t th?ng tin m?t h?ng " + productobject.name.toUpperCase());
+            productobject.accessToken, "Cập nhật thông tin mặt hàng " + productobject.name.toUpperCase());
     }
 
     return productResponse;
 };
 
-//deactive category
+//deactive product
 exports.deactivateProduct = async (productObject) => {
     productResponse.model.statusmessage = status.common.failed;
     productResponse.model.responsecode = status.common.failedcode;
+    var pro = await module.exports.getProductInStoreById({ id: productobject.id, storeId: productobject.storeId }, false);
 
     const pool = await poolPromise;
     const result = await pool.request()
@@ -294,6 +297,9 @@ exports.deactivateProduct = async (productObject) => {
     if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
         productResponse.model.statusmessage = status.common.suscess;
         productResponse.model.responsecode = status.common.suscesscode;
+
+        auditHandler.fire("insertAudit", productobject.storeId,
+            productobject.accessToken, "Xóa mặt hàng " + pro.productname.toUpperCase());
     }
 
     return productResponse;
@@ -329,7 +335,10 @@ exports.getProductsInStore = async (storeId) => {
             });
         });
 
-         productResponse.model.product = products;
+        productResponse.model.product = products;
+
+        auditHandler.fire("insertAudit", productobject.storeId,
+            productobject.accessToken, "Truy vấn danh sách mặt hàng trong cửa hàng");
     }
 
     return productResponse;
@@ -367,6 +376,10 @@ exports.getProductsInStoreByCate = async (productobject) => {
         });
 
         productResponse.model.product = products;
+
+        var cate = await module.exports.getCategoryById({ id: productobject.categoryId }, false);
+        auditHandler.fire("insertAudit", productobject.storeId,
+            productobject.accessToken, format("Truy vấn danh sách mặt hàng của danh mục {0} trong cửa hàng", cate.categoryname.toUpperCase()));
     }
 
     return productResponse;
@@ -399,6 +412,11 @@ exports.getProductInStoreById = async (productobject, allowLog = true) => {
             price: result.recordset[0].Price,
             code: result.recordset[0].Code
         };
+
+        if (allowLog) {
+            auditHandler.fire("insertAudit", productobject.storeId,
+                productobject.accessToken, format("Truy vấn thông tin mặt hàng ", result.recordset[0].Name.toUpperCase()));
+        }
     }
     return productResponse;
 };

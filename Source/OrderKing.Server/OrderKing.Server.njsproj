@@ -60,6 +60,7 @@
     <Compile Include="models\user\model.userinfo.js" />
     <Compile Include="resources\resource.api.status.js" />
     <Compile Include="routes\api.management\route.api.management.catalog.js" />
+    <Compile Include="routes\api.public\route.api.audit.js" />
     <Compile Include="routes\api.public\route.api.catalog.js" />
     <Compile Include="routes\api.public\route.api.home.js" />
     <Compile Include="routes\api.public\route.api.order.js" />

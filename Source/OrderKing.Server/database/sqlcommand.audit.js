@@ -13,7 +13,7 @@ defineProperty('insertAudit', `
 
 //delete audit
 defineProperty('deleteAudit', `
-       DELETE FROM [dbo].[Audit] WHERE Id IN(@Id)
+       DELETE FROM [dbo].[Audit] WHERE Id = @Id
 `);
 
 //get audit list
@@ -23,8 +23,8 @@ defineProperty('getAuditList', `
                     SELECT AUDIT.Id
                     FROM AUDIT INNER JOIN STORE ON STORE.Id = AUDIT.StoreId
                     INNER JOIN ACCOUNT ON AUDIT.AccountId = ACCOUNT.Id
-                    INNER JOIN USERPROFILE ON USERPROFILE.AccountId = ACCOUNT.Id)
-                    WHERE AUDIT.StoreId = @StoreId
+                    INNER JOIN USERPROFILE ON USERPROFILE.AccountId = ACCOUNT.Id
+                    WHERE AUDIT.StoreId = @StoreId)
                 AS Temp
               );
 

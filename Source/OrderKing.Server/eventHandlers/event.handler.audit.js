@@ -16,17 +16,6 @@ eventEmitter.on('insertAudit', async (storeId, accessToken, content) => {
     console.log(result.rowsAffected[0]);
 });
 
-eventEmitter.on('deleteAudit', async (auditId) => {
-
-    const pool = await poolPromise;
-    const result = await pool.request()
-        .input('Id', sql.BigInt, auditId)
-        .input('AccountId', sql.Int, accountId)
-        .input('AuditContent', sql.NVarChar, content)
-        .query(auditSqlCmd.deleteAudit);
-    console.log(result.rowsAffected[0]);
-});
-
 var action = function (type, storeId, accessToken, content, auditId) {
     eventEmitter.emit(type, storeId, accessToken, content, auditId);
 };

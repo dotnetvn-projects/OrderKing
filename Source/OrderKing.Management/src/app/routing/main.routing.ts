@@ -18,7 +18,8 @@ export const MainRoutes = [
             { path: 'cua-hang', loadChildren: 'src/app/presentation/main/store/store.module#StoreModule' },
             { path: 'don-hang', loadChildren: 'src/app/presentation/main/order/order.module#OrderModule' },
             { path: 'don-hang/:type', loadChildren: 'src/app/presentation/main/order/order.module#OrderModule' },
-            { path: 'bao-cao', loadChildren: 'src/app/presentation/main/report/report.module#ReportModule' }
+            { path: 'bao-cao', loadChildren: 'src/app/presentation/main/report/report.module#ReportModule' },
+            { path: 'log', loadChildren: 'src/app/presentation/main/audit/audit.module#AuditModule' }
         ],
         canActivate: [AuthGuard]
     },
