@@ -24,6 +24,7 @@ catalogrouter.post('/create-category', async (req, res, next) => {
             var category = {
                 storeId: storeId,
                 name: req.body.Name,
+                appName: req.headers.appname,
                 accessToken: accessToken,
                 image:null
             };
@@ -60,6 +61,7 @@ catalogrouter.post('/change-category-image', multipartMiddleware, async (req, re
                 image: imageData,
                 id: categoryId,
                 storeId: storeId,
+                appName: req.headers.appname,
                 accessToken: accessToken
             });
 
@@ -95,6 +97,7 @@ catalogrouter.post('/update-category', async (req, res, next) => {
                 storeId: storeId,
                 name: req.body.Name,
                 id: cateId,
+                appName: req.headers.appname,
                 accessToken: accessToken
             };
 
@@ -129,6 +132,7 @@ catalogrouter.post('/delete-category', async (req, res, next) => {
             var category = {
                 storeId: storeId,
                 id: cateId,
+                appName: req.headers.appname,
                 accessToken: accessToken
             };
             var result = await service.deactivateCategory(category);
@@ -154,6 +158,7 @@ catalogrouter.post('/category-list', async (req, res, next) => {
 
         var category = {
             storeId: storeId,
+            appName: req.headers.appname,
             accessToken: accessToken
         }; 
         var result = await service.getCategoryInStore(category);
@@ -180,6 +185,7 @@ catalogrouter.post('/category-info', async (req, res, next) => {
         var category = {
             id: cateId,
             storeId: storeId,
+            appName: req.headers.appname,
             accessToken: accessToken
         }; 
 
@@ -216,6 +222,7 @@ catalogrouter.post('/create-product', async (req, res, next) => {
                 categoryId: security.decrypt(req.body.CategoryId).split('_')[0],
                 price: req.body.Price,
                 image: null,
+                appName: req.headers.appname,
                 accessToken: accessToken
             };     
 
@@ -258,6 +265,7 @@ catalogrouter.post('/update-product', async (req, res, next) => {
                 categoryId: cateId,
                 price: req.body.Price,
                 id: productId,
+                appName: req.headers.appname,
                 accessToken: accessToken
             };
 
@@ -290,6 +298,7 @@ catalogrouter.post('/change-product-image', multipartMiddleware, async (req, res
                 image: imageData,
                 id: productId,
                 storeId: storeId,
+                appName: req.headers.appname,
                 accessToken: accessToken
             });
 
@@ -324,6 +333,7 @@ catalogrouter.post('/delete-product', async (req, res, next) => {
             var product = {
                 storeId: storeId,
                 id: productId,
+                appName: req.headers.appname,
                 accessToken: accessToken
             };
 
@@ -347,8 +357,13 @@ catalogrouter.post('/product-list', async (req, res, next) => {
     try {
         var accessToken = req.body.AccessToken;
         var storeId = await storeService.getStoreIdByAccessToken(accessToken);
+        var product = {
+            storeId: storeId,
+            appName: req.headers.appname,
+            accessToken: accessToken
 
-        var result = await service.getProductsInStore(storeId);
+        };
+        var result = await service.getProductsInStore(product);
 
         var message = common.createResponseMessage(result.model.product,
             result.model.responsecode,
@@ -371,7 +386,9 @@ catalogrouter.post('/product-list-by-cate', async (req, res, next) => {
 
         var product = {
             storeId: storeId,
-            categoryId: cateId
+            appName: req.headers.appname,
+            categoryId: cateId,
+            accessToken: accessToken
         };
 
         var result = await service.getProductsInStoreByCate(product);
@@ -397,7 +414,9 @@ catalogrouter.post('/product-info', async (req, res, next) => {
 
         var product = {
             storeId: storeId,
-            productId: productId
+            appName: req.headers.appname,
+            productId: productId,
+            accessToken: accessToken
         };
 
         var result = await service.getProductInStoreById(product);

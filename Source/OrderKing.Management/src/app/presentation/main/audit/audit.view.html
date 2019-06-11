@@ -11,7 +11,17 @@
                 <div class="col-md-3"><h3 class="box-title"><i class="text-success fa fa-line-chart"></i> Log hệ thống</h3></div>
             </div>
             <div class="row search-tool">
-
+              <div class="col-sm-3 col-md-2">
+                <input type="text" name="fromdate" appInputDateMask
+                             [(ngModel)]="AuditFilter.FromDate" class="form-control order-fromdate" size="10" placeholder="Từ ngày" >
+              </div>
+              <div class="col-sm-3 col-md-2">
+                  <input type="text" name="todate" appInputDateMask
+                             [(ngModel)]="AuditFilter.ToDate" class="form-control order-todate" size="10" placeholder="Đến ngày" >
+              </div>
+              <div class="col-sm-3 col-md-2">
+                <button (click)="loadAuditList()" class="btn btn-default btn-sm"><i class="fa fa-filter"></i> Lọc</button>
+              </div>
             </div>
           </div>
           <div class="box-body">
@@ -19,18 +29,27 @@
               <tbody>
               <tr>
                 <th style="width: 10px">#</th>
-                <th style="width: 100px" class="text-center">Tên nhân viên</th>
+                <th style="width: 200px" class="text-center">Tên nhân viên</th>
                 <th class="text-center">Nội dung</th>
-                <th class="text-center">Ngày tạo</th>
+                <th style="width: 200px" class="text-center">Ứng dụng</th>
+                <th style="width: 100px" class="text-center">Ngày tạo</th>
+                <th style="width: 100px" class="text-center">Thao tác</th>
               </tr>
               <tr *ngFor="let audit of AuditList.AuditItems; let i = index">
                 <td class="text-center">{{ i + 1 }}.</td>
                 <td class="text-center">{{ audit.StaffName }}</td>
                 <td>{{ audit.AuditContent }}</td>
+                <td class="text-center">Từ ứng dụng: {{ audit.AppName }}</td>
                 <td class="text-center">{{ audit.CreatedDate }}</td>
+                <td class="text-center tools">
+                  <a title="Xóa" (click)="deleteAudit(audit.Id)" class="btn bg-red btn-default btn-sm"><i class="fa fa-remove"></i> Xóa</a>
+              </td>
               </tr>
             </tbody></table>
           </div>
+          <div class="box-footer clearfix">
+            <ng-template #AuditPagerContainer></ng-template>
+        </div>
         </div>
       </div>
     </div>

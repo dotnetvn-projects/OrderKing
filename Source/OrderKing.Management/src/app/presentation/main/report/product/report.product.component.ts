@@ -37,7 +37,7 @@ export class ReportProductComponent extends BaseComponent {
 
   // init component
   onInit() {
-    this.titleService.setTitle(AppMessage.APP_TITLE_MESSAGE.REPORT_REVENUE);
+    this.titleService.setTitle(AppMessage.APP_TITLE_MESSAGE.REPORT_PRODUCT);
     this.subscribeObject();
     this.loadTopProductBestSell();
     this.loadTopFourProductBestSell();

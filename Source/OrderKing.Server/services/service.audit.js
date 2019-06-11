@@ -1,5 +1,5 @@
-const auditSqlCmd = require('../database/sqlcommand.audit');
-const response = require('../models/audit/mode.audit');
+﻿const auditSqlCmd = require('../database/sqlcommand.audit');
+const response = require('../models/audit/model.audit');
 const status = require('../resources/resource.api.status');
 const { poolPromise, sql } = require('../database/dbconnection');
 const security = require('../services/service.security');
@@ -8,17 +8,22 @@ const format = require('string-format');
 const common = require('../common/common');
 
 //delete audit
-exports.deleteAudit = async (auditId) => {
+exports.deleteAudit = async (auditData) => {
 
-    var id = security.decrypt(auditId[i]).split('_')[0];
-    const pool = await poolPromise;
-    const result = await pool.request()
-        .input('Id', sql.NVarChar, id)
-        .query(auditSqlCmd.deleteAudit);
-
+    var ids = auditData.auditId.split(',');
+    for (var i = 0; i < ids.length; i++) {
+        var id = parseInt(security.decrypt(ids[0].split('_')[0]));
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('Id', sql.BigInt, id)
+            .query(auditSqlCmd.deleteAudit);
+    }
+   
     response.model.statusmessage = status.common.suscess;
     response.model.responsecode = status.common.suscesscode;
     response.model.audit = true;
+
+    return response;
 };
 
 //get audit list in store
@@ -45,7 +50,7 @@ exports.getAuditList = async (auditData) => {
         .input('EndDate', sql.DateTime, dateRange.endDate)
         .query(format(query, searchString));
 
-    if (result.recordset.length > 0) {
+    if (result.recordset.length >= 0) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
         var audits = [];
@@ -54,6 +59,7 @@ exports.getAuditList = async (auditData) => {
                 AuditId: security.encrypt(value.Id + '_' + security.serverKey()),
                 StaffName: value.StaffName,
                 AuditContent: value.AuditContent,
+                AppName: value.AppName,
                 CreatedDate: moment(value.CreatedDate).format('DD/MM/YYYY'),
                 TotalRecord: value.TotalRecord
             });

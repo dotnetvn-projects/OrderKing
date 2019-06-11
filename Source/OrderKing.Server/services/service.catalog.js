@@ -41,7 +41,7 @@ exports.createCatagory = async (categoryobject) => {
         };
 
         auditHandler.fire("insertAudit", categoryobject.storeId,
-            categoryobject.accessToken, "Tạo danh mục" + categoryobject.name.toUpperCase());
+            categoryobject.accessToken, "Tạo danh mục" + categoryobject.name.toUpperCase(), categoryobject.appName);
     }
 
     return categoryResponse;
@@ -68,7 +68,7 @@ exports.updateCatagory = async (categoryobject) => {
         };
 
         auditHandler.fire("insertAudit", categoryobject.storeId,
-            categoryobject.accessToken, "Cập nhật danh mục " + categoryobject.name.toUpperCase());
+            categoryobject.accessToken, "Cập nhật danh mục " + categoryobject.name.toUpperCase(), categoryobject.appName);
     }
 
     return categoryResponse;
@@ -92,7 +92,7 @@ exports.updateCatagoryImage = async (categoryobject) => {
 
         var cate = await module.exports.getCategoryById({ id: categoryobject.id }, false);
         auditHandler.fire("insertAudit", categoryobject.storeId,
-            categoryobject.accessToken, "Cập nhật ảnh cho danh mục " + cate.categoryname.toUpperCase());
+            categoryobject.accessToken, "Cập nhật ảnh cho danh mục " + cate.categoryname.toUpperCase(), categoryobject.appName);
     }
 
     return categoryResponse;
@@ -117,7 +117,7 @@ exports.deactivateCategory = async (categoryobject) => {
 
         
         auditHandler.fire("insertAudit", categoryobject.storeId,
-            categoryobject.accessToken, "Xóa danh mục " + cate.categoryname.toUpperCase());
+            categoryobject.accessToken, "Xóa danh mục " + cate.categoryname.toUpperCase(), categoryobject.appName);
     }
 
     return categoryResponse;
@@ -149,7 +149,7 @@ exports.getCategoryInStore = async (categoryobject) => {
         categoryResponse.model.category = categories;
 
         auditHandler.fire("insertAudit", categoryobject.storeId,
-            categoryobject.accessToken, "Truy vấn danh sách danh mục từ cửa hàng");
+            categoryobject.accessToken, "Truy vấn danh sách danh mục từ cửa hàng", categoryobject.appName);
     }
 
     return categoryResponse;
@@ -176,7 +176,7 @@ exports.getCategoryById = async (categoryobject, allowLog = true) => {
 
         if (allowLog) {
             auditHandler.fire("insertAudit", categoryobject.storeId,
-                categoryobject.accessToken, "Truy vấn danh mục " + result.recordset[0].Name.toUpperCase());
+                categoryobject.accessToken, "Truy vấn danh mục " + result.recordset[0].Name.toUpperCase(), categoryobject.appName);
         }
     }
 
@@ -219,7 +219,7 @@ exports.createProduct = async (productobject) => {
         };
 
         auditHandler.fire("insertAudit", productobject.storeId,
-            productobject.accessToken, "Tạo mới mặt hàng " + productobject.name.toUpperCase());
+            productobject.accessToken, "Tạo mới mặt hàng " + productobject.name.toUpperCase(), productobject.appName);
     }
 
     return productResponse;
@@ -243,7 +243,7 @@ exports.updateProductImage = async (productobject) => {
 
         var pro = await module.exports.getProductInStoreById({ id: productobject.id, storeId: productobject.storeId }, false);
         auditHandler.fire("insertAudit", productobject.storeId,
-            productobject.accessToken, "Cập nhật hình ảnh của mặt hàng " + pro.productname.toUpperCase());
+            productobject.accessToken, "Cập nhật hình ảnh của mặt hàng " + pro.productname.toUpperCase(), productobject.appName);
     }
 
     return categoryResponse;
@@ -276,7 +276,7 @@ exports.updateProduct = async (productobject) => {
         };
 
         auditHandler.fire("insertAudit", productobject.storeId,
-            productobject.accessToken, "Cập nhật thông tin mặt hàng " + productobject.name.toUpperCase());
+            productobject.accessToken, "Cập nhật thông tin mặt hàng " + productobject.name.toUpperCase(), productobject.appName);
     }
 
     return productResponse;
@@ -299,20 +299,20 @@ exports.deactivateProduct = async (productObject) => {
         productResponse.model.responsecode = status.common.suscesscode;
 
         auditHandler.fire("insertAudit", productobject.storeId,
-            productobject.accessToken, "Xóa mặt hàng " + pro.productname.toUpperCase());
+            productobject.accessToken, "Xóa mặt hàng " + pro.productname.toUpperCase(), productobject.appName);
     }
 
     return productResponse;
 };
 
 //get product list in store
-exports.getProductsInStore = async (storeId) => {
+exports.getProductsInStore = async (productobject) => {
     productResponse.model.statusmessage = status.common.failed;
     productResponse.model.responsecode = status.common.failedcode;
 
     const pool = await poolPromise;
     var result = await pool.request()
-        .input('StoreId', sql.BigInt, storeId)
+        .input('StoreId', sql.BigInt, productobject.storeId)
         .query(catalogSqlCmd.getProductsInStore);
 
     if (result.recordset.length >= 0) {
@@ -338,7 +338,7 @@ exports.getProductsInStore = async (storeId) => {
         productResponse.model.product = products;
 
         auditHandler.fire("insertAudit", productobject.storeId,
-            productobject.accessToken, "Truy vấn danh sách mặt hàng trong cửa hàng");
+            productobject.accessToken, "Truy vấn danh sách mặt hàng trong cửa hàng", productobject.appName);
     }
 
     return productResponse;
@@ -379,7 +379,9 @@ exports.getProductsInStoreByCate = async (productobject) => {
 
         var cate = await module.exports.getCategoryById({ id: productobject.categoryId }, false);
         auditHandler.fire("insertAudit", productobject.storeId,
-            productobject.accessToken, format("Truy vấn danh sách mặt hàng của danh mục {0} trong cửa hàng", cate.categoryname.toUpperCase()));
+            productobject.accessToken,
+            format("Truy vấn danh sách mặt hàng của danh mục {0} trong cửa hàng", cate.categoryname.toUpperCase()),
+            productobject.appName);
     }
 
     return productResponse;
@@ -415,7 +417,9 @@ exports.getProductInStoreById = async (productobject, allowLog = true) => {
 
         if (allowLog) {
             auditHandler.fire("insertAudit", productobject.storeId,
-                productobject.accessToken, format("Truy vấn thông tin mặt hàng ", result.recordset[0].Name.toUpperCase()));
+                productobject.accessToken,
+                format("Truy vấn thông tin mặt hàng ", result.recordset[0].Name.toUpperCase()),
+                productobject.appName);
         }
     }
     return productResponse;

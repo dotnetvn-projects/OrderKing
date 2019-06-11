@@ -20,7 +20,8 @@ export class AppMessage {
     DELETE_PRODUCT: 'Xóa mặt hàng thành công',
     UPDATE_STORE: 'Cập nhật thông tin cửa hàng thành công',
     UPDATE_ORDER: 'Cập nhật thông tin đơn hàng thành công',
-    DELETE_ORDER: 'Xóa đơn hàng thành công'
+    DELETE_ORDER: 'Xóa đơn hàng thành công',
+    DELETE_AUDIT: 'Xóa log thành công'
   };
 
   // title message
@@ -41,7 +42,9 @@ export class AppMessage {
     ORDER: 'Order King - Danh sách đơn hàng',
     ORDER_DETAIL: 'Order King - Chi tiết đơn hàng',
     ORDER_PRINT: 'Đơn hàng - ',
-    REPORT_REVENUE: 'Báo cáo doanh thu'
+    REPORT_REVENUE: 'Báo cáo doanh thu',
+    REPORT_PRODUCT: 'Thống kê mặt hàng',
+    AUDIT_LOG: 'Log hệ thống'
   };
 
   // Control content
@@ -61,6 +64,7 @@ export class AppMessage {
     DELETE_STAFF: 'Bạn có chắc muốn xóa nhân viên này?',
     DELETE_CATEGORY: 'Bạn có chắc muốn xóa danh mục này?',
     DELETE_PRODUCT: 'Bạn có chắc muốn xóa mặt hàng này?',
-    DELETE_ORDER: 'Bạn có chắc muốn xóa đơn hàng này?'
+    DELETE_ORDER: 'Bạn có chắc muốn xóa đơn hàng này?',
+    DELETE_AUDIT: 'Bạn có chắc muốn xóa log này?'
   };
 }

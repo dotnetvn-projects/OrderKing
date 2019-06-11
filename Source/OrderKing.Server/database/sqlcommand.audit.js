@@ -7,8 +7,8 @@ var defineProperty = function define(name, value) {
 
 //insert audit
 defineProperty('insertAudit', `
-       INSERT INTO [dbo].[Audit] (StoreId, AccountId, AuditContent, CreatedDate)
-       VALUES(@StoreId, @AccountId, @AuditContent, GETDATE())
+       INSERT INTO [dbo].[Audit] (StoreId, AccountId, AuditContent, AppName, CreatedDate)
+       VALUES(@StoreId, @AccountId, @AuditContent, @AppName, GETDATE())
 `);
 
 //delete audit
@@ -28,7 +28,8 @@ defineProperty('getAuditList', `
                 AS Temp
               );
 
-       SELECT AUDIT.Id, USERPROFILE.FullName AS StaffName, AUDIT.AuditContent, AUDIT.CreatedDate, @TotalRecord AS TotalRecord
+       SELECT AUDIT.Id, AUDIT.AppName, USERPROFILE.FullName AS StaffName, 
+              AUDIT.AuditContent, AUDIT.CreatedDate, @TotalRecord AS TotalRecord
        FROM AUDIT INNER JOIN STORE ON STORE.Id = AUDIT.StoreId
        INNER JOIN ACCOUNT ON AUDIT.AccountId = ACCOUNT.Id
        INNER JOIN USERPROFILE ON USERPROFILE.AccountId = ACCOUNT.Id
