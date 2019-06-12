@@ -4,7 +4,8 @@ export class AppMessage {
     BUSY: 'Hệ thống đang bận không thể xử lý, vui lòng thử lại !',
     SESSION_TIMEOUT: 'Phiên làm việc đã kết thức, vui lòng đăng nhập lại !',
     SELECT_CATEGORY: 'Vui lòng chọn danh mục !',
-    WRONG_DATE_RANGE: 'Giá trị ngày không hợp lệ, kiểm tra lại vùng giá trị !'
+    WRONG_DATE_RANGE: 'Giá trị ngày không hợp lệ, kiểm tra lại vùng giá trị !',
+    SELECT_AT_LEAST_ONE: 'Vui lòng chọn ít nhất 1 giá trị !'
   };
 
   // success message

@@ -1,3 +1,21 @@
 .search-tool {
-  padding-top: 8px;
+  margin-top: 10px;
+  padding: 5px;
+  border-bottom: 2px solid #f4f4f4;
+}
+
+.search-tool div {
+  padding: 3px;
+}
+
+.search-tool .row {
+  margin-bottom: 0px;
+}
+
+.search-tool .btn {
+  margin-top: 2px;
+}
+
+.search-tool > a {
+  margin-left: -8px;
 }

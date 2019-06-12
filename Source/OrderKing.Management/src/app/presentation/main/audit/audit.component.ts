@@ -19,6 +19,7 @@ export class AuditComponent extends BaseComponent {
 
   AuditFilter: AuditFilterModel = new AuditFilterModel();
   AuditList: AuditListModel = new AuditListModel();
+  private auditIdsSelected: Array<any> = new Array<any>();
 
   @ViewChild('AuditPagerContainer', { read: ViewContainerRef }) saleReportViewContainerRef: ViewContainerRef;
   private auditPagerComponent: any;
@@ -51,6 +52,13 @@ export class AuditComponent extends BaseComponent {
   }
 
   deleteAudit(id: string) {
+    if (id.length === 0 && this.auditIdsSelected.length <= 0) {
+      this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.SELECT_AT_LEAST_ONE);
+      return;
+    } else if (id.length === 0 && this.auditIdsSelected.length > 0) {
+       id = this.auditIdsSelected.join(',');
+    }
+
     this.dialogService.showConfirm(AppMessage.APP_DIALOG_TITLE.CONFIRM, AppMessage.APP_DIALOG_MESSAGE.DELETE_AUDIT, async () => {
       const result = await this.auditService.removeAudit(id);
       if (result === AppSettings.RESPONSE_MESSAGE.SUCCESS) {
@@ -85,4 +93,13 @@ export class AuditComponent extends BaseComponent {
     this.auditPagerComponent.instance.TotalPage = this.AuditList.TotalRecord;
     this.auditPagerComponent.changeDetectorRef.detectChanges();
   }
+
+    // checkbox change
+    handleIdSelected($event, id) {
+      if ($event.target.checked === true) {
+        this.auditIdsSelected.push(id);
+      } else {
+       this.auditIdsSelected = this.auditIdsSelected.filter(x => x !== id);
+      }
+   }
 }

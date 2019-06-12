@@ -121,4 +121,5 @@ export class ReportRevenueComponent extends BaseComponent {
     this.productSoldReportPagerComponent.instance.TotalPage = this.ProductSoldReport.TotalRecord;
     this.productSoldReportPagerComponent.changeDetectorRef.detectChanges();
   }
+
 }

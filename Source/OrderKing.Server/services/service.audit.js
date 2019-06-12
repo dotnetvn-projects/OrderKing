@@ -12,7 +12,7 @@ exports.deleteAudit = async (auditData) => {
 
     var ids = auditData.auditId.split(',');
     for (var i = 0; i < ids.length; i++) {
-        var id = parseInt(security.decrypt(ids[0].split('_')[0]));
+        var id = parseInt(security.decrypt(ids[i].split('_')[0]));
         const pool = await poolPromise;
         const result = await pool.request()
             .input('Id', sql.BigInt, id)
@@ -53,14 +53,14 @@ exports.getAuditList = async (auditData) => {
     if (result.recordset.length >= 0) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
-        var audits = [];
+        var audits d= [];
         result.recordset.forEach(function (value) {
             audits.push({
                 AuditId: security.encrypt(value.Id + '_' + security.serverKey()),
                 StaffName: value.StaffName,
                 AuditContent: value.AuditContent,
                 AppName: value.AppName,
-                CreatedDate: moment(value.CreatedDate).format('DD/MM/YYYY'),
+                CreatedDate: moment(value.CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
                 TotalRecord: value.TotalRecord
             });
         });

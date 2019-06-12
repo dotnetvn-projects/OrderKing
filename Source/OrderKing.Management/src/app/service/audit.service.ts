@@ -29,10 +29,16 @@ export class AuditService {
     params.put('PageNumber', filter.PageNumber);
     this.webClient.doPost(AppSettings.API_ENDPOINT + this.getAuditListUrl, params, (data: ApiResultModel) => {
         const resultData = new AuditListModel();
+        let pageIndex = 1;
+        if (filter.PageNumber !== 1) {
+          pageIndex = filter.PageSize * (filter.PageNumber - 1) + 1;
+        }
+
         if (data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS) {
           resultData.AuditItems = new Array<AuditModel>();
           data.Result.forEach(e => {
             const auditModel = new AuditModel();
+            auditModel.Index = pageIndex;
             auditModel.Id = e.AuditId;
             auditModel.StaffName = e.StaffName;
             auditModel.AppName = e.AppName;
@@ -40,6 +46,7 @@ export class AuditService {
             auditModel.CreatedDate = e.CreatedDate;
             resultData.AuditItems.push(auditModel);
             resultData.TotalRecord = e.TotalRecord;
+            pageIndex ++;
            });
            this.auditSource.next(resultData);
            updateUI();
