@@ -44,6 +44,7 @@
     <Compile Include="database\sqlcommand.payment.js" />
     <Compile Include="database\sqlcommand.report.js" />
     <Compile Include="database\sqlcommand.store.js" />
+    <Compile Include="database\sqlcommand.sysnotify.js" />
     <Compile Include="database\sqlcommand.user.js" />
     <Compile Include="eventHandlers\event.handler.audit.js" />
     <Compile Include="eventHandlers\event.handler.email.js" />
@@ -57,6 +58,7 @@
     <Compile Include="models\product\model.product.js" />
     <Compile Include="models\report\model.report.js" />
     <Compile Include="models\store\model.storeinfo.js" />
+    <Compile Include="models\sysnotify\model.sysnotify.js" />
     <Compile Include="models\user\model.userinfo.js" />
     <Compile Include="resources\resource.api.status.js" />
     <Compile Include="routes\api.management\route.api.management.catalog.js" />
@@ -67,6 +69,7 @@
     <Compile Include="routes\api.public\route.api.payment.js" />
     <Compile Include="routes\api.public\route.api.report.js" />
     <Compile Include="routes\api.public\route.api.store.js" />
+    <Compile Include="routes\api.public\route.api.sysnotify.js" />
     <Compile Include="routes\api.public\route.api.user.js" />
     <Compile Include="server.js" />
     <Compile Include="services\service.audit.js" />
@@ -78,6 +81,7 @@
     <Compile Include="services\service.report.js" />
     <Compile Include="services\service.security.js" />
     <Compile Include="services\service.store.js" />
+    <Compile Include="services\service.sysnotify.js" />
     <Compile Include="services\service.user.js" />
     <Content Include="deploy_azure_note.txt" />
     <Content Include="eventHandlers\event.handler.log.js" />
@@ -111,6 +115,7 @@
     <Folder Include="models\order\" />
     <Folder Include="models\product\" />
     <Folder Include="models\store\" />
+    <Folder Include="models\sysnotify\" />
     <Folder Include="models\user\" />
     <Folder Include="logs\" />
     <Folder Include="eventHandlers\" />

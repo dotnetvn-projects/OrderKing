@@ -6,5 +6,9 @@ var defineProperty = function define(name, value) {
 };
 
 defineProperty('getNewestList',
-    ``
+    `SELECT * FROM SysNotify WHERE Status = 1 ORDER BY CreatedDate DESC`
+);
+
+defineProperty('getList',
+    `SELECT * FROM SysNotify WHERE ORDER BY CreatedDate DESC`
 );
