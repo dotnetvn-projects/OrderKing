@@ -5,20 +5,22 @@
 }
 
 .head-logo-link{
-  padding: 0 0 0 0;
+  padding: 3px 0;
+  margin-right: 8px;
 }
 
 .brand-title{
   margin: 0;
   padding: 0;
-  padding-right: 20px;
 }
 
 .brand-title a{
   color: #90AEAA;
-  font-size: 24px;
+  font-size: 18px;
   font-family: 'Nunito', sans-serif;
   text-decoration: none;
+  vertical-align: middle;
+  font-weight: 600;
 }
 
 .brand-title a span{
@@ -31,59 +33,7 @@
   max-height: 35px;
 }
 
-.search-form{
-  border-radius: 4px;
-  padding: 8px 0;
-  position: relative;
-}
-
-.search-form .txt-search{
-  width: 400px;
-  border: 0;
-  border-radius: 35px;
-  box-shadow: none;
-  display: block;
-  background: #003634;
-  color: #00504D;
-}
-
-.search-form .txt-search:focus{
-  background: #005C59;
-  color: #009C96;
-}
-
-.search-form .txt-search::placeholder{
-  color: #C5E6E5;
-  font-size: 13px;
-}
-
-.search-form .form-group{
-  margin-bottom: 0;
-}
-
-.search-form .btn-search{
-  height: 34px;
-  width: 45px;
-  border-radius: 35px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  background: transparent;
-}
-
-.search-form .btn-search:active{
-  outline: none;
-  background: #C5E6E5;
-  box-shadow: none;
-  color: #00504D;
-}
-
-.search-form .btn-search:focus:focus-within{
-  outline: none;
-  color: #215D54;
-}
-
-.navbar-right .btn{
+.nav-profile .btn{
   height: 34px;
   margin-left: 5px;
   border-radius: 35px;
@@ -92,7 +42,7 @@
   padding-bottom: 0;
 }
 
-.navbar-right .btn.btn-trans{
+.nav-profile .btn.btn-trans{
   text-align: center;
   padding-left: 0;
   padding-right: 0;
@@ -100,13 +50,12 @@
   min-width: 35px;
 }
 
-.navbar-right .btn.btn-trans:active{
+.nav-profile .btn.btn-trans:active{
   box-shadow: none;
   background: #215D54;
 }
 
-
-.navbar-right .btn.btn-trans:focus:focus-within{
+.nav-profile .btn.btn-trans:focus:focus-within{
   box-shadow: none;
   outline: none;
 }
@@ -150,15 +99,23 @@
   width: 25px;
   height: 25px;
   border-radius: 25px;
+  margin-right: 2px;
+}
+
+.nav-profile .profile-name{
   vertical-align: middle;
-  margin-left: 2px;
 }
 
 .nav-profile .btn.btn-profile-info{
-  padding-right: 8px;
-  padding-left: 8px;
+  padding: 3px 8px;
+  height: 35px;
+  line-height: 1;
 }
 
-.top-bar .navbar-right{
-  margin-right: 0;
+.category-menu .nav-link{
+  color: #FFF;
+}
+
+.category-menu .nav-link:hover{
+  color: #17a2b8;
 }
