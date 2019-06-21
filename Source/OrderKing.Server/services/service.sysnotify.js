@@ -6,21 +6,22 @@ const security = require('../services/service.security');
 const moment = require('moment');
 const format = require('string-format');
 
-exports.getNewestSysNotifyList = async function () {
+exports.getNewestSysNotifyList = async function (sysNotifyData) {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
 
     const pool = await poolPromise;
     const result = await pool.request()
+        .input('AccountId', sql.BigInt, sysNotifyData.accountId)
         .query(sysNotifySqlCmd.getNewestList);
 
-    if (result.recordset.length > 0) {
+    if (result.recordset !== null) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
         var notifyItems = [];
         result.recordset.forEach(function (value) {
-            notifies.push({
-                id: security.encrypt(value.Id + '_' + security.serverKey()),
+            notifyItems.push({
+                Id: security.encrypt(value.Id + '_' + security.serverKey()),
                 Title: value.Title,
                 Content: value.Content,
                 CreatedDate: moment(value.CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
@@ -34,29 +35,98 @@ exports.getNewestSysNotifyList = async function () {
     return response;
 };
 
-exports.getSysNotifyList = async function () {
+exports.getSysNotifyList = async function (sysNotifyData) {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
 
     const pool = await poolPromise;
     const result = await pool.request()
+        .input('PageSize', sql.Int, sysNotifyData.pageSize)
+        .input('PageNumber', sql.Int, sysNotifyData.pageNumber)
+        .input('AccountId', sql.BigInt, sysNotifyData.accountId)
         .query(sysNotifySqlCmd.getList);
 
-    if (result.recordset.length > 0) {
+    if (result.recordset !== null) {
         response.model.statusmessage = status.common.suscess;
         response.model.responsecode = status.common.suscesscode;
         var notifyItems = [];
         result.recordset.forEach(function (value) {
             notifies.push({
-                id: security.encrypt(value.Id + '_' + security.serverKey()),
+                Id: security.encrypt(value.Id + '_' + security.serverKey()),
                 Title: value.Title,
                 Content: value.Content,
                 CreatedDate: moment(value.CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
-                UpdatedDate: moment(value.UpdatedDate).format('DD/MM/YYYY HH:mm:ss')
+                UpdatedDate: moment(value.UpdatedDate).format('DD/MM/YYYY HH:mm:ss'),
+                TotalRecord: value.TotalRecord
             });
         });
 
         response.model.notify = notifyItems;
+    }
+
+    return response;
+};
+
+exports.getSysNotifyDetail = async function (sysNotifyData) {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('Id', sql.Int, sysNotifyData.id)
+        .query(sysNotifySqlCmd.getDetail);
+
+    if (result.recordset !== null) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        var value = result.recordset[0];
+
+        response.model.notify = {
+            Id: security.encrypt(value.Id + '_' + security.serverKey()),
+            Title: value.Title,
+            Content: value.Content,
+            CreatedDate: moment(value.CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
+            UpdatedDate: moment(value.UpdatedDate).format('DD/MM/YYYY HH:mm:ss')
+        };
+    }
+
+    return response;
+};
+
+//update HasRead state of sysnotify item
+exports.updateHasReadSysNotify= async (sysNotifyData) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('SysNotifyId', sql.BigInt, sysNotifyData.sysNotifyId)
+        .input('AccountId', sql.BigInt, sysNotifyData.accountId)
+        .input('HasRead', sql.Bit, sysNotifyData.hasRead)
+        .query(sysNotifySqlCmd.updateHasRead);
+
+    if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+    }
+
+    return response;
+};
+
+//update HasRead of sysnotifys for every single account
+exports.updateHasReadSysNotifyForAccount = async (sysNotifyData) => {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('AccountId', sql.BigInt, sysNotifyData.accountId)
+        .input('HasRead', sql.Bit, sysNotifyData.hasRead)
+        .query(sysNotifySqlCmd.updateHasReadForAccount);
+
+    if (result.rowsAffected.length > 0 && result.rowsAffected[0] !== 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
     }
 
     return response;

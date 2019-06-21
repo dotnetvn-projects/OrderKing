@@ -67,4 +67,18 @@ export class DialogService {
       }
     });
   }
+
+  showInfo(title: string, message: string, action = null) {
+    swal({
+      position: 'top',
+      title: title,
+      html: message,
+      showConfirmButton: true,
+      onClose: () => {
+        if (action !== null) {
+          action();
+        }
+      }
+    });
+  }
 }
