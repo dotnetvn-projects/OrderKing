@@ -51,12 +51,13 @@ exports.getSysNotifyList = async function (sysNotifyData) {
         response.model.responsecode = status.common.suscesscode;
         var notifyItems = [];
         result.recordset.forEach(function (value) {
-            notifies.push({
+            notifyItems.push({
                 Id: security.encrypt(value.Id + '_' + security.serverKey()),
                 Title: value.Title,
                 Content: value.Content,
                 CreatedDate: moment(value.CreatedDate).format('DD/MM/YYYY HH:mm:ss'),
                 UpdatedDate: moment(value.UpdatedDate).format('DD/MM/YYYY HH:mm:ss'),
+                DateGroup: moment(value.UpdatedDate).format('DD/MM/YYYY'),
                 TotalRecord: value.TotalRecord
             });
         });

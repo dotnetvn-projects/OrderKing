@@ -21,7 +21,7 @@ export class AuditComponent extends BaseComponent {
   AuditList: AuditListModel = new AuditListModel();
   private auditIdsSelected: Array<any> = new Array<any>();
 
-  @ViewChild('AuditPagerContainer', { read: ViewContainerRef }) saleReportViewContainerRef: ViewContainerRef;
+  @ViewChild('AuditPagerContainer', { read: ViewContainerRef }) auditViewContainerRef: ViewContainerRef;
   private auditPagerComponent: any;
 
   constructor(private titleService: Title,
@@ -44,7 +44,7 @@ export class AuditComponent extends BaseComponent {
     this.loadAuditList();
   }
 
-  // load all top report
+  // load audit list
   loadAuditList() {
     this.auditService.fetchAuditList(this.AuditFilter, () => {
       this.loadAuditPager();
@@ -81,7 +81,7 @@ export class AuditComponent extends BaseComponent {
     // load pager dynamic
     if (this.auditPagerComponent == null) {
       const factory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
-      this.auditPagerComponent = this.saleReportViewContainerRef.createComponent(factory);
+      this.auditPagerComponent = this.auditViewContainerRef.createComponent(factory);
       this.auditPagerComponent.instance.PageChange.subscribe((event) => {
         this.AuditFilter.PageNumber = event;
         this.loadAuditList();

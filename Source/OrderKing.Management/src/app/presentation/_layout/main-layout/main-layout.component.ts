@@ -58,6 +58,7 @@ export class MainLayoutComponent extends BaseComponent {
       this.authService.clearLoginSession();
       await this.gotoLogin(this.router);
     } else {
+      this.sysNotifyService.fetchNewSysNotifyList();
       this.dialogService.showInfo(iresult.sysNotifyInfo.Title, iresult.sysNotifyInfo.Content);
     }
   }

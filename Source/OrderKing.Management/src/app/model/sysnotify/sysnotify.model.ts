@@ -4,4 +4,5 @@ export class SysNotifyModel extends ModelBase {
    Title: string;
    Content: string;
    UpdatedDate: string;
+   DateGroup: string;
 }

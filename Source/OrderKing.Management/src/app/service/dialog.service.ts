@@ -70,9 +70,9 @@ export class DialogService {
 
   showInfo(title: string, message: string, action = null) {
     swal({
-      position: 'top',
       title: title,
       html: message,
+      width: '80rem',
       showConfirmButton: true,
       onClose: () => {
         if (action !== null) {

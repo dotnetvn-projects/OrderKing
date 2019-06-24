@@ -43,7 +43,7 @@
                                       <!-- start notification -->
                                       <a (click)="showNotifyContent(item.Id)">
                                           <i class="fa fa-users text-aqua"></i> {{ item.Title }}
-                                          <small><span class="users-list-date"><i class="fa fa-calendar"></i> {{ item.UpdatedDate }}</span></small>
+                                          <small><span class="users-list-date">{{ item.UpdatedDate }}</span></small>
                                       </a>
                                   </li>
                                   <!-- end notification -->
@@ -145,7 +145,7 @@
                   </ul>
               </li>
                 <li routerLinkActive="active"><a [routerLink]="['/log']"><i class="fa fa-eye"></i> <span>Theo dõi hoạt động</span></a></li>
-                <li><a href="#"><i class="fa fa-commenting"></i> <span>Thông báo</span></a></li>
+                <li routerLinkActive="active"><a [routerLink]="['/thong-bao']"><i class="fa fa-commenting"></i> <span>Thông báo</span></a></li>
             </ul>
             <!-- /.sidebar-menu -->
         </section>

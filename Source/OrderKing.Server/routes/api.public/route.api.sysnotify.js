@@ -33,9 +33,9 @@ sysNotifyRouter.post('/get-newest-notify-list', async (req, res, next) => {
 //get notify list
 sysNotifyRouter.post('/get-notify-list', async (req, res, next) => {
     try {
-
+        var accountId = await userService.getAccountIdByAccessToken(req.body.AccessToken);
         var data = {
-            accountId: userService.getAccountIdByAccessToken(req.body.AccessToken),
+            accountId: accountId,
             pageSize: req.body.PageSize,
             pageNumber: req.body.PageNumber
         };
@@ -64,7 +64,7 @@ sysNotifyRouter.post('/get-notify-detail', async (req, res, next) => {
 
         var result = await service.getSysNotifyDetail(data);
 
-        if (result.responsecode === status.common.suscesscode) {
+        if (result.model.responsecode === status.common.suscesscode) {
             var accountId = await userService.getAccountIdByAccessToken(req.body.AccessToken);
             await service.updateHasReadSysNotify({
                 sysNotifyId: data.id,
