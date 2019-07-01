@@ -43,6 +43,7 @@ export class SysNotifyComponent extends BaseComponent {
 
   // load notify list
   loadNotifyList() {
+    this.sysNotifyService.updateHasRead();
     this.sysNotifyService.fetchSysNotifyList(this.SysNotifyFilter, () => {
       this.loadNotifyPager();
     });

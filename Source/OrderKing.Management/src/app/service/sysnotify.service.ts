@@ -16,6 +16,7 @@ export class SysNotifyService {
   private getNewNotifyListUrl = 'sysnotify/get-newest-notify-list';
   private getNotifyListUrl = 'sysnotify/get-notify-list';
   private getNotifyInfoUrl = 'sysnotify/get-notify-detail';
+  private updateHasReadUrl = 'sysnotify/update-notify-hasread-single-account';
 
 
   private NewSysNotifyListSource = new BehaviorSubject<ListModel<SysNotifyModel>>(new ListModel<SysNotifyModel>());
@@ -117,4 +118,15 @@ export class SysNotifyService {
   }
 
 
+  // ** update all notify status */
+   updateHasRead() {
+    const params = new Dictionary<string, any>();
+    params.put('HasRead', 1);
+     this.webClient.doPost(AppSettings.API_ENDPOINT + this.updateHasReadUrl, params, (data: ApiResultModel) => {
+       const result = data.ResponseCode === AppSettings.RESPONSE_CODE.SUCCESS;
+       if (result) {
+        this.fetchNewSysNotifyList();
+       }
+    });
+  }
 }

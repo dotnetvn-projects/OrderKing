@@ -110,11 +110,11 @@ sysNotifyRouter.post('/update-notify-hasread', async (req, res, next) => {
 });
 
 //update HasRead value of notify items for every single account
-sysNotifyRouter.post('/update-notify-hasread', async (req, res, next) => {
+sysNotifyRouter.post('/update-notify-hasread-single-account', async (req, res, next) => {
     try {
-
+        var accountId = await userService.getAccountIdByAccessToken(req.body.AccessToken);
         var data = {
-            accountId: userService.getAccountIdByAccessToken(req.body.AccessToken),
+            accountId: accountId,
             hasRead: req.body.HasRead
         };
 
