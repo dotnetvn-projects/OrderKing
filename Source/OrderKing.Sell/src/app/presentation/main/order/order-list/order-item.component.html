@@ -11,10 +11,10 @@
                         <label>Số lượng:</label> {{order.quantity}}
                     </span>
                     <span>
-                        <label>Đơn giá:</label> {{order.price}}
+                        <label>Đơn giá:</label> {{order.price | currency:'VND':true}}
                     </span>
                     <span>
-                        <label>Tổng giá:</label> {{order.totalPrice}}
+                        <label>Tổng giá:</label> {{order.totalPrice | currency:'VND':true}}
                     </span>
                 </div>
             </div>
