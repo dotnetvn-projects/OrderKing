@@ -6,7 +6,7 @@
         <h2 class="module-title">
             <a routerLink="/product/detail/1">{{product.name}}</a>
         </h2>
-        <p class="text-warning price">{{product.price}} vnđ</p>
+        <p class="text-warning price">{{product.price | currency:'VND':true}}</p>
     </div>
     <div class="panel-footer">
         <button class="btn btn-outline-info btn-book" (click)="addOrder()">

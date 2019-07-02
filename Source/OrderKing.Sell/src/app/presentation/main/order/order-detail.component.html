@@ -6,10 +6,10 @@
 </ul>
 
 <div class="detail-info">
-    <span>Đã đặt <b>{{totalProduct}} sản phẩm</b> với tổng giá <b>{{totalPrice}} vnđ</b></span>
+    <span>Đã đặt <b>{{totalProduct}} sản phẩm</b> với tổng giá <b>{{totalPrice | currency:'VND':true}}</b></span>
 </div>
 
 <div class="footer text-center">
     <button class="btn btn-secondary" (click)="clear()">Làm Lại</button>
-    <button class="btn btn-success">Thanh Toán</button>
+    <button class="btn btn-success">Xác nhận</button>
 </div>
