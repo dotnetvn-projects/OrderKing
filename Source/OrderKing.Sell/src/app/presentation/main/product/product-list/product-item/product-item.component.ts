@@ -12,7 +12,7 @@ export class ProductItemComponent {
   faHandPointer = faHandPointer;
   @Input() product: ProductItem;
 
-  constructor(private orderDetailService:OrderDetailService) {}
+  constructor(private orderDetailService: OrderDetailService) {}
 
   addOrder() {
     this.orderDetailService.addOrder(this.product);

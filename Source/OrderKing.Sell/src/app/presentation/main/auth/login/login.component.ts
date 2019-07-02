@@ -4,7 +4,7 @@ import { LoginModel } from '../../../../model/login.model';
 import { AuthService } from '../../../../service/auth.service';
 import { Title } from '@angular/platform-browser';
 import { AppSettings } from '../../../../framework/framework.app.setting';
-import { UserService } from '../../../..//service/user.service';
+import { UserService } from '../../../../service/user.service';
 import { AppMessage } from '../../../../framework/framework.app.messages';
 declare var $;
 
@@ -23,26 +23,11 @@ export class LoginComponent implements OnInit {
      this.ErrorMessage = '';
    }
 
-  applyJs() {
-    $(() => {
-      $('.icheck input').on('ifToggled', function (event) {
-        $(this).val(event.target.checked);
-        $('.icheck').trigger('click');
-      });
-    });
-  }
-
-  onCheckboxchange() {
-     const isRemember = $('.icheck input').val();
-     this.LoginInfo.RemeberMe = (isRemember === 'true');
-   }
-
   async ngOnInit() {
     if (sessionStorage.getItem(AppSettings.TOKEN_KEY) === null) {
-      this.applyJs();
       this.titleService.setTitle(AppMessage.APP_TITLE_MESSAGE.LOGIN);
     } else {
-      this.router.navigate(['dashboard']);
+      this.router.navigate(['/']);
     }
   }
 
@@ -58,8 +43,7 @@ export class LoginComponent implements OnInit {
       this.ErrorMessage = 'Tài khoản hoặc mật khẩu không đúng !';
     } else {
       this.userService.fetchUserInfo();
-      sessionStorage.setItem(AppSettings.USERINFO_FLAG, 'true');
-      this.router.navigate(['dashboard']);
+      this.router.navigate(['/']);
     }
   }
 

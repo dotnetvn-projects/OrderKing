@@ -6,11 +6,13 @@ import { FeedItemComponent } from './feed-item/feed-item.component';
 import { ProductHorizontalItemModule } from '../../../../presentation/main/product/product-list/product-item/product-item.module';
 import { OrderDetailModule } from '../../order/order-detail.module';
 import { OrderDetailService } from '../../../../service/order-detail.service';
+import { AuthGuard } from '../../../../framework/framework.auth.guard';
 
 const feedListRoutes: Routes = [
   {
     path: '',
-    component: FeedListComponent
+    component: FeedListComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

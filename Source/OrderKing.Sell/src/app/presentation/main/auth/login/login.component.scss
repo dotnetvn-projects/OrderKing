@@ -3303,6 +3303,10 @@ input.input100 {
   opacity: 1;
 }
 
+.err-message {
+  color: #c80000;
+}
+
 @media (max-width: 992px) {
   .alert-validate::before {
     visibility: visible;

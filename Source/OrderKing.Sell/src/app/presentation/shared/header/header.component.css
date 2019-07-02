@@ -112,10 +112,14 @@
   line-height: 1;
 }
 
-.category-menu .nav-link{
+.main-menu {
+  width: 500px;
+}
+
+.main-menu .nav-link{
   color: #FFF;
 }
 
-.category-menu .nav-link:hover{
+.main-menu .nav-link:hover{
   color: #17a2b8;
 }

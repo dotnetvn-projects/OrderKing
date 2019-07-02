@@ -10,7 +10,7 @@ import { UserService } from './user.service';
   providedIn: 'root'
 })
 export class AuthService {
-  private loginUrl = 'auth/auth-manager';
+  private loginUrl = 'auth/auth-user';
   private logoutUrl = 'auth/remove-auth';
   private checkTokenUrl = 'auth/auth-token-status';
 
@@ -57,8 +57,6 @@ export class AuthService {
   clearLoginSession() {
     sessionStorage.removeItem(AppSettings.TOKEN_KEY);
     localStorage.removeItem(AppSettings.AUTH_KEY);
-    sessionStorage.removeItem(AppSettings.MANAGE_USERINFO_KEY);
-    sessionStorage.removeItem(AppSettings.USERINFO_FLAG);
   }
 
   // check token expiration

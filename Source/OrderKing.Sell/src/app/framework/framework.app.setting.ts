@@ -5,9 +5,9 @@ export class  AppSettings {
   // config api
    public static API_ENDPOINT = 'http://localhost:1337/api/public/';
   // public static API_ENDPOINT = 'https://orderkingserverapi.azurewebsites.net/api/public/';
-  public static TOKEN_KEY = 'order-king-token';
-  public static AUTH_KEY = 'order-king-auth';
-  public static MANAGE_USERINFO_KEY = 'order-king-manage-userinfo';
+  public static TOKEN_KEY = 'order-king-token-seller';
+  public static AUTH_KEY = 'order-king-auth-seller';
+  public static MANAGE_USERINFO_KEY = 'order-king-seller-userinfo';
   public static USERINFO_FLAG = 'order-king-user-info-flag';
 
   // response message
@@ -39,8 +39,8 @@ export class  AppSettings {
   /** create default http params */
   public static createDefaultHeaders() {
     let headers = new HttpHeaders();
-    headers = headers.set('appname', 'http://manage.orderking.com');
-    headers = headers.set('apikey', '0daeb74c82c8f2287038959ce8697896' );
+    headers = headers.set('appname', 'http://seller.orderking.com');
+    headers = headers.set('apikey', '867b1ec2262fcc9ebe11e6f0d1c2d76c' );
     return headers;
   }
 

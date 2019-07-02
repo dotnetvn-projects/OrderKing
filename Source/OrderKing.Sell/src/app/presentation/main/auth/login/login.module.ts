@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login.component';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 const authRoutes: Routes = [
   { path: '', component: LoginComponent }
@@ -13,6 +14,7 @@ const authRoutes: Routes = [
   ],
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule.forChild(authRoutes)
   ],
   exports: [
