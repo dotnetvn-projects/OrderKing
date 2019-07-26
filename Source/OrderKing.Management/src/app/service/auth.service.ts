@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LoginModel } from '../model/login.model';
+import { LoginModel } from '../model/user/login.model';
 import { WebClientService } from '../service/webclient.service';
 import { Dictionary } from '../framework/objectextension/framework.dictionary';
 import { ApiResultModel } from '../model/api.result.model';

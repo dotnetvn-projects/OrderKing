@@ -1,7 +1,7 @@
 import { Component, OnInit, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
-import { UserInfoModel } from 'src/app/model/userinfo.model';
+import { UserInfoModel } from 'src/app/model/user/userinfo.model';
 import { BaseComponent } from 'src/app/framework/framework.base.component';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
 import { SysNotifyService } from 'src/app/service/sysnotify.service';

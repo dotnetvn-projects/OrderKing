@@ -20,7 +20,8 @@ export const MainRoutes = [
             { path: 'don-hang/:type', loadChildren: 'src/app/presentation/main/order/order.module#OrderModule' },
             { path: 'bao-cao', loadChildren: 'src/app/presentation/main/report/report.module#ReportModule' },
             { path: 'log', loadChildren: 'src/app/presentation/main/audit/audit.module#AuditModule' },
-            { path: 'thong-bao', loadChildren: 'src/app/presentation/main/sysnotify/sysnotify.module#SysNotifyModule' }
+            { path: 'thong-bao', loadChildren: 'src/app/presentation/main/sysnotify/sysnotify.module#SysNotifyModule' },
+            { path: 'profile', loadChildren: 'src/app/presentation/main/profile/profile.module#ProfileModule' }
         ],
         canActivate: [AuthGuard]
     },

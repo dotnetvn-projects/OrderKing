@@ -6,14 +6,15 @@ const userSqlCmd = require('../database/sqlcommand.user');
 const moment = require('moment');
 
 //check user has already existed or not
-exports.CheckExistAccount = async function (accountName) {
+exports.CheckExistAccount = async function (data) {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
     response.model.userinfo = 'false';
 
     const pool = await poolPromise;
     const result = await pool.request()
-        .input('AccountName', sql.NVarChar, accountName.toUpperCase())
+        .input('AccountId', sql.BigInt, data.accountId)
+        .input('AccountName', sql.NVarChar, data.accountName)
         .query(userSqlCmd.CheckExistAccount);
 
     if (result.recordset.length > 0) {
@@ -25,14 +26,15 @@ exports.CheckExistAccount = async function (accountName) {
 };
 
 //check email has already existed or not
-exports.CheckExistEmail = async function (email) {
+exports.CheckExistEmail = async function (data) {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
     response.model.userinfo = 'false';
 
     const pool = await poolPromise;
     const result = await pool.request()
-        .input('Email', sql.NVarChar, email.toUpperCase())
+        .input('AccountId', sql.BigInt, data.accountId)
+        .input('Email', sql.NVarChar, data.email)
         .query(userSqlCmd.CheckExistEmail);
 
     if (result.recordset.length > 0) {
@@ -44,14 +46,15 @@ exports.CheckExistEmail = async function (email) {
 };
 
 //check phone number has already existed or not
-exports.CheckExistPhoneNumber = async function (phoneNumber) {
+exports.CheckExistPhoneNumber = async function (data) {
     response.model.statusmessage = status.common.failed;
     response.model.responsecode = status.common.failedcode;
     response.model.userinfo = 'false';
 
     const pool = await poolPromise;
     const result = await pool.request()
-        .input('PhoneNumber', sql.NVarChar, phoneNumber.toUpperCase())
+        .input('AccountId', sql.BigInt, data.accountId)
+        .input('PhoneNumber', sql.NVarChar, data.phoneNumber)
         .query(userSqlCmd.CheckExistPhone);
 
     if (result.recordset.length > 0) {
@@ -62,6 +65,46 @@ exports.CheckExistPhoneNumber = async function (phoneNumber) {
     return response;
 };
 
+//check identity card has already existed or not
+exports.CheckExistIdentityCard = async function (data) {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+    response.model.userinfo = 'false';
+
+    const pool = await poolPromise;
+    const result = await pool.request()
+        .input('AccountId', sql.BigInt, data.accountId)
+        .input('IdentityCard', sql.NVarChar, data.identityCard)
+        .query(userSqlCmd.CheckExistIdentityCard);
+
+    if (result.recordset.length > 0) {
+        response.model.statusmessage = status.common.suscess;
+        response.model.responsecode = status.common.suscesscode;
+        response.model.userinfo = 'true';
+    }
+    return response;
+};
+
+//compare password
+exports.isSamePassword = async function (dataObject) {
+    response.model.statusmessage = status.common.failed;
+    response.model.responsecode = status.common.failedcode;
+    response.model.userinfo = 'false';
+
+    const account = await this.getAccountByAccountId(dataObject.accountid);
+
+    if (account !== null) {
+        const accountName = account.AccountName;
+        const password = security.encrypt(accountName + "-" + dataObject.password + "-" + account.HashKey);
+
+        if (account.Password === password) {
+            response.model.userinfo = 'true';
+            response.model.statusmessage = status.common.suscess;
+            response.model.responsecode = status.common.suscesscode;
+        }
+    }
+    return response;
+};
 
 //get user info uses token
 exports.getUserInfoByAccessToken = async function (accessToken) {
@@ -303,7 +346,6 @@ exports.unLockAccount = async (accountId) => {
     }
     return response;
 };
-
 
 //get avatar
 exports.getAvatar = async (accountId) => {

@@ -5,7 +5,13 @@ export class AppMessage {
     SESSION_TIMEOUT: 'Phiên làm việc đã kết thức, vui lòng đăng nhập lại !',
     SELECT_CATEGORY: 'Vui lòng chọn danh mục !',
     WRONG_DATE_RANGE: 'Giá trị ngày không hợp lệ, kiểm tra lại vùng giá trị !',
-    SELECT_AT_LEAST_ONE: 'Vui lòng chọn ít nhất 1 giá trị !'
+    SELECT_AT_LEAST_ONE: 'Vui lòng chọn ít nhất 1 giá trị !',
+    PASSWORD_DIFF: 'Mật khẩu mới và xác nhận mật khẩu mới không khớp !',
+    PASSWORD_SERVER_DIFF: 'Mật khẩu của bạn không trùng khớp với hệ thống !',
+    EMAIL_EXIST: 'Email này đã được sử dụng !',
+    PHONE_EXIST: 'Số điện thoại này đã được sử dụng !',
+    IDENTITYCARD_EXIST: 'Sô CMND này đã được sử dụng !',
+    ACCOUNT_EXIST: 'Tài khoản này đã tồn tại !'
   };
 
   // success message
@@ -22,7 +28,8 @@ export class AppMessage {
     UPDATE_STORE: 'Cập nhật thông tin cửa hàng thành công',
     UPDATE_ORDER: 'Cập nhật thông tin đơn hàng thành công',
     DELETE_ORDER: 'Xóa đơn hàng thành công',
-    DELETE_AUDIT: 'Xóa log thành công'
+    DELETE_AUDIT: 'Xóa log thành công',
+    UPDATE_PASSWORD: 'Thay đổi mật khẩu thành công'
   };
 
   // title message
@@ -45,7 +52,9 @@ export class AppMessage {
     ORDER_PRINT: 'Đơn hàng - ',
     REPORT_REVENUE: 'Báo cáo doanh thu',
     REPORT_PRODUCT: 'Thống kê mặt hàng',
-    AUDIT_LOG: 'Log hệ thống'
+    AUDIT_LOG: 'Log hệ thống',
+    PROFILE: 'Thông tin cá nhân',
+    NOTIFY: 'Thông báo hệ thống'
   };
 
   // Control content

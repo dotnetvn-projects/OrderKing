@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { UserInfoModel } from '../model/userinfo.model';
+import { UserInfoModel } from '../model/user/userinfo.model';
 import { WebClientService } from './webclient.service';
 import { Dictionary } from '../framework/objectextension/framework.dictionary';
 import { ApiResultModel } from '../model/api.result.model';

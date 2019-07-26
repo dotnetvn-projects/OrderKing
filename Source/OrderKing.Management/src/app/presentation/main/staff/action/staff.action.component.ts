@@ -1,6 +1,6 @@
 import { Component, Injector } from '@angular/core';
 import { StoreService } from 'src/app/service/store.service';
-import { UserInfoModel } from 'src/app/model/userinfo.model';
+import { UserInfoModel } from 'src/app/model/user/userinfo.model';
 import { BaseComponent } from 'src/app/framework/framework.base.component';
 import { Title } from '@angular/platform-browser';
 import { AppSettings } from 'src/app/framework/framework.app.setting';
@@ -51,6 +51,31 @@ export class StaffActionComponent extends BaseComponent {
 
   // ** Form submit event */
   async onSubmit() {
+
+    const checkAccount = await this.userService.isExistAccountName(this.StaffInfo.AccountName);
+    if (checkAccount !== AppSettings.RESPONSE_MESSAGE.ERROR) {
+      this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.ACCOUNT_EXIST);
+      return;
+    }
+
+    const checkEmail = await this.userService.isExistEmail(this.StaffInfo.Email);
+    if (checkEmail !== AppSettings.RESPONSE_MESSAGE.ERROR) {
+      this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.EMAIL_EXIST);
+      return;
+    }
+
+    const checkPhone = await this.userService.isExistPhoneNumber(this.StaffInfo.PhoneNumber);
+    if (checkPhone !== AppSettings.RESPONSE_MESSAGE.ERROR) {
+      this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.PHONE_EXIST);
+      return;
+    }
+
+    const checkIdentity = await this.userService.isExistIdentityCard(this.StaffInfo.IdentityCard);
+    if (checkIdentity !== AppSettings.RESPONSE_MESSAGE.ERROR) {
+      this.dialogService.showError(AppMessage.APP_ERROR_MESSAGE.IDENTITYCARD_EXIST);
+      return;
+    }
+
     if (this.staffId === null || this.staffId === undefined) {
       await this.createNew();
     } else {

@@ -37,6 +37,7 @@ export class SysNotifyComponent extends BaseComponent {
 
   // init component
   onInit() {
+    this.titleService.setTitle(AppMessage.APP_TITLE_MESSAGE.NOTIFY);
     this.sysNotifyService.SysNotifyList.subscribe(data => this.SysNotifyList = data);
     this.loadNotifyList();
   }

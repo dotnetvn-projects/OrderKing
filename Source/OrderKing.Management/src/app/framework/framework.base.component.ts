@@ -1,6 +1,6 @@
 import { OnInit, Injector } from '@angular/core';
 import { UserService } from '../service/user.service';
-import { UserInfoModel } from '../model/userinfo.model';
+import { UserInfoModel } from '../model/user/userinfo.model';
 import { AuthService } from '../service/auth.service';
 import { Router } from '@angular/router';
 declare var $;

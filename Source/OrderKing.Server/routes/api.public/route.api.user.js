@@ -10,11 +10,17 @@ const security = require('../../services/service.security');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
-//check the existence of user in database
+//check the existence of user name in database
 userrouter.post('/check-exist-account', async (req, res, next) => {
     try {
-        var acountName = req.body.AccountName;
-        var result = await service.CheckExist(acountName);
+        var accessToken = req.body.AccessToken;
+        var accountId = await service.getAccountIdByAccessToken(accessToken);
+        var data = {
+            accountName: req.body.AccountName,
+            accountId: accountId
+        };
+
+        var result = await service.CheckExistAccount(data);
         var message = common.createResponseMessage(result,
             result.model.responsecode,
             result.model.statusmessage);
@@ -26,6 +32,73 @@ userrouter.post('/check-exist-account', async (req, res, next) => {
         next(err);
     }
 });
+
+//check the existence email in database
+userrouter.post('/check-exist-email', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var accountId = await service.getAccountIdByAccessToken(accessToken);
+        var data = {
+            email: req.body.Email,
+            accountId: accountId
+        };
+        var result = await service.CheckExistEmail(data);
+        var message = common.createResponseMessage(result,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//check the existence phone number in database
+userrouter.post('/check-exist-phone', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var accountId = await service.getAccountIdByAccessToken(accessToken);
+        var data = {
+            phoneNumber: req.body.PhoneNumber,
+            accountId: accountId
+        };
+        var result = await service.CheckExistPhoneNumber(data);
+        var message = common.createResponseMessage(result,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//check the existence identity card in database
+userrouter.post('/check-exist-identitycard', async (req, res, next) => {
+    try {
+        var accessToken = req.body.AccessToken;
+        var accountId = await service.getAccountIdByAccessToken(accessToken);
+        var data = {
+            identityCard: req.body.IdentityCard,
+            accountId: accountId
+        };
+        var result = await service.CheckExistIdentityCard(data);
+        var message = common.createResponseMessage(result,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
 
 //get user info
 userrouter.post('/get-info', async (req, res, next) => {
@@ -109,6 +182,30 @@ userrouter.post('/change-pass', async function (req, res, next) {
         var accountId = await service.getAccountIdByAccessToken(accessToken);
 
         var result = await service.changePassword({
+            password: password,
+            accountid: accountId
+        });
+
+        var message = common.createResponseMessage(result.model.userinfo,
+            result.model.responsecode,
+            result.model.statusmessage);
+
+        res.writeHead(result.model.responsecode, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(message));
+    }
+    catch (err) {
+        next(err);
+    }
+});
+
+//check password
+userrouter.post('/compare-password', async function (req, res, next) {
+    try {
+        var accessToken = req.body.AccessToken;
+        var password = req.body.Password;
+        var accountId = await service.getAccountIdByAccessToken(accessToken);
+
+        var result = await service.isSamePassword({
             password: password,
             accountid: accountId
         });

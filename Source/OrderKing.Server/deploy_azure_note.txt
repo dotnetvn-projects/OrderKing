@@ -9,4 +9,4 @@
 
 2. truong hop upload thong qua fpt
 khi upload khong can upload thu muc node_modules
-login vao azure portal => cho web app mo "Advances tool" => cho go => CMD => go lenh npm install de cai lai node module
+login vao azure portal => chon web app mo "Advances tool" => chon go => CMD => go lenh npm install de cai lai node module

@@ -1,6 +1,6 @@
 import { Component, Injector } from '@angular/core';
 import { StoreService } from 'src/app/service/store.service';
-import { UserInfoModel } from 'src/app/model/userinfo.model';
+import { UserInfoModel } from 'src/app/model/user/userinfo.model';
 import { BaseComponent } from 'src/app/framework/framework.base.component';
 import { Title } from '@angular/platform-browser';
 import { AppSettings } from 'src/app/framework/framework.app.setting';

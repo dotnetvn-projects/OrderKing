@@ -88,15 +88,20 @@ defineProperty('getAvatar', `
 
 //check whether account has already exist in database
 defineProperty('CheckExistAccount', `
-    SELECT Id FROM Account WHERE UPPER(AccountName) = @AccountName
+    SELECT Id FROM Account WHERE AccountName = @AccountName AND AccountId <> @AccountId
 `);
 
 //check whether email has already exist in database
 defineProperty('CheckExistEmail', `
-    SELECT Id FROM UserProfile WHERE UPPER(Email) = @Email
+    SELECT Id FROM UserProfile WHERE Email = @Email AND AccountId <> @AccountId
 `);
 
 //check whether phone has already exist in database
 defineProperty('CheckExistPhone', `
-    SELECT Id FROM UserProfile WHERE UPPER(PhoneNumber) = @PhoneNumber
+    SELECT Id FROM UserProfile WHERE PhoneNumber = @PhoneNumber AND AccountId <> @AccountId
+`);
+
+//check whether user info has already exist in database
+defineProperty('CheckExistIdentityCard', `
+    SELECT Id FROM UserProfile WHERE IdentityCard = @IdentityCard AND AccountId <> @AccountId
 `);
