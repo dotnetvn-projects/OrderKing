@@ -12,7 +12,7 @@
     "cors": "^2.8.5",
     "cron": "^1.5.1",
     "express": "^4.16.4",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "mssql": "^4.2.2",
     "mssql-connection-string": "^0.1.2",
     "sharp": "^0.21.0",
